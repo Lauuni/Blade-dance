@@ -2,13 +2,14 @@
 
 HTML5 액션 콤보 프로토타입 — 허수아비 수련장.
 
-- 실행: `index.html`을 브라우저로 열기 (PC 기준)
+- ▶ **바로 플레이: https://lauuni.github.io/Blade-dance/** (PC 기준)
+- 또는 `index.html`을 브라우저로 열기
 - 목표: 어떤 기술 조합으로 가장 긴 콤보를 넣을 수 있는지 연구하는 수련장
 
 ## 버전
 자세한 내용은 [CHANGELOG.md](CHANGELOG.md)
 
-**옛 버전 실행:** [`versions/`](versions) 폴더에서 원하는 버전(예: `v0.3.0.html`)을 열고 → 오른쪽 위 다운로드 버튼 → 받은 파일을 더블클릭
+**옛 버전 실행:** 아래 표의 ▶ 링크를 누르면 브라우저에서 바로 실행돼요
 
 - 0.5.2 — 캐릭터 창 미리보기 고정, 확정 후 빠르게 닫힘
 - 0.5.1 — 카메라 기본·넓게·확대(B/V), 캐릭터 단축키(,), 캐릭터·맵 키보드 선택, 캐릭터 카드 정렬
@@ -27,23 +28,23 @@ HTML5 액션 콤보 프로토타입 — 허수아비 수련장.
 - 0.2.0 — 달리기·질주베기, 기술 10종, 이동/점프 모션 개선
 - 0.1.0 — 첫 프로토타입 (기술 5종, 3칸 슬롯, PC/모바일)
 
-## 버전별 코드 (그 시점 저장소 전체)
+## 버전별 플레이 · 코드
 
-| 버전 | 커밋 | 바로 보기 |
+| 버전 | 커밋 | 바로가기 |
 |---|---|---|
-| 0.5.2 | `36e888c` | [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/36e888c) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/36e888c) |
-| 0.5.1 | `b8a9209` | [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/b8a9209) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/b8a9209) |
-| 0.5.0 | `5bbb92d` | [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/5bbb92d) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/5bbb92d) |
-| 0.4.9 | `6e3731d` | [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/6e3731d) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/6e3731d) |
-| 0.4.8 | `11e94b4` | [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/11e94b4) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/11e94b4) |
-| 0.4.7 | `8154a45` | [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/8154a45) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/8154a45) |
-| 0.4.6 | `b1e7838` | [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/b1e7838) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/b1e7838) |
-| 0.4.5 | `912bf71` | [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/912bf71) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/912bf71) |
-| 0.4.4 | `d39f082` | [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/d39f082) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/d39f082) |
-| 0.4.3 | `a103b5d` | [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/a103b5d) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/a103b5d) |
-| 0.4.2 | `b8450a1` | [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/b8450a1) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/b8450a1) |
-| 0.4.1 | `8ae137d` | [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/8ae137d) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/8ae137d) |
-| 0.4.0 | `47bcf9e` | [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/47bcf9e) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/47bcf9e) |
-| 0.3.0 | `e8df7ff` | [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/e8df7ff) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/e8df7ff) |
-| 0.2.0 | `48cc041` | [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/48cc041) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/48cc041) |
-| 0.1.0 | `3aa7fbf` | [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/3aa7fbf) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/3aa7fbf) |
+| 0.5.2 | `36e888c` | [▶ 플레이](https://lauuni.github.io/Blade-dance/versions/v0.5.2.html) · [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/36e888c) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/36e888c) |
+| 0.5.1 | `b8a9209` | [▶ 플레이](https://lauuni.github.io/Blade-dance/versions/v0.5.1.html) · [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/b8a9209) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/b8a9209) |
+| 0.5.0 | `5bbb92d` | [▶ 플레이](https://lauuni.github.io/Blade-dance/versions/v0.5.0.html) · [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/5bbb92d) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/5bbb92d) |
+| 0.4.9 | `6e3731d` | [▶ 플레이](https://lauuni.github.io/Blade-dance/versions/v0.4.9.html) · [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/6e3731d) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/6e3731d) |
+| 0.4.8 | `11e94b4` | [▶ 플레이](https://lauuni.github.io/Blade-dance/versions/v0.4.8.html) · [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/11e94b4) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/11e94b4) |
+| 0.4.7 | `8154a45` | [▶ 플레이](https://lauuni.github.io/Blade-dance/versions/v0.4.7.html) · [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/8154a45) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/8154a45) |
+| 0.4.6 | `b1e7838` | [▶ 플레이](https://lauuni.github.io/Blade-dance/versions/v0.4.6.html) · [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/b1e7838) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/b1e7838) |
+| 0.4.5 | `912bf71` | [▶ 플레이](https://lauuni.github.io/Blade-dance/versions/v0.4.5.html) · [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/912bf71) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/912bf71) |
+| 0.4.4 | `d39f082` | [▶ 플레이](https://lauuni.github.io/Blade-dance/versions/v0.4.4.html) · [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/d39f082) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/d39f082) |
+| 0.4.3 | `a103b5d` | [▶ 플레이](https://lauuni.github.io/Blade-dance/versions/v0.4.3.html) · [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/a103b5d) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/a103b5d) |
+| 0.4.2 | `b8450a1` | [▶ 플레이](https://lauuni.github.io/Blade-dance/versions/v0.4.2.html) · [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/b8450a1) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/b8450a1) |
+| 0.4.1 | `8ae137d` | [▶ 플레이](https://lauuni.github.io/Blade-dance/versions/v0.4.1.html) · [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/8ae137d) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/8ae137d) |
+| 0.4.0 | `47bcf9e` | [▶ 플레이](https://lauuni.github.io/Blade-dance/versions/v0.4.0.html) · [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/47bcf9e) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/47bcf9e) |
+| 0.3.0 | `e8df7ff` | [▶ 플레이](https://lauuni.github.io/Blade-dance/versions/v0.3.0.html) · [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/e8df7ff) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/e8df7ff) |
+| 0.2.0 | `48cc041` | [▶ 플레이](https://lauuni.github.io/Blade-dance/versions/v0.2.0.html) · [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/48cc041) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/48cc041) |
+| 0.1.0 | `3aa7fbf` | [▶ 플레이](https://lauuni.github.io/Blade-dance/versions/v0.1.0.html) · [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/3aa7fbf) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/3aa7fbf) |
