@@ -366,13 +366,22 @@ body.nohint #keys{display:none}
 .ls.empty{border-style:dashed;opacity:.75}.ls.empty b{color:rgba(255,255,255,.5)}
 .sk.empty{border-style:dashed;border-color:rgba(255,255,255,.22)}.sk.empty svg{display:none}
 .ls[draggable=true]{cursor:grab}
+.chars{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:6px 0 16px}
+.chc{position:relative;display:flex;gap:14px;align-items:center;padding:14px;border-radius:18px;background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.1);cursor:pointer;transition:all .15s}
+.chc:hover{background:rgba(255,255,255,.07);border-color:color-mix(in srgb,var(--c) 60%,transparent)}
+.chc.sel{border-color:var(--c);background:color-mix(in srgb,var(--c) 14%,rgba(20,10,28,.6));box-shadow:0 0 24px color-mix(in srgb,var(--c) 35%,transparent)}
+.chc canvas.chv{position:static;inset:auto;display:block;z-index:auto;width:132px;height:168px;flex:none;border-radius:12px;background:radial-gradient(ellipse 70% 55% at 50% 62%,color-mix(in srgb,var(--c) 28%,transparent),transparent 72%),linear-gradient(180deg,rgba(255,255,255,.03),rgba(0,0,0,.25))}
+.chc b{font-family:'Black Han Sans';font-weight:400;font-size:24px;display:block}.chc em{font:800 10px 'Noto Sans KR';letter-spacing:3px;font-style:normal;color:var(--c)}
+.chc p{font-size:12.5px;color:rgba(255,255,255,.7);margin:6px 0 0;line-height:1.5}
+@media (max-width:640px){.chars{grid-template-columns:1fr}.chc canvas.chv{width:96px;height:124px}}
+.chc .tag{position:absolute;top:10px;right:12px;font:800 10px 'Noto Sans KR';color:var(--c)}
 </style>
 </head>
 <body>
 <canvas id="c"></canvas>
 
 <div class="hud" id="brand">
-  <div class="t">검무<i>.</i><small>BLADE DANCE · <span id="mapNm">수련장</span> · v0.4.9</small></div>
+  <div class="t">검무<i>.</i><small>BLADE DANCE · <span id="mapNm">수련장</span> · v0.5.0</small></div>
   <div id="stats">
     <div>총 데미지<b id="stTot">0</b></div>
     <div>최대 콤보<b id="stBest">0</b></div>
@@ -386,6 +395,7 @@ body.nohint #keys{display:none}
   <div class="mwrap"><button class="ib" id="bMenu" title="메뉴"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span>메뉴</span></button>
   <div id="mnu">
   <button class="ib" id="bSet" title="설정 (사운드·화면·키)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg><span>설정</span></button>
+  <button class="ib" id="bChar"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="3.5"/><path d="M5 21c0-4 3-7 7-7s7 3 7 7"/></svg><span>캐릭터</span></button>
   <button class="ib" id="bLoad"><svg viewBox="0 0 24 24"><path d="M4 7h11M4 12h7M4 17h11"/><path d="M17 4l3 3-3 3M17 14l3 3-3 3"/></svg><span>기술 교체</span><kbd>Tab</kbd></button>
   <button class="ib" id="bNote" title="콤보 노트"><svg viewBox="0 0 24 24"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/><path d="M9 8h6"/></svg><span>콤보 노트</span><kbd>L</kbd></button>
   <button class="ib" id="bZoom" title="넓게 보기"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/><circle cx="12" cy="12" r="3"/></svg><span>넓게 보기</span><kbd data-kl="zoom">B</kbd></button>
@@ -434,7 +444,7 @@ body.nohint #keys{display:none}
   <div class="row"><button class="btn" id="bDone">완료</button></div>
 </div></div>
 
-<div id="cfg"><div class="cfgh"><b>테스트 설정</b><small>v0.4.9 · T</small><div class="hb"><button id="c_def" class="pri" title="모든 테스트 수치를 기본값으로 (키 설정은 그대로)">기본값</button><button id="c_copy" title="현재 설정을 글로 복사">설정 복사</button></div><button id="cfgX" title="닫기 (Q / Esc)">✕</button><div class="pmsg" id="c_msg"></div></div>
+<div id="cfg"><div class="cfgh"><b>테스트 설정</b><small>v0.5.0 · T</small><div class="hb"><button id="c_def" class="pri" title="모든 테스트 수치를 기본값으로 (키 설정은 그대로)">기본값</button><button id="c_copy" title="현재 설정을 글로 복사">설정 복사</button></div><button id="cfgX" title="닫기 (Q / Esc)">✕</button><div class="pmsg" id="c_msg"></div></div>
   <textarea id="c_txt" hidden readonly></textarea>
   <details class="cs"><summary><span>💾 설정 슬롯<i class="vt">v0.4.4</i></span></summary><div class="note">지금 테스트 수치를 슬롯에 저장해 두고 언제든 불러와요. 이름 칸을 눌러 이름을 바꿀 수 있어요. (키 설정은 설정 → 키 설정의 슬롯)</div><div class="slots3" id="c_slots"></div></details>
   <details class="cs"><summary><span>🧪 테스트 도구<i class="vt">v0.4.0</i></span></summary>
@@ -469,7 +479,7 @@ body.nohint #keys{display:none}
     <div class="sl-t">환영연참<i class="vt">v0.4.8</i></div><div id="c_chain"></div>
     <div id="c_fx"></div></details>
 </div>
-<div id="gset"><div class="cfgh"><b>설정</b><small>v0.4.9</small><button id="gsX" title="닫기 (Q / Esc)">✕</button><div class="pmsg" id="g_msg"></div></div>
+<div id="gset"><div class="cfgh"><b>설정</b><small>v0.5.0</small><button id="gsX" title="닫기 (Q / Esc)">✕</button><div class="pmsg" id="g_msg"></div></div>
   <details class="cs"><summary><span>🔊 소리<i class="vt">v0.4.5</i></span></summary>
     <label class="sw"><span>소리 켜기 <small style="color:rgba(255,255,255,.4)">(<span data-kl="sound">N</span> 키)</small></span><input type="checkbox" id="gsSnd"></label>
     <div id="g_vol"></div>
@@ -495,6 +505,12 @@ body.nohint #keys{display:none}
   <div class="sub" style="margin-bottom:0">콤보가 끝나면 위쪽 루트 옆 <b style="color:var(--gold)">☆ 저장</b>으로 기록하세요. 📌 핀을 꽂으면 리스트 맨 위에 고정되고, 게임 화면에 <b>연습 가이드</b>로 떠요.</div>
   <div id="ntBody"></div>
 </div></div>
+<div class="modal" id="mChar"><div class="panel" style="width:min(760px,100%)">
+  <h2>캐릭터 <small>CHARACTER</small></h2>
+  <div class="sub">기술은 모두 같아요. 서 있기 · 걷기 · 질주 · 대쉬 · 점프 모습이 캐릭터마다 달라요.</div>
+  <div class="chars" id="chWrap"></div>
+  <div class="row"><button class="btn" id="chX">닫기</button></div>
+</div></div>
 <div class="modal" id="mMap"><div class="panel">
   <h2>맵 선택 <small>STAGE</small></h2>
   <div class="mp-list" id="mpList"></div>
@@ -506,7 +522,7 @@ body.nohint #keys{display:none}
   <div class="help">
     <div><h3>PC 키보드</h3><ul id="helpKeys"></ul></div>
     <div><h3>화면 · 마우스</h3><ul>
-      <li>오른쪽 위 <b>☰ 메뉴</b> → 기술 교체 · 콤보 노트 · 맵 · 넓게 보기 · 전체화면 · 도움말</li>
+      <li>오른쪽 위 <b>☰ 메뉴</b> → 설정 · 캐릭터 · 기술 교체 · 콤보 노트 · 넓게 보기 · 전체화면 · 맵 · 도움말</li>
       <li>메뉴 → <b>⚙ 설정</b> → 소리 채널 · 화면(UI 크기) · 바람 · 카메라 · 키 설정</li>
       <li>아래 기술 칸에 마우스를 올리면 기술 설명</li>
       <li>기술 교체 창: 카드를 칸으로 <b>끌어 놓거나</b>, 카드에 마우스를 올리고 <b>1·2·3</b></li>
@@ -556,11 +572,11 @@ function aInit(){if(S.c){if(S.c.state==='suspended')S.c.resume();return}
     const n=S.c.sampleRate;S.nb=S.c.createBuffer(1,n,n);const d=S.nb.getChannelData(0);for(let i=0;i<n;i++)d[i]=Math.random()*2-1;}catch(e){S.c=null}}
 function nz({d=.1,type='bandpass',f0=1000,f1=f0,q=1,v=.3,a=.004,dl=0}){if(!S.c||!S.on)return;const c=S.c,t=c.currentTime+dl;
   const s=c.createBufferSource();s.buffer=S.nb;s.loop=true;const f=c.createBiquadFilter();f.type=type;f.Q.value=q;
-  f.frequency.setValueAtTime(f0,t);f.frequency.exponentialRampToValueAtTime(Math.max(30,f1),t+d);
+  f.frequency.setValueAtTime(Math.min(f0,20000),t);f.frequency.exponentialRampToValueAtTime(clamp(f1,30,20000),t+d);
   const gn=c.createGain();gn.gain.setValueAtTime(.0001,t);gn.gain.exponentialRampToValueAtTime(v,t+a);gn.gain.exponentialRampToValueAtTime(.0001,t+d);
   s.connect(f);f.connect(gn);gn.connect(CUR_DEST||S.bus[CUR_BUS]||S.out);s.start(t,Math.random()*.5);s.stop(t+d+.05);}
 function tn({d=.1,type='sine',f0=440,f1=f0,v=.3,a=.003,dl=0}){if(!S.c||!S.on)return;const c=S.c,t=c.currentTime+dl;
-  const o=c.createOscillator();o.type=type;o.frequency.setValueAtTime(f0,t);o.frequency.exponentialRampToValueAtTime(Math.max(20,f1),t+d);
+  const o=c.createOscillator();o.type=type;o.frequency.setValueAtTime(Math.min(f0,20000),t);o.frequency.exponentialRampToValueAtTime(clamp(f1,20,20000),t+d);
   const gn=c.createGain();gn.gain.setValueAtTime(.0001,t);gn.gain.exponentialRampToValueAtTime(v,t+a);gn.gain.exponentialRampToValueAtTime(.0001,t+d);
   o.connect(gn);gn.connect(CUR_DEST||S.bus[CUR_BUS]||S.out);o.start(t);o.stop(t+d+.05);}
 const sfx={
@@ -748,6 +764,14 @@ try{const s=JSON.parse(localStorage.getItem('bd_loadout')||'null');if(loOK(s))lo
 const saveLo=()=>{try{localStorage.setItem('bd_loadout',JSON.stringify(loadout))}catch(e){}};
 const svg=(id)=>`<svg viewBox="0 0 24 24">${IC[id]}</svg>`;
 
+// ============================================================ characters
+// skills are shared; each character may override its silhouette and the basic movement (stand / walk / sprint / dash / jump)
+const CHARS={
+  musa:{id:'musa',name:'검객',en:'SWORDSMAN',desc:'붉은 머플러의 검객. 묵직하고 곧은 자세.',col:'#e8384f'},
+  yeon:{id:'yeon',name:'연화',en:'YEONHWA',desc:'연분홍 리본과 긴 포니테일의 여검객. 가볍고 우아한 걸음, 낮고 길게 미끄러지는 대쉬.',col:'#f3a6c1',bladeW:.78}};
+let CUR_CHAR='musa';try{const c=localStorage.getItem('bd_char');if(CHARS[c])CUR_CHAR=c;}catch(e){}
+let CHR=CHARS[CUR_CHAR];
+
 // ============================================================ pose system
 const PK=['lean','hd','aFU','aFL','aBU','aBL','lFU','lFL','lBU','lBL','sw','rot','sx','sq','hx','hy','g2','ft'];
 const BASE={lean:8,hd:0,aFU:30,aFL:80,aBU:-15,aBL:20,lFU:25,lFL:-5,lBU:-25,lBL:-10,sw:120,rot:0,sx:1,sq:1,hx:0,hy:0,g2:1,ft:0};
@@ -820,9 +844,14 @@ const combo={n:0,dmg:0,t:0,best:0,total:0,grade:0,gauge:0,lastKind:null,lastA:nu
 function Cloth(n,seg,grav=.32,damp=.94){return{n,seg,grav,damp,P:Array.from({length:n},()=>({x:0,y:0,px:0,py:0})),init:false};}
 const scarfA=Cloth(11,6.4,.29,.955), scarfB=Cloth(8,5.8,.32,.945), scarfF=Cloth(5,5.6,.4,.92), band=Cloth(5,5,.28), sash=Cloth(5,5.4,.42,.93), sash2=Cloth(4,5.2,.44,.93);
 scarfA.gnd=scarfB.gnd=scarfF.gnd=1;
+// Yeonhwa: ponytail, ribbon at its root, obi bow tails, hanging sleeves, a tassel on the pommel
+const yTail=Cloth(12,6,.36,.95),yTail2=Cloth(9,5.8,.3,.95),yBowA=Cloth(4,4.6,.3,.9),yBowB=Cloth(4,4.2,.33,.9),yObiA=Cloth(6,6,.36,.93),yObiB=Cloth(5,5.8,.38,.93),ySlvF=Cloth(4,4.4,.34,.9),ySlvB=Cloth(4,4.4,.34,.9),yTas=Cloth(4,3.2,.42,.9);
+yTail.gnd=yTail2.gnd=yObiA.gnd=yObiB.gnd=1;yTail.sN=3;yTail2.sN=2;
 const coatA=Cloth(6,7,.36,.92), coatB=Cloth(5,7,.4,.92), slvF=Cloth(4,5.5,.3,.9), slvB=Cloth(4,5.5,.3,.9);
 const CLONE={t:0,max:5,cx:[0,0,0],cy:[0,0,0],side:-1,init:false};const HIST=[];
 let clothAcc=0;
+function hairRest(c,d0,back,k0,k1){const P=c.P;if(!c.init)return;const a0=Math.atan2(d0[1],d0[0]),aH=Math.atan2(1,back);let da=aH-a0;while(da>PI)da-=TAU;while(da<-PI)da+=TAU;
+  let x=P[0].x,y=P[0].y;for(let i=1;i<c.n;i++){const t=E.io(clamp((i-.5)/3.6,0,1)),an=a0+da*t;x+=Math.cos(an)*c.seg;y+=Math.sin(an)*c.seg;const q=P[i],k=lerp(k0,k1,i/(c.n-1));q.x+=(x-q.x)*k;q.y+=(y-q.y)*k;}}
 function clothStep(c,ax,ay,wind,stiff=0,d0){const P=c.P;
   if(!c.init){for(const q of P){q.x=q.px=ax;q.y=q.py=ay;}c.init=true;}
   P[0].x=P[0].px=ax;P[0].y=P[0].py=ay;
@@ -830,7 +859,7 @@ function clothStep(c,ax,ay,wind,stiff=0,d0){const P=c.P;
   for(let it=0;it<4;it++)for(let i=1;i<c.n;i++){const a=P[i-1],b=P[i];const dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy)||.001,df=(d-c.seg)/d;
     if(i===1){b.x-=dx*df;b.y-=dy*df;}else{a.x+=dx*df*.5;a.y+=dy*df*.5;b.x-=dx*df*.5;b.y-=dy*df*.5;}}
   // stiffness: each joint is pulled toward the straight continuation of the segment before it
-  if(stiff>0)for(let it=0;it<2;it++)for(let i=d0?1:2;i<c.n;i++){const a=i>=2?P[i-2]:{x:P[0].x-d0[0]*c.seg,y:P[0].y-d0[1]*c.seg},b=P[i-1],q=P[i];let dx=b.x-a.x,dy=b.y-a.y;const l=Math.hypot(dx,dy)||1,tx=b.x+dx/l*c.seg,ty=b.y+dy/l*c.seg,k=stiff*.45;q.x+=(tx-q.x)*k;q.y+=(ty-q.y)*k;}
+  if(stiff>0)for(let it=0;it<2;it++)for(let i=d0?1:2;i<(c.sN||c.n);i++){const a=i>=2?P[i-2]:{x:P[0].x-d0[0]*c.seg,y:P[0].y-d0[1]*c.seg},b=P[i-1],q=P[i];let dx=b.x-a.x,dy=b.y-a.y;const l=Math.hypot(dx,dy)||1,tx=b.x+dx/l*c.seg,ty=b.y+dy/l*c.seg,k=stiff*.45;q.x+=(tx-q.x)*k;q.y+=(ty-q.y)*k;}
   if(c.gnd&&CFG.clothGround)for(let i=1;i<c.n;i++){const q=P[i];if(q.y>-1.5){q.y=-1.5;q.px+=(q.x-q.px)*.6;if(q.py<q.y)q.py=q.y;}}
 }
 
@@ -895,6 +924,8 @@ def('DASH',{dur:.24,cancelAt:.07,noGrav:1,ownVx:1,blend:.04,chainAt:0,next:()=>(
   keys:[[0,{lean:66,hd:-10,aFU:-52,aFL:-22,sw:-114,aBU:40,aBL:70,lFU:78,lFL:20,lBU:-78,lBL:-60,sq:.88}],[.24,{lean:50,sq:.98},'oq']],
   start:()=>{p.vy=0;if(!p.ground)p.airDashed=true;sfx.dash();dust(p.x,p.y,6,-p.f);p.dashCD=p.dashMax=CFG.noCD?0:CFG.dashCD;},
   update:(a,dt)=>{p.vx=p.f*(a.t<.17?920:300);if(!p.ground)p.vy=0;a.gT=(a.gT||0)-dt;if(a.gT<=0&&a.t<.18){a.gT=.03;ghost('#ffd1dc',.22);}}});
+// Yeonhwa dash: lower and longer, front leg reaching far, gliding
+const Y_DASH_KEYS=[[0,{lean:62,hd:-8,aFU:-50,aFL:-20,sw:-116,aBU:40,aBL:70,lFU:94,lFL:62,lBU:-72,lBL:-40,sq:.84,ft:20}],[.24,{lean:46,sq:.95},'oq']];
 def('DA',{basic:1,dur:.44,cancelAt:.22,chainAt:9,trail:'#cfeeff',
   keys:[[0,{lean:50,aFU:-40,aFL:10,sw:92,aBU:50,aBL:80,lFU:70,lFL:10,lBU:-70,lBL:-50,sq:.9}],
     [.05,{lean:40,aFU:88,aFL:92,sw:92,aBU:-80,aBL:-70,lFU:75,lFL:10,lBU:-75,lBL:-50,sq:.95},'ox'],
@@ -1293,7 +1324,8 @@ function playFx(act){if(act[0]==='!'){fxEvent(act.slice(1));return;}if(document.
   if(p.act&&!p.act.def.idle)return;if(p.act)endAct();if(!p.ground)return;p.idleT=-4;startAct(act);}
 
 // ============================================================ action control
-function startAct(name){const D=ACT[name];if(!D)return;p.stopT=0;if(name[0]==='A'&&name[1]==='A'){p.airIdx=+name[2];}if(!D.idle)p.lastCombat=gt;
+function chActs(){CHARS.yeon.acts={DASH:Object.assign({},ACT.DASH,{keys:K(Y_DASH_KEYS)})};}
+function startAct(name){const D=(CHR.acts&&CHR.acts[name])||ACT[name];if(!D)return;p.stopT=0;if(name[0]==='A'&&name[1]==='A'){p.airIdx=+name[2];}if(!D.idle)p.lastCombat=gt;
   const a={def:D,t:0,from:Object.assign({},p.disp),hs:{},evd:{},hc:0};p.act=a;p.skidT=0;p.jsq=0;
   const ax=axis();if(ax)p.f=Math.sign(ax);
   if(D.start)D.start(a);}
@@ -1562,6 +1594,11 @@ const GAIT=[[32,4],[16,-22],[-6,-16],[-30,-34],[-42,-80],[-8,-115],[46,-48],[52,
 const crm=(a,b,c,d,t)=>.5*(2*b+(-a+c)*t+(2*a-5*b+4*c-d)*t*t+(-a+3*b-3*c+d)*t*t*t);
 function gait(ph){ph=((ph%1)+1)%1*8;const i=ph|0,t=ph-i,G=k=>GAIT[(i+k+8)%8];return[crm(G(-1)[0],G(0)[0],G(1)[0],G(2)[0],t),crm(G(-1)[1],G(0)[1],G(1)[1],G(2)[1],t)];}
 const AIR_RISE={...STAND,lean:4,hd:-4,aFU:130,aFL:160,sw:205,aBU:-60,aBL:-30,lFU:72,lFL:-18,lBU:-18,lBL:-48,sq:1.05};
+function yStandMod(T){T.lean-=3;T.lFU-=7;T.lFL-=2;T.lBU+=9;T.lBL+=1;T.aFU-=2;T.aFL+=2;T.sw+=5;T.hd-=1;T.ft=(T.ft||0)+6;}
+// Yeonhwa: knees drawn up together on the way up, a light tuck at the top, legs long and together on the way down
+const Y_AIR={rise:{...STAND,lean:3,hd:-5,aFU:122,aFL:152,sw:198,aBU:-60,aBL:-30,lFU:62,lFL:-58,lBU:34,lBL:-74,sq:1.05,ft:14},
+  apex:{...STAND,lean:7,hd:1,aFU:108,aFL:134,sw:176,aBU:-90,aBL:-60,lFU:48,lFL:-44,lBU:22,lBL:-58,sq:1,ft:10},
+  fall:{...STAND,lean:11,hd:5,aFU:94,aFL:120,sw:150,aBU:-120,aBL:-90,lFU:20,lFL:6,lBU:-4,lBL:-12,sq:1,ft:22}};
 const AIR_APEX={...STAND,lean:10,hd:2,aFU:115,aFL:140,sw:180,aBU:-95,aBL:-60,lFU:66,lFL:-42,lBU:12,lBL:-72,sq:1};
 const AIR_FALL={...STAND,lean:14,hd:6,aFU:95,aFL:120,sw:150,aBU:-125,aBL:-95,lFU:34,lFL:6,lBU:-12,lBL:-28,sq:1};
 // breathing: inhale - hold - exhale - pause, irregular period; faster and deeper right after fighting
@@ -1591,9 +1628,10 @@ function locoPose(dt){
     {const pw=windAtPlayer();if(pw>0){T.lean+=pw*6;T.sq-=pw*.025;T.hd+=pw*5;T.aFU-=pw*4;T.sw+=pw*5;T.lFU+=pw*5;T.lBU-=pw*6;}}
     // accelerate -> lean in, brake -> lean back (and the sword tip overshoots)
     {const ac=clamp((p.accS||0)/3200,-1,1);T.lean+=ac*8;T.hd-=ac*4;T.sw-=ac*7;}
+    if(CHR.id==='yeon')yStandMod(T);
     const spd=Math.abs(p.vx),mv=Math.min(1,spd/RUN),k=clamp((spd-RUN)/(SPRINT-RUN),0,1),ks=E.io(k);
     if(spd>12&&p.skidT<=0){
-      const stride=lerp(lerp(70,118,mv),205,k),prev=p.runPh;p.runPh+=spd*dt/stride;
+      const stride=lerp(lerp(70,118,mv),205,k)*(CHR.id==='yeon'?lerp(.84,1.06,k):1),prev=p.runPh;p.runPh+=spd*dt/stride;
       if(Math.floor(prev*2)!==Math.floor(p.runPh*2)&&mv>.35){sfx.step(mv*.6+k*.4);if(MAP==='field'&&mv>.6)kickDirt(p.x-p.f*6,mv*.5+k*.7,-p.f);}
       const amp=lerp(.5,.84,mv)+k*.26;
       const[fT,fS]=gait(p.runPh),[bT,bS]=gait(p.runPh+.5);
@@ -1608,6 +1646,7 @@ function locoPose(dt){
       R.aBU=-bT*1.05*amp+8;R.aBL=R.aBU+lerp(60,96,k)+Math.sin(p.runPh*TAU-1.3)*14*amp;
       R.g2=1;
       R.hy=-bob*lerp(1.6,8,k);R.sq=1-.035*(1-bob)*amp;
+      if(CHR.id==='yeon'){const wk=1-k;R.lean+=-4*wk+5*k;R.hy*=lerp(.6,1,k);R.lFU*=lerp(.86,1.08,k);R.lBU*=lerp(.86,1.06,k);R.ft=lerp(8,0,k);R.sw+=3*wk;R.hd+=1.5*wk;R.sq=1-.02*(1-bob)*amp;}
       lerpPose(T,R,Math.min(1,spd/60),T);
     }
     if(p.stopT>0){const u=E.io(Math.min(1,p.stopT/.26*1.6));lerpPose(T,{...T,lean:-14,hd:9,lFU:48,lFL:36,lBU:-12,lBL:-60,aFU:-44,aFL:-14,sw:-118,sq:.92,hy:0,g2:1},u,T);}
@@ -1616,7 +1655,8 @@ function locoPose(dt){
     if(p.landT>0){const w=E.oq(p.landT/p.landD)*p.landK;T.sq*=1-.2*w;T.lean+=14*w;T.hd+=8*w;T.lFU+=26*w;T.lFL-=16*w;T.lBU+=12*w;T.lBL-=40*w;T.aFU-=12*w;T.sw-=14*w;}
   }else{
     const v=p.vy;
-    if(v<-250)lerpPose(AIR_RISE,AIR_APEX,clamp((v+900)/650,0,1),T);else lerpPose(AIR_APEX,AIR_FALL,clamp((v+250)/700,0,1),T);
+    const AR=CHR.id==='yeon'?Y_AIR:{rise:AIR_RISE,apex:AIR_APEX,fall:AIR_FALL};
+    if(v<-250)lerpPose(AR.rise,AR.apex,clamp((v+900)/650,0,1),T);else lerpPose(AR.apex,AR.fall,clamp((v+250)/700,0,1),T);
     const fw=clamp(p.vx*p.f/SPRINT,-1,1);T.lean+=fw*9;T.lFU+=Math.max(0,fw)*12;T.lBU-=Math.max(0,fw)*12;
     if(p.toT>0){const u=p.toT/.14;T.lFU=lerp(T.lFU,10,u);T.lFL=lerp(T.lFL,6,u);T.lBU=lerp(T.lBU,-16,u);T.lBL=lerp(T.lBL,-24,u);T.sq=lerp(T.sq,1.13,u);T.lean=lerp(T.lean,12,u);}
     if(p.flipT<=0){const ga=gazeAng(T);if(ga!=null)T.hd=lerp(T.hd,ga,.65);}
@@ -1681,11 +1721,16 @@ function update(rdt){
   updAmbient(rdt);
   updCam(rdt);
 }
-const ALLCLOTH=()=>[scarfA,scarfB,scarfF,band,sash,sash2,coatA,coatB,slvF,slvB];
+const ALLCLOTH=()=>[scarfA,scarfB,scarfF,band,sash,sash2,coatA,coatB,slvF,slvB,yTail,yTail2,yBowA,yBowB,yObiA,yObiB,ySlvF,ySlvB,yTas];
 function resetCloth(){for(const c of ALLCLOTH())c.init=false;}
 function stepCloth(){if(!p.J)return;const J=p.J,f=p.fwd;
   if(p._ln&&Math.hypot(J.neck[0]-p._ln[0],J.neck[1]-p._ln[1])>110)resetCloth();p._ln=[J.neck[0],J.neck[1]];
   const w=-p.f*.18+Math.sin(rt*3.1)*.12-p.vx*.0009-windAtPlayer()*1.1;
+  if(CHR.id==='yeon'){const fr=headFr(J),F=fr.F,U=fr.U,R=fr.hp(-5.2,9.8),R2=fr.hp(-5.6,9.6),K=yObiK(J);
+    {const sp=clamp(Math.abs(p.vx)/SPRINT,0,1.4),d0=yDir(-F[0]*.8+U[0]*lerp(.6,.25,Math.min(1,sp)),-F[1]*.8+U[1]*lerp(.6,.25,Math.min(1,sp)));clothStep(yTail,R[0],R[1],w*.42+Math.sin(rt*2.3)*.03,.3,d0);hairRest(yTail,d0,-f*(.3+sp*2.6),.14,lerp(.035,.06,Math.min(1,sp)));}clothStep(yTail2,R[0]-F[0]*1.2,R[1]-F[1]*1.2+1.5,w*.8+Math.sin(rt*3.6+1)*.06,.3,yDir(-F[0]*.8+U[0]*.4,-F[1]*.8+U[1]*.4));
+    clothStep(yBowA,R2[0],R2[1],w*.8+Math.sin(rt*5+1)*.06);clothStep(yBowB,R2[0]-F[0],R2[1]-F[1]+.6,w*.7+Math.sin(rt*4.4)*.06);
+    clothStep(yObiA,K[0],K[1]+1,w*.7);clothStep(yObiB,K[0]+f*1.2,K[1]+1.5,w*.6+Math.sin(rt*3.3)*.04);
+    {const a=yLP(J.eF,J.hF,.18),b=yLP(J.eB,J.hB,.18);clothStep(ySlvF,a[0],a[1]+2,w*.45);clothStep(ySlvB,b[0],b[1]+2,w*.45);}clothStep(yTas,J.sp[0],J.sp[1],w*.4+Math.sin(rt*6)*.05);return;}
   {const K=knotAt(J),wb=w-f*.07,st=CFG.clothStiff??0,d0=[-f*.86,.5];clothStep(scarfA,K[0],K[1],wb+Math.sin(rt*5.1)*.05,st,d0);clothStep(scarfB,K[0]+f*1.5,K[1]+1.5,wb*.9+Math.sin(rt*4.3+1)*.07,st,d0);
    clothStep(scarfF,J.neck[0]+f*4.5,J.neck[1]+5,w*.75+Math.sin(rt*3.7+2)*.04,st*.6);}
   {const fr=headFr(J),b=fr.hp(-8,3);clothStep(band,b[0],b[1],w*.9);}{const K=obiKnot(J);clothStep(sash,K[0],K[1]+1,w*.6);clothStep(sash2,K[0]+f*1.2,K[1]+1.5,w*.5+Math.sin(rt*3.3)*.03);}
@@ -1914,7 +1959,7 @@ function dot(a,r){g.beginPath();g.arc(a[0],a[1],r,0,TAU);g.fill();}
 function blade(J,col,hilt,thin){const[hx,hy]=J.hF,[tx,ty]=J.st;const dx=tx-hx,dy=ty-hy,L=Math.hypot(dx,dy)||1,nx=-dy/L,ny=dx/L;const f=p.fwd;
   g.strokeStyle=hilt;g.lineCap='round';g.lineWidth=4.2;g.beginPath();g.moveTo(J.sp[0],J.sp[1]);g.lineTo(J.sg[0],J.sg[1]);g.stroke();
   g.fillStyle=hilt;g.beginPath();g.ellipse(J.sg[0],J.sg[1],2.4,6,Math.atan2(dy,dx),0,TAU);g.fill();
-  const sg=(p.fwd||1),gx=J.sg[0],gy=J.sg[1],c=(thin?0:3.2)*sg,c2=(thin?0:.8)*sg,e1=1.9*sg,e2=1.5*sg;g.fillStyle=col;g.beginPath();g.moveTo(gx+nx*e1,gy+ny*e1);
+  const bw=CHR.bladeW||1,sg=(p.fwd||1),gx=J.sg[0],gy=J.sg[1],c=(thin?0:3.2*bw)*sg,c2=(thin?0:.8*bw)*sg,e1=1.9*bw*sg,e2=1.5*bw*sg;g.fillStyle=col;g.beginPath();g.moveTo(gx+nx*e1,gy+ny*e1);
   g.quadraticCurveTo(gx+dx*.55+nx*c,gy+dy*.55+ny*c,tx,ty);g.quadraticCurveTo(gx+dx*.55+nx*c2,gy+dy*.55+ny*c2,gx-nx*e2,gy-ny*e2);g.closePath();g.fill();}
 // head space: U = up (neck->head), F = facing, perpendicular to U. hp(a,b) = a forward, b up from head centre
 function headFr(J){let ux=J.head[0]-J.neck[0],uy=J.head[1]-J.neck[1];const l=Math.hypot(ux,uy)||1;ux/=l;uy/=l;const f=p.fwd||1;
@@ -1989,7 +2034,115 @@ function ribbon(c,w0,w1,col){const P=c.P,n=P.length;if(!c.init)return;const L=[]
   g.fillStyle=col;g.beginPath();g.moveTo(L[0][0],L[0][1]);for(let i=1;i<n;i++)g.lineTo(L[i][0],L[i][1]);for(let i=n-1;i>=0;i--)g.lineTo(R[i][0],R[i][1]);g.closePath();g.fill();}
 function lightPos(){return MAP==='dojo'?[W*.5-cam.x*.03*K0,GY-170*K0-cam.y*.04*K0]:[W*.66,GY-255*K0-cam.y*.04*K0];}
 function lightDir(){const k=KZ(1)*(1+cam.zk),px=W/2+(p.x-cam.x)*k,py=GY+(p.y-80-cam.y)*k,L=lightPos();let dx=L[0]-px,dy=L[1]-py;const l=Math.hypot(dx,dy)||1;return[dx/l,dy/l];}
-function drawPlayer(){const J=p.J;if(!J)return;
+// ---- Yeonhwa
+const YC={top:'#1b1027',hak:'#2a1b42',hakB:'#1d1330',pleat:'rgba(170,140,220,.18)',pink:'#f4a7c3',pinkD:'#c96d91',pinkL:'#ffdbe8',hair:'#0b0611',hairL:'#3a2a52',slv:'#21152f',slvB:'#170f22',skin:'#251829',foot:'#150c1f',saya:'#1f1429'};
+const yNorm=(A,B)=>{const dx=B[0]-A[0],dy=B[1]-A[1],l=Math.hypot(dx,dy)||1;return[dx/l,dy/l,l];};
+const yLP=(A,B,t)=>[A[0]+(B[0]-A[0])*t,A[1]+(B[1]-A[1])*t];
+function ySmooth(pts,closed=true){const n=pts.length;g.beginPath();g.moveTo(pts[0][0],pts[0][1]);
+  for(let i=0;i<(closed?n:n-1);i++){const p0=pts[(i-1+n)%n],p1=pts[i],p2=pts[(i+1)%n],p3=pts[(i+2)%n];
+    g.bezierCurveTo(p1[0]+(p2[0]-p0[0])/6,p1[1]+(p2[1]-p0[1])/6,p2[0]-(p3[0]-p1[0])/6,p2[1]-(p3[1]-p1[1])/6,p2[0],p2[1]);}
+  if(closed)g.closePath();}
+// torso frame: t along hip->neck, o toward the front
+function yTor(J){const h=J.hip,[ux,uy,l]=yNorm(h,J.neck),f=p.fwd||1,nx=-uy*f,ny=ux*f;return{u:[ux,uy],n:[nx,ny],P:(t,o)=>[h[0]+ux*l*t+nx*o,h[1]+uy*l*t+ny*o]};}
+const yObiK=J=>yTor(J).P(.2,-6.6);
+// one flared hakama leg: slim at the hip, widening past the knee into a wide hem
+function hakama(h,k,a,wh,wk,wa,pl){const[ux,uy]=yNorm(h,k),[vx,vy]=yNorm(k,a),e=[a[0]+vx*3.5,a[1]+vy*3.5],vv=clamp(vy,0,1);wa=lerp(wk*1.1,wa,Math.pow(vv,1.4));
+  const n1=[-uy,ux],n2=[-(uy+vy)/2,(ux+vx)/2],n3=[-vy,vx],S=(c,n,w,s)=>[c[0]+n[0]*w*s/2,c[1]+n[1]*w*s/2];
+  const L0=S(h,n1,wh,1),L1=S(k,n2,wk*1.12,1),L2=S(e,n3,wa,1),R0=S(h,n1,wh,-1),R1=S(k,n2,wk*1.12,-1),R2=S(e,n3,wa,-1),dr=(1-vv)*6;{const lowL=L2[1]>R2[1];(lowL?L2:R2)[1]+=dr;(lowL?L1:R1)[1]+=dr*.5;}
+  g.beginPath();g.moveTo(L0[0],L0[1]);g.quadraticCurveTo(L1[0],L1[1],L2[0],L2[1]);g.quadraticCurveTo(e[0]+vx*2.2,e[1]+vy*2.2,R2[0],R2[1]);g.quadraticCurveTo(R1[0],R1[1],R0[0],R0[1]);
+  g.arc(h[0],h[1],wh/2,Math.atan2(-n1[1],-n1[0]),Math.atan2(n1[1],n1[0]),false);g.closePath();g.fill();
+  if(pl){g.strokeStyle=pl;g.lineWidth=.9;g.lineCap='round';for(const o of [-.28,.06,.38]){const A=S(yLP(h,k,.2),n1,wh,o),B=S(k,n2,wk,o),C=S(e,n3,wa,o*1.05);g.beginPath();g.moveTo(A[0],A[1]);g.quadraticCurveTo(B[0],B[1],C[0],C[1]);g.stroke();}}}
+// ponytail: thin at the tie, full a little below it, tapering to a fine point
+function hairTail(c,W,col,hi){const P=c.P,n=P.length;if(!c.init)return;const L=[],R=[];
+  for(let i=0;i<n;i++){const a=P[Math.max(0,i-1)],b=P[Math.min(n-1,i+1)];let dx=b.x-a.x,dy=b.y-a.y;const l=Math.hypot(dx,dy)||1;dx/=l;dy/=l;
+    const u=i/(n-1),w=W*(.45+.55*Math.sin(Math.min(1,u/.3)*PI/2))*Math.pow(1-u,.7)/2+.3,wv=Math.sin(i*.7-rt*4.2)*u*(.5+Math.min(1.6,Math.abs(p.vx)/400)),cx=P[i].x+dy*wv,cy=P[i].y-dx*wv;L.push([cx-dy*w,cy+dx*w]);R.push([cx+dy*w,cy-dx*w]);}
+  const tp=[P[n-1].x+(P[n-1].x-P[n-2].x)*.8,P[n-1].y+(P[n-1].y-P[n-2].y)*.8];
+  g.fillStyle=col;g.beginPath();g.moveTo(L[0][0],L[0][1]);
+  for(let i=1;i<n;i++){const m=yLP(L[i-1],L[i],.5);g.quadraticCurveTo(L[i-1][0],L[i-1][1],m[0],m[1]);}
+  g.quadraticCurveTo(L[n-1][0],L[n-1][1],tp[0],tp[1]);{const m=yLP(R[n-1],R[n-2],.5);g.quadraticCurveTo(R[n-1][0],R[n-1][1],m[0],m[1]);}
+  for(let i=n-2;i>0;i--){const m=yLP(R[i-1],R[i],.5);g.quadraticCurveTo(R[i][0],R[i][1],m[0],m[1]);}g.lineTo(R[0][0],R[0][1]);g.closePath();g.fill();
+  if(hi){g.strokeStyle=hi;g.lineWidth=.75;g.lineCap='round';g.globalAlpha=.6;for(const o of [.3,.62]){g.beginPath();for(let i=1;i<n-2;i++){const q=yLP(L[i],R[i],o);i>1?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1]);}g.stroke();}g.globalAlpha=1;}}
+// ribbon tail: a soft twist (shade side) and a swallowtail cut at the end
+function ribbonV(c,w0,w1,col,shade){const P=c.P,n=P.length;if(!c.init)return;const L=[],R=[],T=[];
+  for(let i=0;i<n;i++){const a=P[Math.max(0,i-1)],b=P[Math.min(n-1,i+1)];let dx=b.x-a.x,dy=b.y-a.y;const l=Math.hypot(dx,dy)||1;dx/=l;dy/=l;
+    const tw=Math.cos(i*.8-rt*3.2+n*1.7)*.5+.5,w=lerp(w0,w1,i/(n-1))*(.6+.4*tw)/2;T.push(tw);L.push([P[i].x-dy*w,P[i].y+dx*w]);R.push([P[i].x+dy*w,P[i].y-dx*w]);}
+  const e=P[n-1],e2=P[n-2],ex=e.x-e2.x,ey=e.y-e2.y,el=Math.hypot(ex,ey)||1,nt=[e.x-ex/el*w1*.6,e.y-ey/el*w1*.6];
+  g.lineWidth=.5;g.lineJoin='round';
+  for(let i=0;i<n-1;i++){const c2=(T[i]+T[i+1])/2<.4?shade:col;g.fillStyle=g.strokeStyle=c2;g.beginPath();g.moveTo(L[i][0],L[i][1]);g.lineTo(L[i+1][0],L[i+1][1]);if(i===n-2)g.lineTo(nt[0],nt[1]);g.lineTo(R[i+1][0],R[i+1][1]);g.lineTo(R[i][0],R[i][1]);g.closePath();g.fill();g.stroke();}}
+// a plain hanging panel (sleeve bag): flat end, optional hem colour
+function yPanel(c,w0,w1,col,hem){const P=c.P,n=P.length;if(!c.init)return;const L=[],R=[];
+  for(let i=0;i<n;i++){const a=P[Math.max(0,i-1)],b=P[Math.min(n-1,i+1)];let dx=b.x-a.x,dy=b.y-a.y;const l=Math.hypot(dx,dy)||1;dx/=l;dy/=l;const w=lerp(w0,w1,i/(n-1))/2;L.push([P[i].x-dy*w,P[i].y+dx*w]);R.push([P[i].x+dy*w,P[i].y-dx*w]);}
+  g.fillStyle=col;ySmooth(L.concat(R.slice().reverse()));g.fill();
+  if(hem){const e=n-1,d=yNorm([P[e-1].x,P[e-1].y],[P[e].x,P[e].y]);g.fillStyle=hem;g.beginPath();g.moveTo(L[e][0],L[e][1]);g.lineTo(R[e][0],R[e][1]);g.lineTo(R[e][0]-d[0]*3,R[e][1]-d[1]*3);g.lineTo(L[e][0]-d[0]*3,L[e][1]-d[1]*3);g.closePath();g.fill();}}
+function bowLoop(K,dx,dy,L,W,col,inner){const px=-dy,py=dx,E=[K[0]+dx*L,K[1]+dy*L];g.fillStyle=col;g.beginPath();g.moveTo(K[0],K[1]);
+  g.bezierCurveTo(K[0]+dx*L*.2+px*W,K[1]+dy*L*.2+py*W,E[0]+px*W*.95,E[1]+py*W*.95,E[0],E[1]);g.bezierCurveTo(E[0]-px*W*.95,E[1]-py*W*.95,K[0]+dx*L*.2-px*W,K[1]+dy*L*.2-py*W,K[0],K[1]);g.fill();
+  if(inner){g.fillStyle=inner;g.beginPath();g.moveTo(K[0],K[1]);g.quadraticCurveTo(K[0]+dx*L*.45+px*W*.5,K[1]+dy*L*.45+py*W*.5,K[0]+dx*L*.7,K[1]+dy*L*.7);g.quadraticCurveTo(K[0]+dx*L*.4,K[1]+dy*L*.4,K[0],K[1]);g.fill();}}
+function yDir(a,b){const l=Math.hypot(a,b)||1;return[a/l,b/l];}
+// sleeve: wide tube from the shoulder past the elbow, pink cuff at the opening, the forearm showing beyond it
+function ySleeve(sh,e,h,panel,col,cuff,skin,rim){if(panel)yPanel(panel,11.5,10.5,col,rim?null:cuff);
+  g.fillStyle=skin;cap(yLP(e,h,.45),h,3.9,3.3);dot(h,2.8);
+  const m=yLP(e,h,.5),[dx,dy]=yNorm(e,h),nx=-dy,ny=dx,Q=(c,w)=>[c[0]+nx*w,c[1]+ny*w];g.fillStyle=col;cap(sh,e,9.6,10.8);
+  {const a=Q(e,5.4),b=Q(m,6.6),c=Q(m,-6.6),d=Q(e,-5.4);g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.lineTo(c[0],c[1]);g.lineTo(d[0],d[1]);g.closePath();g.fill();
+   if(!rim){g.strokeStyle=cuff;g.lineWidth=2.1;g.lineCap='butt';const m2=yLP(e,h,.47),b2=Q(m2,6.5),c2=Q(m2,-6.5);g.beginPath();g.moveTo(b2[0],b2[1]);g.lineTo(c2[0],c2[1]);g.stroke();}}}
+// silhouette: narrow shoulders, waist taken in under a wide pink obi, flared hakama, wide sleeves, high ponytail
+function figureY(J,cb,cbk,bl,hilt,noBlade){const rim=!!noBlade,C=c=>rim?cb:c,Cb=c=>rim?cbk:c,f=p.fwd||1,T=yTor(J),P=T.P,u=T.u,n=T.n;
+  // back leg + back arm
+  g.fillStyle=Cb(YC.hakB);hakama(J.hip,J.kB,J.aB,11.5,15,24,rim?null:'rgba(150,120,200,.12)');g.fillStyle=Cb(YC.foot);cap(J.aB,J.tB,3.6,2.1);
+  ySleeve(J.shB||J.sh,J.eB,J.hB,ySlvB,Cb(YC.slvB),Cb(YC.pinkD),Cb(YC.skin),rim);
+  // torso (kimono top)
+  g.fillStyle=C(YC.top);ySmooth([P(-.04,6.2),P(.3,5),P(.58,6.5),P(.82,5.6),P(1,3),P(1.05,0),P(1,-3.4),P(.84,-6.3),P(.55,-5.3),P(.28,-5.2),P(-.04,-6.4),P(-.14,0)]);g.fill();
+  if(!rim){g.fillStyle=YC.pink;g.beginPath();{const a=P(1.01,-.6),b=P(1.01,2.2),c=P(.34,5.6),d=P(.34,3.4);g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.lineTo(c[0],c[1]);g.lineTo(d[0],d[1]);}g.closePath();g.fill();
+    g.strokeStyle=YC.pinkL;g.lineWidth=.9;g.beginPath();{const a=P(1.01,2.2),b=P(.5,5.1);g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);}g.stroke();}
+  // hakama waist + obi
+  g.fillStyle=C(YC.hak);cap(J.hip,P(.14,0),12.6,12);
+  {const A=P(.08,6.6),B=P(.33,5.7),Cc=P(.33,-5.8),D=P(.08,-6.6);g.fillStyle=C(YC.pink);g.beginPath();g.moveTo(A[0],A[1]);g.lineTo(B[0],B[1]);g.lineTo(Cc[0],Cc[1]);g.lineTo(D[0],D[1]);g.closePath();g.fill();
+    if(!rim){g.strokeStyle='#4a2a5e';g.lineWidth=1.3;g.beginPath();{const a=P(.2,6.4),b=P(.2,-6.4);g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);}g.stroke();g.fillStyle='#4a2a5e';dot(P(.2,5.6),1.5);}
+    const K=yObiK(J),d1=yDir(-n[0]+u[0]*.5,-n[1]+u[1]*.5),d2=yDir(-n[0]-u[0]*.3,-n[1]-u[1]*.3);
+    bowLoop(K,d2[0],d2[1],8,3,C(YC.pinkD),null);bowLoop(K,d1[0],d1[1],9.5,3.3,C(YC.pink),rim?null:YC.pinkD);g.fillStyle=C(YC.pinkD);dot(K,2);}
+  // neck, head, hair
+  g.fillStyle=C(YC.skin);cap(J.neck,J.head,4.6,4.6);dot(J.head,9);
+  const fr=headFr(J),H=fr.hp,F=fr.F,U=fr.U;
+  {g.fillStyle=C(YC.hair);g.beginPath();for(let i=0;i<=16;i++){const th=(12+i*14)*D2R,q=H(Math.cos(th)*9.7,Math.sin(th)*9.7+.6);i?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1]);}
+    for(const q of [[-5.4,-3],[-3.4,1.6],[0,2.8],[2.2,3.4],[4.4,1.2],[5.4,3],[7.6,.2],[8.4,2.4],[10.2,-2.6],[9.8,2.8]]){const c=H(q[0],q[1]);g.lineTo(c[0],c[1]);}g.closePath();g.fill();
+    // side lock framing the face
+    const sw=Math.sin(rt*2.1)*.5,a=H(.4,3.4),b=H(3.2,2.4),c=H(3.6+sw,-7),d=H(2.4+sw,-13.2),e=H(.8+sw*.6,-7.5);g.beginPath();g.moveTo(a[0],a[1]);g.quadraticCurveTo(b[0],b[1],c[0],c[1]);g.quadraticCurveTo(c[0]+U[0]*-3,c[1]+U[1]*-3,d[0],d[1]);g.quadraticCurveTo(e[0],e[1],a[0],a[1]);g.fill();
+    const k=H(-4.8,9.4);dot(k,3.4);
+    if(!rim){g.strokeStyle=YC.hairL;g.lineWidth=1.1;g.lineCap='round';g.globalAlpha=.8;g.beginPath();for(let i=0;i<=8;i++){const th=(58+i*11)*D2R,q=H(Math.cos(th)*7.6,Math.sin(th)*7.6+.6);i?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1]);}g.stroke();g.globalAlpha=1;}}
+  // ribbon bow at the tie
+  {const K=H(-5.6,9.6),d1=yDir(-F[0]*.55+U[0],-F[1]*.55+U[1]),d2=yDir(-F[0],-F[1]+0)
+   ,d3=yDir(-F[0]*.3-U[0]*.2+F[0]*.0,-F[1]*.3-U[1]*.2);bowLoop(K,d1[0],d1[1],7.4,3.6,C(YC.pink),rim?null:YC.pinkD);bowLoop(K,d2[0],d2[1],6.4,3.2,C(YC.pink),rim?null:YC.pinkD);g.fillStyle=C(YC.pinkD);dot(K,2);}
+  // sheath
+  if(J.sa&&!noBlade){g.fillStyle=YC.saya;cap(J.sa,J.sb,4.6,3.6);g.fillStyle=YC.pink;cap(yLP(J.sa,J.sb,.05),yLP(J.sa,J.sb,.12),5,5);cap(yLP(J.sa,J.sb,.93),J.sb,3.9,3.7);}
+  // front leg
+  g.fillStyle=C(YC.hak);hakama(J.hip,J.kF,J.aF,12.5,16,25,rim?null:YC.pleat);g.fillStyle=C(YC.foot);cap(J.aF,J.tF,3.8,2.2);
+  if(p.swordOut||noBlade){}else if(bl){g.save();clipMouth(J);blade(J,bl,hilt);
+    g.fillStyle=YC.pink;const[ax,ay,al]=yNorm(J.sp,J.sg);for(let i=0;i<4;i++){const q=yLP(J.sp,J.sg,.16+i*.2);g.save();g.translate(q[0],q[1]);g.rotate(Math.atan2(ay,ax)+PI/4);g.fillRect(-.8,-.8,1.6,1.6);g.restore();}g.restore();}
+  else{g.fillStyle=cb;blade(J,cb,cb,true);}
+  // front arm, pink shoulder
+  ySleeve(J.sh,J.eF,J.hF,ySlvF,C(YC.slv),C(YC.pink),C(YC.skin),rim);
+  if(!rim){g.strokeStyle=YC.pink;g.lineWidth=2.4;g.lineCap='round';g.lineJoin='round';g.beginPath();{const a=P(.99,-3.4),b=P(1.04,.2),c=P(.9,3.4),d=P(.74,4.8);g.moveTo(a[0],a[1]);g.quadraticCurveTo(b[0],b[1],c[0],c[1]);g.lineTo(d[0],d[1]);}g.stroke();
+    g.strokeStyle=YC.pinkL;g.lineWidth=.8;g.beginPath();{const b=P(1.06,.6),c=P(.93,3.1);g.moveTo(b[0],b[1]);g.lineTo(c[0],c[1]);}g.stroke();}
+}
+function yTassel(){const P=yTas.P,n=P.length;if(!yTas.init||p.swordOut)return;g.strokeStyle=YC.pink;g.lineWidth=1.1;g.lineCap='round';g.beginPath();g.moveTo(P[0].x,P[0].y);for(let i=1;i<n-1;i++)g.lineTo(P[i].x,P[i].y);g.stroke();
+  g.fillStyle=YC.pinkD;dot([P[1].x,P[1].y],1.5);const a=P[n-2],b=P[n-1],[dx,dy]=yNorm([a.x,a.y],[b.x,b.y]);g.strokeStyle=YC.pink;g.lineWidth=.8;
+  for(const o of [-1.7,-.6,.6,1.7]){g.beginPath();g.moveTo(a.x,a.y);g.lineTo(b.x+dx*3.2-dy*o,b.y+dy*3.2+dx*o);g.stroke();}g.fillStyle=YC.pink;dot([a.x,a.y],1.3);}
+function drawPlayerY(){const J=p.J,a=p.act,glow=a&&a.def.trail&&a.def.skill?a.def.trail:null;
+  const Ld=lightDir(),rc=MAP==='dojo'?['#ff9f78','#c56a6a','#ffd2b8']:['#bcd4ff','#7f98cc','#e6efff'];
+  // behind the body: ponytail (with its own rim), bow tails, obi tails
+  g.save();g.translate(Ld[0]*1.6,Ld[1]*1.6);hairTail(yTail,9,rc[0]);g.restore();
+  hairTail(yTail,9,YC.hair,YC.hairL);
+  ribbonV(yObiB,4.4,4.8,YC.pinkD,'#93506e');ribbonV(yObiA,5,5.4,YC.pink,YC.pinkD);
+  ribbonV(yBowB,2.8,3.2,YC.pinkD,'#93506e');ribbonV(yBowA,3,3.4,YC.pink,YC.pinkD);
+  {g.save();g.translate(Ld[0]*1.9,Ld[1]*1.9);figureY(J,rc[0],rc[1],null,null,true);g.restore();}
+  figureY(J,YC.top,YC.slvB,'#eef1fb','#2a1830');
+  sheathRim(J,Ld,rc[0]);bladeRim(J,Ld,rc[2]);yTassel();
+  const fr=headFr(J),H=fr.hp,[ex,ey]=H(4.8,.4),e0=H(3.4,.8),e1=H(7,.2),e2=H(7.5,.9);g.globalCompositeOperation='lighter';
+  const eg=g.createRadialGradient(ex,ey,0,ex,ey,8);eg.addColorStop(0,'rgba(255,120,175,.6)');eg.addColorStop(1,'rgba(255,90,150,0)');g.fillStyle=eg;g.beginPath();g.arc(ex,ey,8,0,TAU);g.fill();
+  g.globalCompositeOperation='source-over';g.strokeStyle='#fff3f8';g.lineCap='round';g.lineWidth=1.5;g.beginPath();g.moveTo(e0[0],e0[1]);g.lineTo(e1[0],e1[1]);g.stroke();g.lineWidth=.8;g.beginPath();g.moveTo(e1[0],e1[1]);g.lineTo(e2[0],e2[1]);g.stroke();
+  const inWin=a&&(!a.def.trailWin||(a.t>=a.def.trailWin[0]&&a.t<=a.def.trailWin[1]));const col=p.swordOut||(a&&a.def.idle&&!inWin)?null:glow||(a&&a.def.trail?(a.def.idle?a.def.trail:'#ffe3ee'):null);
+  if(CLONE.t>0){const u=CLONE.t/CLONE.max;g.strokeStyle='#8f7dff';g.lineWidth=2.5;g.lineCap='round';g.globalAlpha=.85;g.beginPath();g.arc(J.head[0],J.head[1]-26,7,-PI/2,-PI/2+TAU*u);g.stroke();g.globalAlpha=1;}
+  if(col){g.globalCompositeOperation='lighter';g.strokeStyle=col;g.globalAlpha=.35;g.lineWidth=6;g.lineCap='round';g.beginPath();g.moveTo(J.sg[0],J.sg[1]);g.lineTo(J.st[0],J.st[1]);g.stroke();g.globalAlpha=1;g.globalCompositeOperation='source-over';}}
+function drawPlayer(){const J=p.J;if(!J)return;if(CHR.id==='yeon'){drawPlayerY();return;}
   const a=p.act,glow=a&&a.def.trail&&a.def.skill?a.def.trail:null;
   const rcol=MAP==='dojo'?'#ffb08c':'#c4d8ff';
   ribbon(coatB,10,3.5,'#140f1c');ribbon(coatA,11.5,3,'#1c1527');ribbon(sash,4.2,2.6,'#3a2148');ribbon(sash2,3.8,2.4,'#311b3d');ribbon(band,3.5,1,'#c22a44');ribbon(slvB,7,2,'#2c2238');
@@ -2016,6 +2169,10 @@ function drawPlayer(){const J=p.J;if(!J)return;
   if(col){g.globalCompositeOperation='lighter';g.strokeStyle=col;g.globalAlpha=.35;g.lineWidth=7;g.lineCap='round';g.beginPath();g.moveTo(J.sg[0],J.sg[1]);g.lineTo(J.st[0],J.st[1]);g.stroke();g.globalAlpha=1;g.globalCompositeOperation='source-over';}
 }
 function drawFlat(J,col){g.fillStyle=col;
+  if(CHR.id==='yeon'){const T=yTor(J),P=T.P;hakama(J.hip,J.kB,J.aB,11.5,15,24);hakama(J.hip,J.kF,J.aF,12.5,16,25);cap(J.shB||J.sh,J.eB,9.6,10.8);cap(J.eB,J.hB,8,3.6);
+    ySmooth([P(-.04,6.2),P(.3,5),P(.58,6.5),P(.82,5.6),P(1,3),P(1.05,0),P(1,-3.4),P(.84,-6.3),P(.55,-5.3),P(.28,-5.2),P(-.04,-6.4),P(-.14,0)]);g.fill();
+    cap(J.neck,J.head,4.6,4.6);dot(J.head,9.4);cap(J.sh,J.eF,9.6,10.8);cap(J.eF,J.hF,9,3.6);
+    g.strokeStyle=col;g.lineWidth=2.2;g.lineCap='round';g.beginPath();g.moveTo(J.sp[0],J.sp[1]);g.lineTo(J.st[0],J.st[1]);g.stroke();return;}
   cap(J.hip,J.kB,10.5,8);cap(J.kB,J.aB,8,5.5);cap(J.shB||J.sh,J.eB,8,6.5);cap(J.eB,J.hB,6.5,5);
   cap(J.hip,J.neck,14,18);cap(J.neck,J.head,7,7);dot(J.head,10.5);cap(J.hip,J.kF,11.5,8.5);cap(J.kF,J.aF,8.5,5.5);cap(J.aF,J.tF,5.5,3);cap(J.aB,J.tB,5.5,3);
   cap(J.sh,J.eF,8.5,7);cap(J.eF,J.hF,7,5.5);g.strokeStyle=col;g.lineWidth=3.2;g.lineCap='round';g.beginPath();g.moveTo(J.sp[0],J.sp[1]);g.lineTo(J.st[0],J.st[1]);g.stroke();}
@@ -2169,7 +2326,7 @@ function renderInk(){
   for(const q of parts)if(q.t==='brush')drawBrush(q,'#140c0e');
   for(const q of ghosts){g.globalAlpha=(q.life/q.max)*.45;drawFlat(q.J,'#1a1013');}g.globalAlpha=1;
   drawDummy('#1a1013');
-  if(p.J){ribbon(scarfB,6,4.5,'#7d0d18');ribbon(scarfA,7.5,5.5,'#b3121f');drawFlat(p.J,'#120a0c');ribbon(scarfF,7,5.5,'#b3121f');}
+  if(p.J){if(CHR.id==='yeon'){ribbon(yTail,8,2,'#120a0c');ribbon(yObiA,5,4,'#b3121f');drawFlat(p.J,'#120a0c');ribbon(yBowA,3.4,2.8,'#b3121f');}else{ribbon(scarfB,6,4.5,'#7d0d18');ribbon(scarfA,7.5,5.5,'#b3121f');drawFlat(p.J,'#120a0c');ribbon(scarfF,7,5.5,'#b3121f');}}
   for(const q of parts)if(q.t==='petal')drawPetal(q,'#b3121f');
   // red seal stamp
   g.setTransform(DPR,0,0,DPR,0,0);const sx=W-90*K0,sy=H*.22;g.fillStyle='rgba(180,20,30,.85)';g.fillRect(sx-26*K0,sy-26*K0,52*K0,52*K0);
@@ -2227,11 +2384,11 @@ function showRoute(){const R=combo.route;if(!R.length)return;const el=$('route')
   $('rB').innerHTML=BEST?`최고 기록 <b>${BEST.n}히트</b> · ${BEST.dmg.toLocaleString()} DMG${BEST.corr===false?' (보정 OFF)':''}`:'';
   el.classList.remove('dim');el.classList.add('on');}
 // ---- test config panel
-const SLD=[{k:'incHit',l:'보정 증가량 (히트당)',min:0,max:20,step:.5,u:'%',m:'hit',d:'한 대 맞을 때마다 쌓이는 양',sec:'c_sl',v:'0.3.0'},
-  {k:'incAtk',l:'보정 증가량 (공격당)',min:0,max:60,step:1,u:'%',m:'atk',d:'공격(기술) 1회의 첫 타에 쌓이는 양',sec:'c_sl',v:'0.3.0'},
-  {k:'rec',l:'보정 회복량',min:0,max:100,step:1,u:'%',d:'평타↔스킬로 종류가 바뀐 첫 타에 회복',sec:'c_sl',v:'0.3.0'},
+const SLD=[{k:'incHit',l:'보정 증가량 (히트당)',min:0,max:20,step:.1,u:'%',m:'hit',d:'한 대 맞을 때마다 쌓이는 양',sec:'c_sl',v:'0.5.0'},
+  {k:'incAtk',l:'보정 증가량 (공격당)',min:0,max:60,step:.1,u:'%',m:'atk',d:'공격(기술) 1회의 첫 타에 쌓이는 양',sec:'c_sl',v:'0.5.0'},
+  {k:'rec',l:'보정 회복량',min:0,max:100,step:.1,u:'%',d:'평타↔스킬로 종류가 바뀐 첫 타에 회복',sec:'c_sl',v:'0.5.0'},
   {k:'maxFall',l:'최대 낙하 배율',min:1,max:4,step:.1,u:'×',d:'게이지 100%일 때 허수아비 낙하 속도',sec:'c_sl',v:'0.3.0'},
-  {k:'stunCut',l:'경직 감소율',min:0,max:90,step:5,u:'%',d:'게이지 100%일 때 지상 경직이 줄어드는 비율',sec:'c_sl',v:'0.3.0'},
+  {k:'stunCut',l:'경직 감소율',min:0,max:90,step:.1,u:'%',d:'게이지 100%일 때 지상 경직이 줄어드는 비율',sec:'c_sl',v:'0.5.0'},
   {k:'inDecay',l:'공중 감속 강도',min:0,max:8,step:.05,u:'k',d:'클수록 공중에서 빨리 느려져요 (감속·혼합)',sec:'c_mv',v:'0.4.3',im:['decay','mix']},
   {k:'inKeep',l:'타격 시 남는 속도',min:0,max:100,step:5,u:'%',d:'점프평이 맞는 순간 남는 속도 (타격 시 감속·혼합)',sec:'c_mv',v:'0.4.3',im:['onhit','mix']},
   {k:'dashCD',l:'대쉬 쿨타임',min:0,max:2,step:.05,u:'초',d:'대쉬평 반복 방지용',sec:'c_mv',v:'0.3.0'},
@@ -2277,7 +2434,7 @@ $('c_on').onchange=e=>{CFG.on=e.target.checked;saveCfg();buildCfg();e.target.blu
 document.querySelectorAll('#c_mode button').forEach(b=>b.onclick=()=>{CFG.mode=b.dataset.v;saveCfg();buildCfg();b.blur();});
 function cdReset(){for(const k in p.cd)p.cd[k]=0;p.dashCD=0;cfgMsg('쿨타임 초기화!');}
 function cfgMsg(t){$('c_msg').textContent=t;clearTimeout(cfgMsg.t);cfgMsg.t=setTimeout(()=>$('c_msg').textContent='',1800);}
-function cfgText(){return['[검무 v0.4.9 테스트 설정]',`쿨타임 없음: ${CFG.noCD?'ON':'OFF'}`,`공중 관성: ${({decay:'감속',onhit:'타격 시 감속',mix:'혼합'})[CFG.inertia]}`,`바운드 모든타: ${BLIST.filter(([id])=>CFG.bounce[id]===2).map(x=>x[1]).join(', ')||'없음'}`,`연출 ON: ${FXL.filter(x=>FX(x[0])).map(x=>x[0]).join(', ')||'없음'}`,`바운드: ${CFG.bounceMode==='fixed'?'고정 높이 '+CFG.bounceH+'px':'충격 비례'}`,`콤보 보정: ${CFG.on?'ON':'OFF'}`,`누적 방식: ${CFG.mode==='hit'?'히트당':'공격당'}`].concat(SLD.map(sd=>`${sd.l}: ${fmtV(sd,CFG[sd.k])}`)).concat([`바운드 ON: ${BLIST.filter(([id])=>CFG.bounce[id]).map(x=>x[1]).join(', ')||'없음'}`]).join('\n');}
+function cfgText(){return['[검무 v0.5.0 테스트 설정]',`쿨타임 없음: ${CFG.noCD?'ON':'OFF'}`,`공중 관성: ${({decay:'감속',onhit:'타격 시 감속',mix:'혼합'})[CFG.inertia]}`,`바운드 모든타: ${BLIST.filter(([id])=>CFG.bounce[id]===2).map(x=>x[1]).join(', ')||'없음'}`,`연출 ON: ${FXL.filter(x=>FX(x[0])).map(x=>x[0]).join(', ')||'없음'}`,`바운드: ${CFG.bounceMode==='fixed'?'고정 높이 '+CFG.bounceH+'px':'충격 비례'}`,`콤보 보정: ${CFG.on?'ON':'OFF'}`,`누적 방식: ${CFG.mode==='hit'?'히트당':'공격당'}`].concat(SLD.map(sd=>`${sd.l}: ${fmtV(sd,CFG[sd.k])}`)).concat([`바운드 ON: ${BLIST.filter(([id])=>CFG.bounce[id]).map(x=>x[1]).join(', ')||'없음'}`]).join('\n');}
 $('c_copy').onclick=()=>{const t=cfgText();const ta=$('c_txt');ta.value=t;
   const ok=()=>cfgMsg('복사됨! 채팅에 붙여넣으세요');
   try{navigator.clipboard.writeText(t).then(ok,()=>{ta.hidden=false;ta.select();cfgMsg('아래 글을 길게 눌러 복사하세요');});}catch(e){ta.hidden=false;ta.select();cfgMsg('아래 글을 복사하세요');}};
@@ -2397,6 +2554,19 @@ function renderMaps(){$('mpList').innerHTML=MAPS.map(m=>`<div class="mp-card ${M
 function setMap(id){MAP=id;setTimeout(resetCloth,0);ARENA=id==='dojo'?1150:1e9;try{localStorage.setItem('bd_map',id)}catch(e){}
   p.x=-140;p.y=0;p.vx=p.vy=0;Object.assign(dummy,{x:150,y:0,vx:0,vy:0,air:false,state:'stand',rot:0,rv:0,frozen:false,heldT:0});cam.x=0;
   $('mapNm').textContent=TH[id].name;dust(dummy.x,0,10);}
+// card preview: the real figure, posed at rest, cloth settled, drawn into the card's canvas (live cloth is restored afterwards)
+function charPreview(id,cv){const dpr=Math.min(2,window.devicePixelRatio||1),w=cv.clientWidth||110,h=cv.clientHeight||150;cv.width=w*dpr;cv.height=h*dpr;const c2=cv.getContext('2d');
+  const all=ALLCLOTH(),snap=all.map(c=>({init:c.init,P:c.P.map(q=>({x:q.x,y:q.y,px:q.px,py:q.py}))})),keep={CHR,J:p.J,act:p.act,fwd:p.fwd,vx:p.vx,ln:p._ln,so:p.swordOut,cl:CLONE.t,g};
+  try{CHR=CHARS[id];p.act=null;p.fwd=1;p.vx=0;p.swordOut=false;CLONE.t=0;const T={...STAND,lean:9,hd:-2};if(id==='yeon')yStandMod(T);const{L,foot}=rigLocal(T);p.J=rigWorld(L,0,-foot,1);p._ln=null;
+    for(const c of all)c.init=false;for(let i=0;i<150;i++)stepCloth();
+    const sc=.92*h/168;g=c2;g.setTransform(dpr*sc,0,0,dpr*sc,w*dpr*.34,h*dpr*.95);drawPlayer();}
+  catch(e){console.warn(e);}
+  finally{g=keep.g;CHR=keep.CHR;p.J=keep.J;p.act=keep.act;p.fwd=keep.fwd;p.vx=keep.vx;p._ln=keep.ln;p.swordOut=keep.so;CLONE.t=keep.cl;all.forEach((c,i)=>{c.init=snap[i].init;c.P.forEach((q,j)=>Object.assign(q,snap[i].P[j]));});}}
+function renderChars(){$('chWrap').innerHTML=Object.values(CHARS).map(c=>`<div class="chc ${c.id===CUR_CHAR?'sel':''}" data-ch="${c.id}" style="--c:${c.col}">${c.id===CUR_CHAR?'<span class="tag">사용 중</span>':''}<canvas class="chv" data-cv="${c.id}"></canvas><div><em>${c.en}</em><b>${c.name}</b><p>${c.desc}</p></div></div>`).join('');
+  $('chWrap').querySelectorAll('[data-ch]').forEach(el=>el.onclick=()=>{setChar(el.dataset.ch);renderChars();});
+  $('chWrap').querySelectorAll('[data-cv]').forEach(cv=>charPreview(cv.dataset.cv,cv));}
+function setChar(id){if(!CHARS[id]||id===CUR_CHAR)return;CUR_CHAR=id;CHR=CHARS[id];try{localStorage.setItem('bd_char',id)}catch(e){}if(p.act&&!p.act.def.skill)p.act=null;resetCloth();sfx.ready();}
+$('bChar').onclick=()=>{aInit();closeModals();renderChars();openModal('mChar');};$('chX').onclick=closeModals;
 $('bMap').onclick=()=>{aInit();closeModals();renderMaps();openModal('mMap');};$('mpX').onclick=closeModals;
 $('mapNm').textContent=TH[MAP].name;
 function toggleCfg(force){const on=force??!$('cfg').classList.contains('on');if(on)$('gset').classList.remove('on');$('cfg').classList.toggle('on',on);document.body.classList.toggle('cfgOpen',on);
@@ -2454,7 +2624,7 @@ let LS_DROP=false;
 function unassign(i){loadout[i]=null;selSkill=null;selSlot=null;saveLo();paintSlots();renderLoad();renderGuide();sfx.click();}
 function assign(i,id){setTimeout(renderGuide,0);const o=loadout.indexOf(id);if(o>=0&&o!==i)loadout[o]=loadout[i];loadout[i]=id;selSkill=null;selSlot=null;saveLo();paintSlots();renderLoad();sfx.ready();}
 function openModal(id){paused=true;$(id).classList.add('on');for(const k in keys)keys[k]=false;held.attack=false;touchAx=0;}
-function closeModals(){closeMenu();['mLoad','mHelp','mNote','mMap'].forEach(id=>$(id).classList.remove('on'));if($('start').classList.contains('hide'))paused=false;for(const b in buf)buf[b]=0;}
+function closeModals(){closeMenu();['mLoad','mHelp','mNote','mMap','mChar'].forEach(id=>$(id).classList.remove('on'));if($('start').classList.contains('hide'))paused=false;for(const b in buf)buf[b]=0;}
 function toggleLoad(){HOVER_CARD=null;if($('mLoad').classList.contains('on'))closeModals();else{closeModals();selSkill=selSlot=null;renderLoad();openModal('mLoad');}}
 function toggleSnd(){S.on=!S.on;GS.snd=S.on?1:0;saveGS();if($('gset').classList.contains('on'))$('gsSnd').checked=!!GS.snd;}
 $('bLoad').onclick=()=>{aInit();toggleLoad();};$('bDone').onclick=closeModals;
@@ -2533,7 +2703,8 @@ function frame(now){const rdt=Math.min(.05,(now-last)/1000);last=now;requestAnim
 requestAnimationFrame(frame);
 
 // test hook
-window.__bd={scr:(x,y)=>{const k=KZ(1)*(1+cam.zk);return[W/2+(x-cam.x)*k,GY+(y-cam.y)*k,k];},GUST,EV,fxEvent,playFx,CLONE,get NOTES(){return NOTES},saveLast,setMap,keyAssign,get KEYS(){return KEYS},CFG:()=>CFG,p,dummy,press,combo,startAct,ACT,objs,loadout,setAx:v=>{touchAx=v;},dirPress,begin,renderGuide,windS,BELLS,scarfEnd:()=>{const q=scarfA.P[scarfA.n-1];return[q.x,q.y];},hold:v=>{TEST_HOLD=v;},adv:sec=>{for(let i=0;i<Math.round(sec*60);i++)update(1/60);render();}};
+chActs();
+window.__bd={setChar,scr:(x,y)=>{const k=KZ(1)*(1+cam.zk);return[W/2+(x-cam.x)*k,GY+(y-cam.y)*k,k];},GUST,EV,fxEvent,playFx,CLONE,get NOTES(){return NOTES},saveLast,setMap,keyAssign,get KEYS(){return KEYS},CFG:()=>CFG,p,dummy,press,combo,startAct,ACT,objs,loadout,setAx:v=>{touchAx=v;},dirPress,begin,renderGuide,windS,BELLS,scarfEnd:()=>{const q=scarfA.P[scarfA.n-1];return[q.x,q.y];},hold:v=>{TEST_HOLD=v;},adv:sec=>{for(let i=0;i<Math.round(sec*60);i++)update(1/60);render();}};
 })();
 </script>
 </body>
