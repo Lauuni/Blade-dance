@@ -366,8 +366,14 @@ body.nohint #keys{display:none}
 .ls.empty{border-style:dashed;opacity:.75}.ls.empty b{color:rgba(255,255,255,.5)}
 .sk.empty{border-style:dashed;border-color:rgba(255,255,255,.22)}.sk.empty svg{display:none}
 .ls[draggable=true]{cursor:grab}
-.chars{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:6px 0 16px}
-.chc{position:relative;display:flex;gap:14px;align-items:center;padding:14px;border-radius:18px;background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.1);cursor:pointer;transition:all .15s}
+.chars{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;gap:14px;margin:6px 0 16px}
+.chc>div{padding-top:22px;min-width:0}.chc em{display:block;height:14px}.chc b{line-height:1.15;margin:4px 0 0}
+.chc.kf,.mp-card.kf{outline:2px solid rgba(255,255,255,.75);outline-offset:3px}
+.row .pkh{margin-right:auto;font-size:11.5px;color:rgba(255,255,255,.55);display:flex;align-items:center;gap:4px;flex-wrap:wrap}.row .pkh kbd{font:700 10px 'Noto Sans KR';padding:2px 6px;border-radius:5px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#fff}
+#zToast{position:fixed;left:50%;top:84px;transform:translate(-50%,-6px);z-index:40;display:flex;gap:8px;align-items:center;padding:8px 16px;border-radius:999px;background:rgba(14,8,20,.72);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(6px);font:700 13px 'Noto Sans KR';color:rgba(255,255,255,.45);opacity:0;pointer-events:none;transition:opacity .18s,transform .18s}
+#zToast.on{opacity:1;transform:translate(-50%,0)}#zToast span.on{color:#fff}#zToast i{font-style:normal;opacity:.5}
+#bZoom .zm{font-weight:700;color:var(--gold,#ffd36b);margin-left:4px}
+.chc{position:relative;display:flex;gap:16px;align-items:flex-start;padding:14px;border-radius:18px;background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.1);cursor:pointer;transition:all .15s}
 .chc:hover{background:rgba(255,255,255,.07);border-color:color-mix(in srgb,var(--c) 60%,transparent)}
 .chc.sel{border-color:var(--c);background:color-mix(in srgb,var(--c) 14%,rgba(20,10,28,.6));box-shadow:0 0 24px color-mix(in srgb,var(--c) 35%,transparent)}
 .chc canvas.chv{position:static;inset:auto;display:block;z-index:auto;width:132px;height:168px;flex:none;border-radius:12px;background:radial-gradient(ellipse 70% 55% at 50% 62%,color-mix(in srgb,var(--c) 28%,transparent),transparent 72%),linear-gradient(180deg,rgba(255,255,255,.03),rgba(0,0,0,.25))}
@@ -381,7 +387,7 @@ body.nohint #keys{display:none}
 <canvas id="c"></canvas>
 
 <div class="hud" id="brand">
-  <div class="t">검무<i>.</i><small>BLADE DANCE · <span id="mapNm">수련장</span> · v0.5.0</small></div>
+  <div class="t">검무<i>.</i><small>BLADE DANCE · <span id="mapNm">수련장</span> · v0.5.1</small></div>
   <div id="stats">
     <div>총 데미지<b id="stTot">0</b></div>
     <div>최대 콤보<b id="stBest">0</b></div>
@@ -395,10 +401,10 @@ body.nohint #keys{display:none}
   <div class="mwrap"><button class="ib" id="bMenu" title="메뉴"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span>메뉴</span></button>
   <div id="mnu">
   <button class="ib" id="bSet" title="설정 (사운드·화면·키)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg><span>설정</span></button>
-  <button class="ib" id="bChar"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="3.5"/><path d="M5 21c0-4 3-7 7-7s7 3 7 7"/></svg><span>캐릭터</span></button>
+  <button class="ib" id="bChar"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="3.5"/><path d="M5 21c0-4 3-7 7-7s7 3 7 7"/></svg><span>캐릭터</span><kbd data-kl="char">,</kbd></button>
   <button class="ib" id="bLoad"><svg viewBox="0 0 24 24"><path d="M4 7h11M4 12h7M4 17h11"/><path d="M17 4l3 3-3 3M17 14l3 3-3 3"/></svg><span>기술 교체</span><kbd>Tab</kbd></button>
   <button class="ib" id="bNote" title="콤보 노트"><svg viewBox="0 0 24 24"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/><path d="M9 8h6"/></svg><span>콤보 노트</span><kbd>L</kbd></button>
-  <button class="ib" id="bZoom" title="넓게 보기"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/><circle cx="12" cy="12" r="3"/></svg><span>넓게 보기</span><kbd data-kl="zoom">B</kbd></button>
+  <button class="ib" id="bZoom" title="카메라: 기본 → 넓게 → 확대 (우클릭: 거꾸로)"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/><circle cx="12" cy="12" r="3"/></svg><span>카메라 <b class="zm">기본</b></span><kbd data-kl="zoom">B</kbd></button>
   <button class="ib" id="bFull"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg><span>전체화면</span><kbd>F</kbd></button>
   <button class="ib" id="bMap" title="맵 선택"><svg viewBox="0 0 24 24"><path d="M3 19l6-10 4 6 3-4 5 8z"/><circle cx="17" cy="6" r="2"/></svg><span>맵 선택</span><kbd data-kl="map">M</kbd></button>
   <button class="ib" id="bHelp" title="조작법"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6V14M12 17.5v.01"/></svg><span>도움말</span></button>
@@ -444,7 +450,7 @@ body.nohint #keys{display:none}
   <div class="row"><button class="btn" id="bDone">완료</button></div>
 </div></div>
 
-<div id="cfg"><div class="cfgh"><b>테스트 설정</b><small>v0.5.0 · T</small><div class="hb"><button id="c_def" class="pri" title="모든 테스트 수치를 기본값으로 (키 설정은 그대로)">기본값</button><button id="c_copy" title="현재 설정을 글로 복사">설정 복사</button></div><button id="cfgX" title="닫기 (Q / Esc)">✕</button><div class="pmsg" id="c_msg"></div></div>
+<div id="cfg"><div class="cfgh"><b>테스트 설정</b><small>v0.5.1 · T</small><div class="hb"><button id="c_def" class="pri" title="모든 테스트 수치를 기본값으로 (키 설정은 그대로)">기본값</button><button id="c_copy" title="현재 설정을 글로 복사">설정 복사</button></div><button id="cfgX" title="닫기 (Q / Esc)">✕</button><div class="pmsg" id="c_msg"></div></div>
   <textarea id="c_txt" hidden readonly></textarea>
   <details class="cs"><summary><span>💾 설정 슬롯<i class="vt">v0.4.4</i></span></summary><div class="note">지금 테스트 수치를 슬롯에 저장해 두고 언제든 불러와요. 이름 칸을 눌러 이름을 바꿀 수 있어요. (키 설정은 설정 → 키 설정의 슬롯)</div><div class="slots3" id="c_slots"></div></details>
   <details class="cs"><summary><span>🧪 테스트 도구<i class="vt">v0.4.0</i></span></summary>
@@ -479,7 +485,7 @@ body.nohint #keys{display:none}
     <div class="sl-t">환영연참<i class="vt">v0.4.8</i></div><div id="c_chain"></div>
     <div id="c_fx"></div></details>
 </div>
-<div id="gset"><div class="cfgh"><b>설정</b><small>v0.5.0</small><button id="gsX" title="닫기 (Q / Esc)">✕</button><div class="pmsg" id="g_msg"></div></div>
+<div id="gset"><div class="cfgh"><b>설정</b><small>v0.5.1</small><button id="gsX" title="닫기 (Q / Esc)">✕</button><div class="pmsg" id="g_msg"></div></div>
   <details class="cs"><summary><span>🔊 소리<i class="vt">v0.4.5</i></span></summary>
     <label class="sw"><span>소리 켜기 <small style="color:rgba(255,255,255,.4)">(<span data-kl="sound">N</span> 키)</small></span><input type="checkbox" id="gsSnd"></label>
     <div id="g_vol"></div>
@@ -492,7 +498,7 @@ body.nohint #keys{display:none}
     <label class="sw"><span>바람 효과</span><input type="checkbox" id="gsWind"></label>
     <div class="note">가끔 돌풍이 불어 억새·풀·꽃잎·옷자락이 휘날려요</div></details>
   <details class="cs"><summary><span>🔭 카메라<i class="beta">베타</i></span></summary>
-    <div class="note">B 키(또는 메뉴 → 넓게 보기)로 넓게 보기를 켜고 꺼요.</div>
+    <div class="note">B 키(또는 메뉴 → 카메라)로 <b>기본 → 넓게 → 확대</b> 순서로 바뀌어요. V 키(또는 버튼 우클릭)는 거꾸로.</div>
     <div id="g_cam"></div></details>
   <details class="cs kbsec"><summary><span>⌨️ 키 설정<i class="vt">v0.4.0</i></span></summary>
     <div class="sl-t">키 설정 슬롯<i class="vt">v0.4.4</i></div><div class="slots3" id="k_slots"></div>
@@ -505,16 +511,17 @@ body.nohint #keys{display:none}
   <div class="sub" style="margin-bottom:0">콤보가 끝나면 위쪽 루트 옆 <b style="color:var(--gold)">☆ 저장</b>으로 기록하세요. 📌 핀을 꽂으면 리스트 맨 위에 고정되고, 게임 화면에 <b>연습 가이드</b>로 떠요.</div>
   <div id="ntBody"></div>
 </div></div>
+<div id="zToast"></div>
 <div class="modal" id="mChar"><div class="panel" style="width:min(760px,100%)">
   <h2>캐릭터 <small>CHARACTER</small></h2>
   <div class="sub">기술은 모두 같아요. 서 있기 · 걷기 · 질주 · 대쉬 · 점프 모습이 캐릭터마다 달라요.</div>
   <div class="chars" id="chWrap"></div>
-  <div class="row"><button class="btn" id="chX">닫기</button></div>
+  <div class="row"><span class="pkh" data-pkh></span><button class="btn" id="chX">닫기</button></div>
 </div></div>
 <div class="modal" id="mMap"><div class="panel">
   <h2>맵 선택 <small>STAGE</small></h2>
   <div class="mp-list" id="mpList"></div>
-  <div class="row"><button class="btn" id="mpX">닫기</button></div>
+  <div class="row"><span class="pkh" data-pkh></span><button class="btn" id="mpX">닫기</button></div>
 </div></div>
 <div class="modal" id="mHelp"><div class="panel" style="width:min(980px,100%)">
   <h2>조작법 <small>CONTROLS</small></h2>
@@ -563,7 +570,7 @@ addEventListener('resize',resize);resize();
 // ============================================================ audio
 const S={c:null,on:true,out:null,nb:null,bus:{}};let CUR_BUS='sfx',CUR_DEST=null;const BUSV={bgm:'vBgm',amb:'vAmb',sfx:'vSfx',ui:'vUi'};
 const onBus=(b,f)=>{const o=CUR_BUS;CUR_BUS=b;try{f()}finally{CUR_BUS=o}};
-const GS={snd:1,vol:.8,vBgm:.8,vAmb:.8,vSfx:1,vUi:.8,wind:1,zoomOut:.62,zoomDur:.45,ui:1,hints:1};try{Object.assign(GS,JSON.parse(localStorage.getItem('bd_game')||'{}'));}catch(e){}
+const GS={snd:1,vol:.8,vBgm:.8,vAmb:.8,vSfx:1,vUi:.8,wind:1,zoomOut:.62,zoomIn:1.4,zoomDur:.45,ui:1,hints:1};try{Object.assign(GS,JSON.parse(localStorage.getItem('bd_game')||'{}'));}catch(e){}
 S.on=!!GS.snd;const saveGS=()=>{try{localStorage.setItem('bd_game',JSON.stringify(GS))}catch(e){}};
 function aInit(){if(S.c){if(S.c.state==='suspended')S.c.resume();return}
   try{const C=window.AudioContext||window.webkitAudioContext;S.c=new C();S.out=S.c.createGain();S.out.gain.value=.55*GS.vol;
@@ -595,6 +602,7 @@ const sfx={
   deny:()=>tn({d:.08,type:'square',f0:150,v:.05}),
   grade:()=>{tn({d:.3,type:'triangle',f0:880,v:.1});tn({d:.45,type:'triangle',f0:1320,v:.09,dl:.07});},
   ready:()=>tn({d:.14,f0:1700,v:.035}),
+  tick:()=>onBus('ui',()=>tn({d:.05,f0:2400,f1:2100,v:.018})),
   step:(k=.5)=>{const v=.6+.6*k;if(MAP==='dojo'){tn({d:.045,type:'triangle',f0:rnd(170,230),f1:110,v:.035*v});nz({d:.025,type:'highpass',f0:2600,v:.028*v});nz({d:.05,type:'bandpass',f0:rnd(700,900),q:2,v:.02*v});}
     else{nz({d:.1,type:'lowpass',f0:rnd(800,1000),f1:260,v:.055*v});nz({d:.06,type:'bandpass',f0:rnd(2200,2800),q:2.2,v:.016*v,dl:.008});}},
   wave:()=>{nz({d:.35,f0:300,f1:1700,q:3,v:.25});tn({d:.4,type:'triangle',f0:620,f1:300,v:.06});},
@@ -624,8 +632,8 @@ const vib=ms=>{try{navigator.vibrate&&navigator.vibrate(ms)}catch(e){}};
 // ============================================================ input
 const keys={}, buf={attack:0,jump:0,dash:0,s0:0,s1:0,s2:0}, held={attack:false};
 let touchAx=0, paused=true;
-const KEY_DEF={close:['KeyQ',''],map:['KeyM',''],sound:['KeyN',''],zoom:['KeyB',''],left:['ArrowLeft',''],right:['ArrowRight',''],attack:['KeyX',''],jump:['KeyC','ArrowUp'],dash:['KeyZ','ShiftLeft'],s0:['KeyA','Digit1'],s1:['KeyS','Digit2'],s2:['KeyD','Digit3']};
-const KEY_NM={close:'메뉴 / 창 닫기',map:'맵 선택',sound:'소리 켜기/끄기',zoom:'넓게 보기',left:'왼쪽 이동',right:'오른쪽 이동',attack:'공격',jump:'점프',dash:'대쉬',s0:'기술 1',s1:'기술 2',s2:'기술 3'};
+const KEY_DEF={close:['KeyQ',''],map:['KeyM',''],char:['Comma',''],sound:['KeyN',''],zoom:['KeyB',''],zoomR:['KeyV',''],left:['ArrowLeft',''],right:['ArrowRight',''],attack:['KeyX',''],jump:['KeyC','ArrowUp'],dash:['KeyZ','ShiftLeft'],s0:['KeyA','Digit1'],s1:['KeyS','Digit2'],s2:['KeyD','Digit3']};
+const KEY_NM={close:'메뉴 / 창 닫기',map:'맵 선택',char:'캐릭터 선택',sound:'소리 켜기/끄기',zoom:'카메라 (다음)',zoomR:'카메라 (이전)',left:'왼쪽 이동',right:'오른쪽 이동',attack:'공격',jump:'점프',dash:'대쉬',s0:'기술 1',s1:'기술 2',s2:'기술 3'};
 const SYS_KEYS=['Tab','KeyT','KeyR','KeyL','KeyF','Escape'];
 let KEYS=JSON.parse(JSON.stringify(KEY_DEF));
 try{const k=JSON.parse(localStorage.getItem('bd_keys')||'null');if(k&&typeof k==='object')for(const a in KEY_DEF)if(Array.isArray(k[a]))KEYS[a]=[k[a][0]||'',k[a][1]||''];}catch(e){}
@@ -650,6 +658,11 @@ addEventListener('keydown',e=>{
   if(e.code==='KeyF'&&!KM.KeyF&&!e.repeat){toggleFull();return}
   if($('mLoad').classList.contains('on')&&HOVER_CARD){const n=['Digit1','Digit2','Digit3'].indexOf(e.code);const m=n>=0?n:['s0','s1','s2'].indexOf(KM[e.code]);if(m>=0){assign(m,HOVER_CARD);return}}
   if(e.code==='KeyL'&&!KM.KeyL){toggleNote();return}
+  {const pk=PICK.cur();if(pk){const b=KM[e.code];
+    if(e.code==='ArrowLeft'||e.code==='ArrowUp'||b==='left'){PICK.move(pk,-1);return}
+    if(e.code==='ArrowRight'||e.code==='ArrowDown'||b==='right'){PICK.move(pk,1);return}
+    if(!e.repeat&&(e.code==='Space'||e.code==='Enter'||e.code==='NumpadEnter'||b==='attack')){PICK.ok(pk);return}}}
+  if(KM[e.code]==='char'&&!e.repeat){if($('mChar').classList.contains('on'))closeModals();else openChar();return}
   if(KM[e.code]==='map'&&!e.repeat){if($('mMap').classList.contains('on'))closeModals();else{closeModals();renderMaps();openModal('mMap');}return}
   if(KM[e.code]==='sound'&&!e.repeat){toggleSnd();return}
   if(e.code==='KeyT'&&!KM.KeyT){toggleCfg();return}
@@ -658,7 +671,7 @@ addEventListener('keydown',e=>{
   if(e.repeat)return;
   if(KM[e.code]==='left')dirPress(-1);if(KM[e.code]==='right')dirPress(1);
   if(e.code==='KeyR'&&!KM.KeyR){resetDummy();cdReset();clearClones();}
-  if(KM[e.code]==='zoom'){toggleZoom();return;}
+  if(KM[e.code]==='zoom'){toggleZoom(1);return;}if(KM[e.code]==='zoomR'){toggleZoom(-1);return;}
   const b=KM[e.code];if(b&&b!=='left'&&b!=='right'){press(b);if(b==='attack')held.attack=true;}
 });
 addEventListener('keyup',e=>{keys[e.code]=false;if(KM[e.code]==='attack')held.attack=KEYS.attack.some(c=>c&&keys[c]);});
@@ -830,9 +843,12 @@ const PG=2600, RUN=300, SPRINT=560;
 const p={x:-140,y:0,vx:0,vy:0,f:1,ground:true,dj:false,airDashed:false,airChain:false,act:null,disp:Object.assign({},STAND),hipOff:-HIPH,J:null,flipT:0,landT:0,runPh:0,cd:{},dashCD:0,fwd:1,sprint:false,sprintDir:0,skidT:0,jsq:0,toT:0,landK:0,landD:.14,airIdx:0,dashMax:.8,swordOut:false,prevF:1,idleT:0};
 const dummy={x:150,y:0,vx:0,vy:0,air:false,rot:0,rv:0,flash:0,sq:0,pb:0,frozen:false,lastHit:-9,jit:0,touch:0,stun:0,heldT:0,state:'stand',bounceProp:false,forced:false,downT:0,getT:0,downDir:1,iceT:0,iceHits:0,iceShape:null,iceCr:null};
 let ink=0, inkT=0;
-const ZM={v:1,from:1,to:1,t:9,on:false};
+const ZM={v:1,from:1,to:1,t:9,on:false,mode:0};const ZM_NM=['기본','넓게','확대'];
 const KZ=(par=1)=>K0*(1+(ZM.v-1)*Math.min(1,par));
-function toggleZoom(){ZM.on=!ZM.on;ZM.from=ZM.v;ZM.to=ZM.on?GS.zoomOut:1;ZM.t=0;const b=$('bZoom');if(b)b.classList.toggle('on',ZM.on);sfx.zoom&&sfx.zoom(ZM.on);}
+const zoomTarget=m=>[1,GS.zoomOut,GS.zoomIn][m];
+function setZoom(m){ZM.mode=m;ZM.on=m!==0;const to=zoomTarget(m),out=to<ZM.v;ZM.from=ZM.v;ZM.to=to;ZM.t=0;const b=$('bZoom');if(b){b.classList.toggle('on',ZM.on);const z=b.querySelector('.zm');if(z)z.textContent=ZM_NM[m];}sfx.zoom&&sfx.zoom(out);zoomToast();}
+function toggleZoom(dir=1){setZoom((ZM.mode+dir+3)%3);}
+let zToastT=0;function zoomToast(){const el=$('zToast');if(!el)return;el.innerHTML=ZM_NM.map((n,i)=>`<span class="${i===ZM.mode?'on':''}">${n}</span>`).join('<i>›</i>');el.classList.add('on');clearTimeout(zToastT);zToastT=setTimeout(()=>el.classList.remove('on'),1100);}
 function updZoom(rdt){ZM.t+=rdt;ZM.v=lerp(ZM.from,ZM.to,E.io(Math.min(1,ZM.t/Math.max(.05,GS.zoomDur))));}
 let gt=0, rt=0, hitstop=0, trauma=0, flashA=0, flashC='#fff', impT=0, impMax=1, impX=0, impY=0, dim=0, dimT=0;
 const slow={s:1,t:0}; const cam={x:0,y:0,zk:0,kx:0,ky:0};
@@ -1749,11 +1765,13 @@ function sampleTrail(){const a=p.act,D=a&&a.def;
   trail.prev=cur;}
 function updCam(rdt){
   updZoom(rdt);const d=dummy;const k=KZ(1);const far=Math.abs(p.x-d.x)>760/ZM.v;
-  let tx=far?p.x:p.x*.55+d.x*.45;tx+=p.f*30;
+  // close-up: frame the player more than the pair, and follow faster so a jump never leaves the screen
+  const zin=clamp(ZM.v-1,0,1.2),dw=.45*clamp(1-zin*.9,0,1),fr=1+zin*2.2;
+  let tx=far?p.x:p.x*(1-dw)+d.x*dw;tx+=p.f*30*(1-zin*.5);
   const halfW=W/2/k;tx=clamp(tx,-ARENA-80+halfW,ARENA+80-halfW);
-  cam.x+=(tx-cam.x)*(1-Math.exp(-rdt*5));
-  const top=Math.min(p.y-120,far?0:d.y-150);
-  const ty=Math.min(0,top+(GY-H*.2)/k);cam.y+=(ty-cam.y)*(1-Math.exp(-rdt*4));
+  cam.x+=(tx-cam.x)*(1-Math.exp(-rdt*5*fr));
+  const top=Math.min(p.y-120-zin*30,far||zin>.2?p.y-120-zin*30:d.y-150);
+  const ty=Math.min(zin*70,top+(GY-H*(.17+zin*.04))/k);cam.y+=(ty-cam.y)*(1-Math.exp(-rdt*4*fr));
 }
 
 // ============================================================ background
@@ -2398,7 +2416,7 @@ const SLD=[{k:'incHit',l:'보정 증가량 (히트당)',min:0,max:20,step:.1,u:'
   {k:'clothStiff',l:'천의 뻣뻣함',min:0,max:1,step:.05,u:'',d:'0 = 부드럽게 흐름 (기본), 높을수록 덜 꺾여요 (머플러)',sec:'c_cloth',v:'0.4.8'},
   {k:'saPowX',l:'질주베기 가로 힘',min:0,max:1400,step:20,u:'',d:'3번째 회전에 맞은 적이 앞으로 날아가는 힘',sec:'c_tech',v:'0.4.4'},
   {k:'saPowY',l:'질주베기 세로 힘',min:0,max:1400,step:20,u:'',d:'위로 뜨는 힘 (0이면 거의 바닥으로 미끄러져요)',sec:'c_tech',v:'0.4.4'}];
-const GSL=[{k:'zoomOut',l:'넓게 보기 배율',min:.35,max:.95,step:.01,u:'×2',d:'작을수록 더 넓게 보여요'},{k:'zoomDur',l:'전환 시간',min:.15,max:1.2,step:.05,u:'초',d:'넓어지고 돌아오는 데 걸리는 시간'}];
+const GSL=[{k:'zoomOut',l:'넓게 보기 배율',min:.35,max:.95,step:.01,u:'×',d:'작을수록 더 넓게 보여요'},{k:'zoomIn',l:'가까이 보기 배율',v:'0.5.1',min:1.1,max:2,step:.05,u:'×',d:'클수록 더 가까이 보여요'},{k:'zoomDur',l:'전환 시간',min:.15,max:1.2,step:.05,u:'초',d:'카메라가 바뀌는 데 걸리는 시간'}];
 const BSL={k:'bounceH',l:'바운드 높이',min:30,max:320,step:5,u:'px',d:'세게 박든 약하게 떨어지든 항상 이 높이로 튀어요'};
 const BLIST=[['A1','평1'],['A2','평2'],['A3','평3'],['A4','평4'],['AA1','점프평1'],['AA2','점프평2'],['AA3','점프평3'],['DA','대쉬평'],['SA','질주베기']].concat(SK_ORDER.map(k=>[SK[k].act,SK[k].name]));
 function fmtV(sd,v){return sd.u==='k'?(+v).toFixed(2):sd.u===''?String(v):sd.u==='×2'?'×'+(+v).toFixed(2):sd.u==='px'?`${v}px`:sd.u==='×'?'×'+(+v).toFixed(1):sd.u==='초'?(+v).toFixed(2)+'초':v+'%';}
@@ -2434,7 +2452,7 @@ $('c_on').onchange=e=>{CFG.on=e.target.checked;saveCfg();buildCfg();e.target.blu
 document.querySelectorAll('#c_mode button').forEach(b=>b.onclick=()=>{CFG.mode=b.dataset.v;saveCfg();buildCfg();b.blur();});
 function cdReset(){for(const k in p.cd)p.cd[k]=0;p.dashCD=0;cfgMsg('쿨타임 초기화!');}
 function cfgMsg(t){$('c_msg').textContent=t;clearTimeout(cfgMsg.t);cfgMsg.t=setTimeout(()=>$('c_msg').textContent='',1800);}
-function cfgText(){return['[검무 v0.5.0 테스트 설정]',`쿨타임 없음: ${CFG.noCD?'ON':'OFF'}`,`공중 관성: ${({decay:'감속',onhit:'타격 시 감속',mix:'혼합'})[CFG.inertia]}`,`바운드 모든타: ${BLIST.filter(([id])=>CFG.bounce[id]===2).map(x=>x[1]).join(', ')||'없음'}`,`연출 ON: ${FXL.filter(x=>FX(x[0])).map(x=>x[0]).join(', ')||'없음'}`,`바운드: ${CFG.bounceMode==='fixed'?'고정 높이 '+CFG.bounceH+'px':'충격 비례'}`,`콤보 보정: ${CFG.on?'ON':'OFF'}`,`누적 방식: ${CFG.mode==='hit'?'히트당':'공격당'}`].concat(SLD.map(sd=>`${sd.l}: ${fmtV(sd,CFG[sd.k])}`)).concat([`바운드 ON: ${BLIST.filter(([id])=>CFG.bounce[id]).map(x=>x[1]).join(', ')||'없음'}`]).join('\n');}
+function cfgText(){return['[검무 v0.5.1 테스트 설정]',`쿨타임 없음: ${CFG.noCD?'ON':'OFF'}`,`공중 관성: ${({decay:'감속',onhit:'타격 시 감속',mix:'혼합'})[CFG.inertia]}`,`바운드 모든타: ${BLIST.filter(([id])=>CFG.bounce[id]===2).map(x=>x[1]).join(', ')||'없음'}`,`연출 ON: ${FXL.filter(x=>FX(x[0])).map(x=>x[0]).join(', ')||'없음'}`,`바운드: ${CFG.bounceMode==='fixed'?'고정 높이 '+CFG.bounceH+'px':'충격 비례'}`,`콤보 보정: ${CFG.on?'ON':'OFF'}`,`누적 방식: ${CFG.mode==='hit'?'히트당':'공격당'}`].concat(SLD.map(sd=>`${sd.l}: ${fmtV(sd,CFG[sd.k])}`)).concat([`바운드 ON: ${BLIST.filter(([id])=>CFG.bounce[id]).map(x=>x[1]).join(', ')||'없음'}`]).join('\n');}
 $('c_copy').onclick=()=>{const t=cfgText();const ta=$('c_txt');ta.value=t;
   const ok=()=>cfgMsg('복사됨! 채팅에 붙여넣으세요');
   try{navigator.clipboard.writeText(t).then(ok,()=>{ta.hidden=false;ta.select();cfgMsg('아래 글을 길게 눌러 복사하세요');});}catch(e){ta.hidden=false;ta.select();cfgMsg('아래 글을 복사하세요');}};
@@ -2452,8 +2470,9 @@ function keyAssign(code){const L=listenKey;listenKey=null;
 $('c_kdef').onclick=()=>{KEYS=JSON.parse(JSON.stringify(KEY_DEF));saveKeys();buildKM();buildKB();paintKeys();gMsg('키 기본값으로 되돌림');};
 function paintKeys(){const L=a=>keyLabel(KEYS[a][0]||KEYS[a][1]);
   const hk=$('helpKeys');if(hk){const K2=a=>KEYS[a].filter(Boolean).map(c=>`<kbd>${keyLabel(c)}</kbd>`).join(' / ')||'<kbd>—</kbd>';
-    hk.innerHTML=`<li>${K2('left')} ${K2('right')} 걷기 · 두 번 누르면 <b>질주</b> (질주 중 공격 = 질주베기)</li><li>${K2('attack')} 공격 (연타·꾹 누르기로 4연격)</li><li>${K2('jump')} 점프 · 공중 2단 점프</li><li>${K2('dash')} 대시 (대시 중 공격 = 돌진 찌르기)</li><li>${K2('s0')} ${K2('s1')} ${K2('s2')} 기술 1·2·3</li><li>${K2('zoom')} 넓게 보기 (베타) · ${K2('close')} 메뉴 열기 / 창 닫기 (전체화면에서는 Esc 대신)</li><li><kbd>Tab</kbd> 기술 교체 · <kbd>L</kbd> 콤보 노트 · <kbd>T</kbd> 테스트 설정 · <kbd>R</kbd> 리셋 · ${K2('map')} 맵 · ${K2('sound')} 소리 · <kbd>F</kbd> 전체화면 · <kbd>Esc</kbd> 닫기</li><li style="opacity:.6">키는 설정(⚙) → 키 설정에서 바꿀 수 있어요</li>`;}
+    hk.innerHTML=`<li>${K2('left')} ${K2('right')} 걷기 · 두 번 누르면 <b>질주</b> (질주 중 공격 = 질주베기)</li><li>${K2('attack')} 공격 (연타·꾹 누르기로 4연격)</li><li>${K2('jump')} 점프 · 공중 2단 점프</li><li>${K2('dash')} 대시 (대시 중 공격 = 돌진 찌르기)</li><li>${K2('s0')} ${K2('s1')} ${K2('s2')} 기술 1·2·3</li><li>${K2('zoom')} 카메라 기본 → 넓게 → 확대 · ${K2('zoomR')} 거꾸로 · ${K2('close')} 메뉴 열기 / 창 닫기 (전체화면에서는 Esc 대신)</li><li><kbd>Tab</kbd> 기술 교체 · <kbd>L</kbd> 콤보 노트 · <kbd>T</kbd> 테스트 설정 · <kbd>R</kbd> 리셋 · ${K2('map')} 맵 · ${K2('char')} 캐릭터 · ${K2('sound')} 소리 · <kbd>F</kbd> 전체화면 · <kbd>Esc</kbd> 닫기</li><li style="opacity:.6">키는 설정(⚙) → 키 설정에서 바꿀 수 있어요</li>`;}
   document.querySelectorAll('[data-kl]').forEach(el=>el.textContent=L(el.dataset.kl));
+  document.querySelectorAll('[data-pkh]').forEach(el=>el.innerHTML=`<kbd>←</kbd><kbd>→</kbd> 고르기 · <kbd>Space</kbd><kbd>Enter</kbd><kbd>${L('attack')}</kbd> 확정 · <kbd>${L('close')}</kbd> 닫기`);
   $('kh1').innerHTML=`<kbd>${L('left')}</kbd><kbd>${L('right')}</kbd>걷기 · 두 번 누르면 질주`;
   $('kh2').innerHTML=`<kbd>${L('attack')}</kbd>공격 <kbd>${L('jump')}</kbd>점프 <kbd>${L('dash')}</kbd>대시`;
   const sh=$('startHint');if(sh&&!document.body.classList.contains('touch'))sh.textContent=`${L('left')}${L('right')} 걷기(두 번: 질주) · ${L('attack')} 공격 · ${L('jump')} 점프 · ${L('dash')} 대시 · ${L('s0')} ${L('s1')} ${L('s2')} 기술 · T 테스트 설정 · L 콤보 노트`;}
@@ -2549,8 +2568,16 @@ function mapSVG(id){const W2=320,H2=150;
     <g><rect x="96" y="120" width="4" height="10" fill="#0c1220"/><rect x="95" y="116" width="6" height="4" fill="#ffcf7a"/></g></svg>`;}
 const MAPS=[{id:'dojo',en:'DUSK DOJO',desc:'노을 지는 산사 수련장. 양쪽 끝 석등이 벽이 되는 닫힌 무대예요.'},
   {id:'field',en:'MOONLIT FIELD',desc:'달빛 아래 억새가 끝없이 펼쳐진 들판. 벽이 없어 어디까지든 날리고 쫓을 수 있어요. 멀어지면 R로 허수아비를 앞에 소환하세요.'}];
+// keyboard pick: arrows / move keys choose, Space · Enter · attack confirm. Mouse hover moves the same cursor.
+const PICK={i:{mMap:0,mChar:0},sel:{mMap:'[data-mp]',mChar:'[data-ch]'},
+  cur(){return['mMap','mChar'].find(id=>$(id).classList.contains('on'))},
+  els(id){return[...$(id).querySelectorAll(this.sel[id])];},
+  paint(id){this.els(id).forEach((el,j)=>el.classList.toggle('kf',j===this.i[id]));},
+  init(id){const L=this.els(id),k=L.findIndex(el=>el.classList.contains('sel'));this.i[id]=Math.max(0,k);this.paint(id);L.forEach((el,j)=>el.addEventListener('mouseenter',()=>{this.i[id]=j;this.paint(id);}));},
+  move(id,d){const n=this.els(id).length;if(!n)return;this.i[id]=(this.i[id]+d+n)%n;this.paint(id);sfx.tick&&sfx.tick();},
+  ok(id){const el=this.els(id)[this.i[id]];if(el)el.click();}};
 function renderMaps(){$('mpList').innerHTML=MAPS.map(m=>`<div class="mp-card ${MAP===m.id?'sel':''}" data-mp="${m.id}">${MAP===m.id?'<span class="tag">현재 맵</span>':''}${mapSVG(m.id)}<div class="mi"><em>${m.en}</em><b>${TH[m.id].name}</b><p>${m.desc}</p></div></div>`).join('');
-  document.querySelectorAll('[data-mp]').forEach(el=>el.onclick=()=>{setMap(el.dataset.mp);renderMaps();setTimeout(closeModals,260);});}
+  document.querySelectorAll('[data-mp]').forEach(el=>el.onclick=()=>{setMap(el.dataset.mp);renderMaps();setTimeout(closeModals,260);});PICK.init('mMap');}
 function setMap(id){MAP=id;setTimeout(resetCloth,0);ARENA=id==='dojo'?1150:1e9;try{localStorage.setItem('bd_map',id)}catch(e){}
   p.x=-140;p.y=0;p.vx=p.vy=0;Object.assign(dummy,{x:150,y:0,vx:0,vy:0,air:false,state:'stand',rot:0,rv:0,frozen:false,heldT:0});cam.x=0;
   $('mapNm').textContent=TH[id].name;dust(dummy.x,0,10);}
@@ -2563,10 +2590,11 @@ function charPreview(id,cv){const dpr=Math.min(2,window.devicePixelRatio||1),w=c
   catch(e){console.warn(e);}
   finally{g=keep.g;CHR=keep.CHR;p.J=keep.J;p.act=keep.act;p.fwd=keep.fwd;p.vx=keep.vx;p._ln=keep.ln;p.swordOut=keep.so;CLONE.t=keep.cl;all.forEach((c,i)=>{c.init=snap[i].init;c.P.forEach((q,j)=>Object.assign(q,snap[i].P[j]));});}}
 function renderChars(){$('chWrap').innerHTML=Object.values(CHARS).map(c=>`<div class="chc ${c.id===CUR_CHAR?'sel':''}" data-ch="${c.id}" style="--c:${c.col}">${c.id===CUR_CHAR?'<span class="tag">사용 중</span>':''}<canvas class="chv" data-cv="${c.id}"></canvas><div><em>${c.en}</em><b>${c.name}</b><p>${c.desc}</p></div></div>`).join('');
-  $('chWrap').querySelectorAll('[data-ch]').forEach(el=>el.onclick=()=>{setChar(el.dataset.ch);renderChars();});
+  $('chWrap').querySelectorAll('[data-ch]').forEach(el=>el.onclick=()=>{setChar(el.dataset.ch);renderChars();setTimeout(closeModals,320);});PICK.init('mChar');
   $('chWrap').querySelectorAll('[data-cv]').forEach(cv=>charPreview(cv.dataset.cv,cv));}
 function setChar(id){if(!CHARS[id]||id===CUR_CHAR)return;CUR_CHAR=id;CHR=CHARS[id];try{localStorage.setItem('bd_char',id)}catch(e){}if(p.act&&!p.act.def.skill)p.act=null;resetCloth();sfx.ready();}
-$('bChar').onclick=()=>{aInit();closeModals();renderChars();openModal('mChar');};$('chX').onclick=closeModals;
+function openChar(){closeModals();renderChars();openModal('mChar');}
+$('bChar').onclick=()=>{aInit();openChar();};$('chX').onclick=closeModals;
 $('bMap').onclick=()=>{aInit();closeModals();renderMaps();openModal('mMap');};$('mpX').onclick=closeModals;
 $('mapNm').textContent=TH[MAP].name;
 function toggleCfg(force){const on=force??!$('cfg').classList.contains('on');if(on)$('gset').classList.remove('on');$('cfg').classList.toggle('on',on);document.body.classList.toggle('cfgOpen',on);
@@ -2635,7 +2663,7 @@ function toggleGS(force){const on=force??!$('gset').classList.contains('on');if(
 $('bSet').onclick=()=>{aInit();toggleGS();};$('gsX').onclick=()=>toggleGS(false);
 function gMsg(t){$('g_msg').textContent=t;clearTimeout(gMsg.t);gMsg.t=setTimeout(()=>$('g_msg').textContent='',1800);}
 const GVOL=[{k:'vol',l:'마스터 음량',d:'모든 소리'},{k:'vBgm',l:'배경음악',d:'(아직 없음)'},{k:'vAmb',l:'환경음',d:'바람 · 풍경 종'},{k:'vSfx',l:'효과음',d:'베기 · 타격 · 기술 · 발소리 · 착지 · 칼집 · 입김'},{k:'vUi',l:'UI',d:'기술 준비 완료 · 쿨타임 알림 · 넓게 보기 · 버튼'}];
-const GDEF={vol:.8,vBgm:.8,vAmb:.8,vSfx:1,vUi:.8,zoomOut:.62,zoomDur:.45,ui:1};
+const GDEF={vol:.8,vBgm:.8,vAmb:.8,vSfx:1,vUi:.8,zoomOut:.62,zoomIn:1.4,zoomDur:.45,ui:1};
 function applyVol(){if(!S.c)return;S.out.gain.value=.55*GS.vol;for(const b in BUSV)if(S.bus[b])S.bus[b].gain.value=GS[BUSV[b]];}
 function applyUI(){document.documentElement.style.setProperty('--ui',GS.ui);document.body.classList.toggle('nohint',!GS.hints);}
 // slider row with a number box; double-click resets to default
@@ -2649,8 +2677,8 @@ function buildGS(){$('gsSnd').checked=!!GS.snd;$('gsWind').checked=!!GS.wind;$('
   $('g_vol').querySelectorAll('.sl').forEach(el=>{const k=el.dataset.k;bindRow(el,()=>GS[k]*100,v=>{GS[k]=v/100;applyVol();saveGS();},GDEF[k]*100);});
   $('g_ui').innerHTML=slRow({k:'ui',l:'UI 크기',d:'버튼 · 글자 · 창 크기 (큰 모니터는 크게) — 손을 놓으면 적용',min:.8,max:1.5,step:.05},GS.ui,'×','0.4.5');
   bindRow($('g_ui').querySelector('.sl'),()=>GS.ui,v=>{GS.ui=v;applyUI();saveGS();},1,true);
-  $('g_cam').innerHTML=GSL.map(sd=>slRow(sd,GS[sd.k],sd.u==='초'?'초':'×','0.4.3')).join('');
-  $('g_cam').querySelectorAll('.sl').forEach(el=>{const sd=GSL.find(x=>x.k===el.dataset.k);bindRow(el,()=>GS[sd.k],v=>{GS[sd.k]=v;saveGS();if(sd.k==='zoomOut'&&ZM.on){ZM.from=ZM.v;ZM.to=GS.zoomOut;ZM.t=0;}},GDEF[sd.k]);});
+  $('g_cam').innerHTML=GSL.map(sd=>slRow(sd,GS[sd.k],sd.u==='초'?'초':'×',sd.v||'0.4.3')).join('');
+  $('g_cam').querySelectorAll('.sl').forEach(el=>{const sd=GSL.find(x=>x.k===el.dataset.k);bindRow(el,()=>GS[sd.k],v=>{GS[sd.k]=v;saveGS();if((sd.k==='zoomOut'&&ZM.mode===1)||(sd.k==='zoomIn'&&ZM.mode===2)){ZM.from=ZM.v;ZM.to=zoomTarget(ZM.mode);ZM.t=0;}},GDEF[sd.k]);});
   buildKB();buildSlots('k');}
 // ---- menu
 // turn a panel's <details> sections into a left tab list (one category at a time, no long scroll)
@@ -2686,7 +2714,7 @@ function toggleFull(){try{if(document.fullscreenElement)document.exitFullscreen(
 $('gsFull').onclick=e=>{toggleFull();e.target.blur();};$('bFull').onclick=()=>{toggleFull();};
 $('gsWind').onchange=e=>{GS.wind=e.target.checked?1:0;saveGS();e.target.blur();};
 applyUI();
-$('bZoom').onclick=()=>{aInit();toggleZoom();};
+$('bZoom').onclick=()=>{aInit();toggleZoom(1);};$('bZoom').oncontextmenu=e=>{e.preventDefault();aInit();toggleZoom(-1);};
 document.querySelectorAll('.modal').forEach(m=>m.addEventListener('pointerdown',e=>{if(e.target===m)closeModals();}));
 function begin(){aInit();$('start').classList.add('hide');paused=false;}
 $('start').addEventListener('pointerdown',e=>{e.preventDefault();begin();});
