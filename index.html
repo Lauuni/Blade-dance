@@ -387,7 +387,7 @@ body.nohint #keys{display:none}
 <canvas id="c"></canvas>
 
 <div class="hud" id="brand">
-  <div class="t">검무<i>.</i><small>BLADE DANCE · <span id="mapNm">수련장</span> · v0.5.1</small></div>
+  <div class="t">검무<i>.</i><small>BLADE DANCE · <span id="mapNm">수련장</span> · v0.5.2</small></div>
   <div id="stats">
     <div>총 데미지<b id="stTot">0</b></div>
     <div>최대 콤보<b id="stBest">0</b></div>
@@ -450,7 +450,7 @@ body.nohint #keys{display:none}
   <div class="row"><button class="btn" id="bDone">완료</button></div>
 </div></div>
 
-<div id="cfg"><div class="cfgh"><b>테스트 설정</b><small>v0.5.1 · T</small><div class="hb"><button id="c_def" class="pri" title="모든 테스트 수치를 기본값으로 (키 설정은 그대로)">기본값</button><button id="c_copy" title="현재 설정을 글로 복사">설정 복사</button></div><button id="cfgX" title="닫기 (Q / Esc)">✕</button><div class="pmsg" id="c_msg"></div></div>
+<div id="cfg"><div class="cfgh"><b>테스트 설정</b><small>v0.5.2 · T</small><div class="hb"><button id="c_def" class="pri" title="모든 테스트 수치를 기본값으로 (키 설정은 그대로)">기본값</button><button id="c_copy" title="현재 설정을 글로 복사">설정 복사</button></div><button id="cfgX" title="닫기 (Q / Esc)">✕</button><div class="pmsg" id="c_msg"></div></div>
   <textarea id="c_txt" hidden readonly></textarea>
   <details class="cs"><summary><span>💾 설정 슬롯<i class="vt">v0.4.4</i></span></summary><div class="note">지금 테스트 수치를 슬롯에 저장해 두고 언제든 불러와요. 이름 칸을 눌러 이름을 바꿀 수 있어요. (키 설정은 설정 → 키 설정의 슬롯)</div><div class="slots3" id="c_slots"></div></details>
   <details class="cs"><summary><span>🧪 테스트 도구<i class="vt">v0.4.0</i></span></summary>
@@ -485,7 +485,7 @@ body.nohint #keys{display:none}
     <div class="sl-t">환영연참<i class="vt">v0.4.8</i></div><div id="c_chain"></div>
     <div id="c_fx"></div></details>
 </div>
-<div id="gset"><div class="cfgh"><b>설정</b><small>v0.5.1</small><button id="gsX" title="닫기 (Q / Esc)">✕</button><div class="pmsg" id="g_msg"></div></div>
+<div id="gset"><div class="cfgh"><b>설정</b><small>v0.5.2</small><button id="gsX" title="닫기 (Q / Esc)">✕</button><div class="pmsg" id="g_msg"></div></div>
   <details class="cs"><summary><span>🔊 소리<i class="vt">v0.4.5</i></span></summary>
     <label class="sw"><span>소리 켜기 <small style="color:rgba(255,255,255,.4)">(<span data-kl="sound">N</span> 키)</small></span><input type="checkbox" id="gsSnd"></label>
     <div id="g_vol"></div>
@@ -1630,7 +1630,8 @@ function stepWindSprings(dt){const n=WS.n;for(let i=0;i<n;i++){const sx=-.12+1.2
     if(MAP==='dojo'&&trig&&rt>(b.cd||0)&&rt>BELL_CD){b.cd=rt+(CFG.bellCD??4);BELL_CD=rt+.5;chime(clamp(Math.abs(b.a)/(th*1.8),.45,1),b);}}}
 let BELL_CD=0;
 function windS(sx){const n=WS.n,f=clamp((sx+.12)/1.24,0,1)*(n-1),i=Math.min(n-2,f|0),u=f-i;return WS.a[i]*(1-u)+WS.a[i+1]*u;}
-function windAtPlayer(){return windS(scrX(p.x));}
+let PREVIEW=false;
+function windAtPlayer(){return PREVIEW?0:windS(scrX(p.x));}
 function gazeAng(P){const d=dummy,dx=(d.x-p.x)*p.f,dy=(d.y-102)-(p.y-112);
   if(!FX('M4')||dx<18||dx>760)return null;return clamp(Math.atan2(dy,Math.max(dx,90))*R2D-P.lean,-42,20);}
 function locoPose(dt){
@@ -2051,7 +2052,7 @@ function ribbon(c,w0,w1,col){const P=c.P,n=P.length;if(!c.init)return;const L=[]
     L.push([P[i].x-dy*w,P[i].y+dx*w]);R.push([P[i].x+dy*w,P[i].y-dx*w]);}
   g.fillStyle=col;g.beginPath();g.moveTo(L[0][0],L[0][1]);for(let i=1;i<n;i++)g.lineTo(L[i][0],L[i][1]);for(let i=n-1;i>=0;i--)g.lineTo(R[i][0],R[i][1]);g.closePath();g.fill();}
 function lightPos(){return MAP==='dojo'?[W*.5-cam.x*.03*K0,GY-170*K0-cam.y*.04*K0]:[W*.66,GY-255*K0-cam.y*.04*K0];}
-function lightDir(){const k=KZ(1)*(1+cam.zk),px=W/2+(p.x-cam.x)*k,py=GY+(p.y-80-cam.y)*k,L=lightPos();let dx=L[0]-px,dy=L[1]-py;const l=Math.hypot(dx,dy)||1;return[dx/l,dy/l];}
+function lightDir(){if(PREVIEW)return[.55,-.84];const k=KZ(1)*(1+cam.zk),px=W/2+(p.x-cam.x)*k,py=GY+(p.y-80-cam.y)*k,L=lightPos();let dx=L[0]-px,dy=L[1]-py;const l=Math.hypot(dx,dy)||1;return[dx/l,dy/l];}
 // ---- Yeonhwa
 const YC={top:'#1b1027',hak:'#2a1b42',hakB:'#1d1330',pleat:'rgba(170,140,220,.18)',pink:'#f4a7c3',pinkD:'#c96d91',pinkL:'#ffdbe8',hair:'#0b0611',hairL:'#3a2a52',slv:'#21152f',slvB:'#170f22',skin:'#251829',foot:'#150c1f',saya:'#1f1429'};
 const yNorm=(A,B)=>{const dx=B[0]-A[0],dy=B[1]-A[1],l=Math.hypot(dx,dy)||1;return[dx/l,dy/l,l];};
@@ -2452,7 +2453,7 @@ $('c_on').onchange=e=>{CFG.on=e.target.checked;saveCfg();buildCfg();e.target.blu
 document.querySelectorAll('#c_mode button').forEach(b=>b.onclick=()=>{CFG.mode=b.dataset.v;saveCfg();buildCfg();b.blur();});
 function cdReset(){for(const k in p.cd)p.cd[k]=0;p.dashCD=0;cfgMsg('쿨타임 초기화!');}
 function cfgMsg(t){$('c_msg').textContent=t;clearTimeout(cfgMsg.t);cfgMsg.t=setTimeout(()=>$('c_msg').textContent='',1800);}
-function cfgText(){return['[검무 v0.5.1 테스트 설정]',`쿨타임 없음: ${CFG.noCD?'ON':'OFF'}`,`공중 관성: ${({decay:'감속',onhit:'타격 시 감속',mix:'혼합'})[CFG.inertia]}`,`바운드 모든타: ${BLIST.filter(([id])=>CFG.bounce[id]===2).map(x=>x[1]).join(', ')||'없음'}`,`연출 ON: ${FXL.filter(x=>FX(x[0])).map(x=>x[0]).join(', ')||'없음'}`,`바운드: ${CFG.bounceMode==='fixed'?'고정 높이 '+CFG.bounceH+'px':'충격 비례'}`,`콤보 보정: ${CFG.on?'ON':'OFF'}`,`누적 방식: ${CFG.mode==='hit'?'히트당':'공격당'}`].concat(SLD.map(sd=>`${sd.l}: ${fmtV(sd,CFG[sd.k])}`)).concat([`바운드 ON: ${BLIST.filter(([id])=>CFG.bounce[id]).map(x=>x[1]).join(', ')||'없음'}`]).join('\n');}
+function cfgText(){return['[검무 v0.5.2 테스트 설정]',`쿨타임 없음: ${CFG.noCD?'ON':'OFF'}`,`공중 관성: ${({decay:'감속',onhit:'타격 시 감속',mix:'혼합'})[CFG.inertia]}`,`바운드 모든타: ${BLIST.filter(([id])=>CFG.bounce[id]===2).map(x=>x[1]).join(', ')||'없음'}`,`연출 ON: ${FXL.filter(x=>FX(x[0])).map(x=>x[0]).join(', ')||'없음'}`,`바운드: ${CFG.bounceMode==='fixed'?'고정 높이 '+CFG.bounceH+'px':'충격 비례'}`,`콤보 보정: ${CFG.on?'ON':'OFF'}`,`누적 방식: ${CFG.mode==='hit'?'히트당':'공격당'}`].concat(SLD.map(sd=>`${sd.l}: ${fmtV(sd,CFG[sd.k])}`)).concat([`바운드 ON: ${BLIST.filter(([id])=>CFG.bounce[id]).map(x=>x[1]).join(', ')||'없음'}`]).join('\n');}
 $('c_copy').onclick=()=>{const t=cfgText();const ta=$('c_txt');ta.value=t;
   const ok=()=>cfgMsg('복사됨! 채팅에 붙여넣으세요');
   try{navigator.clipboard.writeText(t).then(ok,()=>{ta.hidden=false;ta.select();cfgMsg('아래 글을 길게 눌러 복사하세요');});}catch(e){ta.hidden=false;ta.select();cfgMsg('아래 글을 복사하세요');}};
@@ -2577,21 +2578,23 @@ const PICK={i:{mMap:0,mChar:0},sel:{mMap:'[data-mp]',mChar:'[data-ch]'},
   move(id,d){const n=this.els(id).length;if(!n)return;this.i[id]=(this.i[id]+d+n)%n;this.paint(id);sfx.tick&&sfx.tick();},
   ok(id){const el=this.els(id)[this.i[id]];if(el)el.click();}};
 function renderMaps(){$('mpList').innerHTML=MAPS.map(m=>`<div class="mp-card ${MAP===m.id?'sel':''}" data-mp="${m.id}">${MAP===m.id?'<span class="tag">현재 맵</span>':''}${mapSVG(m.id)}<div class="mi"><em>${m.en}</em><b>${TH[m.id].name}</b><p>${m.desc}</p></div></div>`).join('');
-  document.querySelectorAll('[data-mp]').forEach(el=>el.onclick=()=>{setMap(el.dataset.mp);renderMaps();setTimeout(closeModals,260);});PICK.init('mMap');}
+  document.querySelectorAll('[data-mp]').forEach(el=>el.onclick=()=>{setMap(el.dataset.mp);renderMaps();setTimeout(closeModals,120);});PICK.init('mMap');}
 function setMap(id){MAP=id;setTimeout(resetCloth,0);ARENA=id==='dojo'?1150:1e9;try{localStorage.setItem('bd_map',id)}catch(e){}
   p.x=-140;p.y=0;p.vx=p.vy=0;Object.assign(dummy,{x:150,y:0,vx:0,vy:0,air:false,state:'stand',rot:0,rv:0,frozen:false,heldT:0});cam.x=0;
   $('mapNm').textContent=TH[id].name;dust(dummy.x,0,10);}
 // card preview: the real figure, posed at rest, cloth settled, drawn into the card's canvas (live cloth is restored afterwards)
 function charPreview(id,cv){const dpr=Math.min(2,window.devicePixelRatio||1),w=cv.clientWidth||110,h=cv.clientHeight||150;cv.width=w*dpr;cv.height=h*dpr;const c2=cv.getContext('2d');
-  const all=ALLCLOTH(),snap=all.map(c=>({init:c.init,P:c.P.map(q=>({x:q.x,y:q.y,px:q.px,py:q.py}))})),keep={CHR,J:p.J,act:p.act,fwd:p.fwd,vx:p.vx,ln:p._ln,so:p.swordOut,cl:CLONE.t,g};
-  try{CHR=CHARS[id];p.act=null;p.fwd=1;p.vx=0;p.swordOut=false;CLONE.t=0;const T={...STAND,lean:9,hd:-2};if(id==='yeon')yStandMod(T);const{L,foot}=rigLocal(T);p.J=rigWorld(L,0,-foot,1);p._ln=null;
+  const all=ALLCLOTH(),snap=all.map(c=>({init:c.init,P:c.P.map(q=>({x:q.x,y:q.y,px:q.px,py:q.py}))})),keep={CHR,J:p.J,act:p.act,fwd:p.fwd,vx:p.vx,ln:p._ln,so:p.swordOut,cl:CLONE.t,g,rt};
+  try{PREVIEW=true;rt=1.2;CHR=CHARS[id];p.act=null;p.fwd=1;p.vx=0;p.swordOut=false;CLONE.t=0;const T={...STAND,lean:9,hd:-2};if(id==='yeon')yStandMod(T);const{L,foot}=rigLocal(T);p.J=rigWorld(L,0,-foot,1);p._ln=null;
     for(const c of all)c.init=false;for(let i=0;i<150;i++)stepCloth();
     const sc=.92*h/168;g=c2;g.setTransform(dpr*sc,0,0,dpr*sc,w*dpr*.34,h*dpr*.95);drawPlayer();}
   catch(e){console.warn(e);}
-  finally{g=keep.g;CHR=keep.CHR;p.J=keep.J;p.act=keep.act;p.fwd=keep.fwd;p.vx=keep.vx;p._ln=keep.ln;p.swordOut=keep.so;CLONE.t=keep.cl;all.forEach((c,i)=>{c.init=snap[i].init;c.P.forEach((q,j)=>Object.assign(q,snap[i].P[j]));});}}
+  finally{PREVIEW=false;rt=keep.rt;g=keep.g;CHR=keep.CHR;p.J=keep.J;p.act=keep.act;p.fwd=keep.fwd;p.vx=keep.vx;p._ln=keep.ln;p.swordOut=keep.so;CLONE.t=keep.cl;all.forEach((c,i)=>{c.init=snap[i].init;c.P.forEach((q,j)=>Object.assign(q,snap[i].P[j]));});}}
 function renderChars(){$('chWrap').innerHTML=Object.values(CHARS).map(c=>`<div class="chc ${c.id===CUR_CHAR?'sel':''}" data-ch="${c.id}" style="--c:${c.col}">${c.id===CUR_CHAR?'<span class="tag">사용 중</span>':''}<canvas class="chv" data-cv="${c.id}"></canvas><div><em>${c.en}</em><b>${c.name}</b><p>${c.desc}</p></div></div>`).join('');
-  $('chWrap').querySelectorAll('[data-ch]').forEach(el=>el.onclick=()=>{setChar(el.dataset.ch);renderChars();setTimeout(closeModals,320);});PICK.init('mChar');
+  $('chWrap').querySelectorAll('[data-ch]').forEach(el=>el.onclick=()=>{setChar(el.dataset.ch);markChars();setTimeout(closeModals,120);});PICK.init('mChar');
   $('chWrap').querySelectorAll('[data-cv]').forEach(cv=>charPreview(cv.dataset.cv,cv));}
+// confirm: only move the highlight and the tag, the previews stay as drawn
+function markChars(){$('chWrap').querySelectorAll('[data-ch]').forEach(el=>{const on=el.dataset.ch===CUR_CHAR;el.classList.toggle('sel',on);const t=el.querySelector('.tag');if(on&&!t)el.insertAdjacentHTML('afterbegin','<span class="tag">사용 중</span>');if(!on&&t)t.remove();});}
 function setChar(id){if(!CHARS[id]||id===CUR_CHAR)return;CUR_CHAR=id;CHR=CHARS[id];try{localStorage.setItem('bd_char',id)}catch(e){}if(p.act&&!p.act.def.skill)p.act=null;resetCloth();sfx.ready();}
 function openChar(){closeModals();renderChars();openModal('mChar');}
 $('bChar').onclick=()=>{aInit();openChar();};$('chX').onclick=closeModals;
