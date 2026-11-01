@@ -372,7 +372,7 @@ body.nohint #keys{display:none}
 <canvas id="c"></canvas>
 
 <div class="hud" id="brand">
-  <div class="t">검무<i>.</i><small>BLADE DANCE · <span id="mapNm">수련장</span> · v0.4.8</small></div>
+  <div class="t">검무<i>.</i><small>BLADE DANCE · <span id="mapNm">수련장</span> · v0.4.9</small></div>
   <div id="stats">
     <div>총 데미지<b id="stTot">0</b></div>
     <div>최대 콤보<b id="stBest">0</b></div>
@@ -434,7 +434,7 @@ body.nohint #keys{display:none}
   <div class="row"><button class="btn" id="bDone">완료</button></div>
 </div></div>
 
-<div id="cfg"><div class="cfgh"><b>테스트 설정</b><small>v0.4.8 · T</small><div class="hb"><button id="c_def" class="pri" title="모든 테스트 수치를 기본값으로 (키 설정은 그대로)">기본값</button><button id="c_copy" title="현재 설정을 글로 복사">설정 복사</button></div><button id="cfgX" title="닫기 (Q / Esc)">✕</button><div class="pmsg" id="c_msg"></div></div>
+<div id="cfg"><div class="cfgh"><b>테스트 설정</b><small>v0.4.9 · T</small><div class="hb"><button id="c_def" class="pri" title="모든 테스트 수치를 기본값으로 (키 설정은 그대로)">기본값</button><button id="c_copy" title="현재 설정을 글로 복사">설정 복사</button></div><button id="cfgX" title="닫기 (Q / Esc)">✕</button><div class="pmsg" id="c_msg"></div></div>
   <textarea id="c_txt" hidden readonly></textarea>
   <details class="cs"><summary><span>💾 설정 슬롯<i class="vt">v0.4.4</i></span></summary><div class="note">지금 테스트 수치를 슬롯에 저장해 두고 언제든 불러와요. 이름 칸을 눌러 이름을 바꿀 수 있어요. (키 설정은 설정 → 키 설정의 슬롯)</div><div class="slots3" id="c_slots"></div></details>
   <details class="cs"><summary><span>🧪 테스트 도구<i class="vt">v0.4.0</i></span></summary>
@@ -469,7 +469,7 @@ body.nohint #keys{display:none}
     <div class="sl-t">환영연참<i class="vt">v0.4.8</i></div><div id="c_chain"></div>
     <div id="c_fx"></div></details>
 </div>
-<div id="gset"><div class="cfgh"><b>설정</b><small>v0.4.8</small><button id="gsX" title="닫기 (Q / Esc)">✕</button><div class="pmsg" id="g_msg"></div></div>
+<div id="gset"><div class="cfgh"><b>설정</b><small>v0.4.9</small><button id="gsX" title="닫기 (Q / Esc)">✕</button><div class="pmsg" id="g_msg"></div></div>
   <details class="cs"><summary><span>🔊 소리<i class="vt">v0.4.5</i></span></summary>
     <label class="sw"><span>소리 켜기 <small style="color:rgba(255,255,255,.4)">(<span data-kl="sound">N</span> 키)</small></span><input type="checkbox" id="gsSnd"></label>
     <div id="g_vol"></div>
@@ -731,13 +731,13 @@ const FXL=[['M4','시선 (적의 가슴 높이)','c',null,'v0.4.6 개선'],
   ['M6','대기: 피 털기','c','IDLE_CHIBURI','v0.4.7 개선'],['M10','대기: 지루해하기','c','IDLE_BORED','v0.4.7 개선'],['M13','대기: 칼끝 짚고 쉬기','c','IDLE_REST','v0.4.6 신규'],['M11','30히트+ 콤보 뒤 숨 고르기','c','IDLE_EXHALE','v0.4.6 개선'],
   ['D1','등불 (센 돌풍 때 가끔 어둡게)','b',null,'v0.4.6 개선']];
 const FXK=new Set(FXL.map(x=>x[0]));const FX=k=>!FXK.has(k)||!!(CFG.fx&&CFG.fx[k]);
-const CFG_DEF={ver:405,bellTh:40,bellCD:4,bellSnd:'new',bellMode:'tilt',dragMode:'new',chainIv:.1,clothStiff:.45,clothGround:1,inertia:'mix',inDecay:.25,inKeep:70,saPowX:700,saPowY:805,fx:Object.fromEntries(FXL.map(x=>[x[0],1])),on:true,mode:'hit',incHit:2.5,incAtk:14,rec:30,maxFall:4,stunCut:60,dashCD:.8,noCD:false,bounceMode:'fixed',bounceH:120,bounce:{AA3:1,S_THUNDER:2,S_CYCLONE:1,S_WHEEL:1,S_BLOSSOM:1}};
+const CFG_DEF={ver:406,bellTh:40,bellCD:4,bellSnd:'new',bellMode:'tilt',dragMode:'new',chainIv:.1,clothStiff:0,clothGround:1,inertia:'mix',inDecay:.25,inKeep:70,saPowX:700,saPowY:805,fx:Object.fromEntries(FXL.map(x=>[x[0],1])),on:true,mode:'hit',incHit:2.5,incAtk:14,rec:30,maxFall:4,stunCut:60,dashCD:.8,noCD:false,bounceMode:'fixed',bounceH:120,bounce:{AA3:1,S_THUNDER:2,S_CYCLONE:1,S_WHEEL:1,S_BLOSSOM:1}};
 let CFG=JSON.parse(JSON.stringify(CFG_DEF));
 try{const c=JSON.parse(localStorage.getItem('bd_cfg')||'null');if(c&&typeof c==='object'){Object.assign(CFG,c);if(c.bounceMode===undefined){CFG.bounceMode='fixed';CFG.bounceH=120;}CFG.fx=Object.assign({},CFG_DEF.fx,c.fx||{});for(const k of['inDecay','inKeep','saPowX','saPowY','bellTh','bellCD','bellSnd','bellMode','dragMode','chainIv','clothStiff','clothGround'])if(c[k]===undefined)CFG[k]=CFG_DEF[k];
   if((c.ver||0)<404){CFG.inDecay=.25;CFG.inKeep=70;if(c.saPow){CFG.saPowX=c.saPow;CFG.saPowY=Math.round(c.saPow*1.15);}}
   delete CFG.saPow;delete CFG.zoomOut;delete CFG.zoomDur;
-  if((c.ver||0)<405){CFG.bellTh=40;CFG.bellCD=4;CFG.bellMode='tilt';}CFG.bellSnd='new';
-  if(!c.ver||c.ver<403){CFG.inertia='mix';if(CFG.bounce.S_THUNDER)CFG.bounce.S_THUNDER=2;}CFG.ver=405;CFG.bounce=Object.assign({},c.bounce||CFG_DEF.bounce);}}catch(e){}
+  if((c.ver||0)<405){CFG.bellTh=40;CFG.bellCD=4;CFG.bellMode='tilt';}if((c.ver||0)<406){CFG.clothStiff=0;CFG.clothGround=1;}CFG.bellSnd='new';
+  if(!c.ver||c.ver<403){CFG.inertia='mix';if(CFG.bounce.S_THUNDER)CFG.bounce.S_THUNDER=2;}CFG.ver=406;CFG.bounce=Object.assign({},c.bounce||CFG_DEF.bounce);}}catch(e){}
 const saveCfg=()=>{try{localStorage.setItem('bd_cfg',JSON.stringify(CFG))}catch(e){}};
 const NSLOT=3; // number of skill slots (add a key 's3' in KEY_DEF to grow)
 let loadout=['gale','rise','thunder'];
@@ -1686,7 +1686,7 @@ function resetCloth(){for(const c of ALLCLOTH())c.init=false;}
 function stepCloth(){if(!p.J)return;const J=p.J,f=p.fwd;
   if(p._ln&&Math.hypot(J.neck[0]-p._ln[0],J.neck[1]-p._ln[1])>110)resetCloth();p._ln=[J.neck[0],J.neck[1]];
   const w=-p.f*.18+Math.sin(rt*3.1)*.12-p.vx*.0009-windAtPlayer()*1.1;
-  {const K=knotAt(J),wb=w-f*.07,st=CFG.clothStiff??.45,d0=[-f*.86,.5];clothStep(scarfA,K[0],K[1],wb+Math.sin(rt*5.1)*.05,st,d0);clothStep(scarfB,K[0]+f*1.5,K[1]+1.5,wb*.9+Math.sin(rt*4.3+1)*.07,st,d0);
+  {const K=knotAt(J),wb=w-f*.07,st=CFG.clothStiff??0,d0=[-f*.86,.5];clothStep(scarfA,K[0],K[1],wb+Math.sin(rt*5.1)*.05,st,d0);clothStep(scarfB,K[0]+f*1.5,K[1]+1.5,wb*.9+Math.sin(rt*4.3+1)*.07,st,d0);
    clothStep(scarfF,J.neck[0]+f*4.5,J.neck[1]+5,w*.75+Math.sin(rt*3.7+2)*.04,st*.6);}
   {const fr=headFr(J),b=fr.hp(-8,3);clothStep(band,b[0],b[1],w*.9);}{const K=obiKnot(J);clothStep(sash,K[0],K[1]+1,w*.6);clothStep(sash2,K[0]+f*1.2,K[1]+1.5,w*.5+Math.sin(rt*3.3)*.03);}
   clothStep(coatA,J.hip[0]-f*6,J.hip[1]+2,w*.7);clothStep(coatB,J.hip[0]-f*1,J.hip[1]+5,w*.55);
@@ -1811,7 +1811,7 @@ function drawLantern(x,warm){g.save();g.translate(x,0);g.fillStyle=warm?'#0c1220
   g.fillRect(-14,-10,28,10);g.fillRect(-5,-58,10,48);g.fillRect(-16,-66,32,8);g.fillRect(-11,-92,22,26);
   g.beginPath();g.moveTo(-22,-92);g.lineTo(0,-108);g.lineTo(22,-92);g.closePath();g.fill();g.fillRect(-2,-116,4,9);
   g.globalCompositeOperation='lighter';const gr=g.createRadialGradient(0,-78,2,0,-78,90);let fl=1;if(FX('D1')){const wl=clamp((Math.abs(windS(scrX(x,1)))-.3)/.7,0,1),L=LANTS[x]||(LANTS[x]={lt:rt,d:0,dur:1,dep:0}),dt=clamp(rt-L.lt,0,.1);L.lt=rt;
-    if(L.d>0)L.d-=dt;else if(wl>.15&&Math.random()<dt*1.1*wl){L.dur=L.d=rnd(.18,.42);L.dep=rnd(.35,.6);}
+    if(L.d>0)L.d-=dt;else if(wl>.15&&Math.random()<dt*1.1*wl){L.dur=L.d=rnd(.18,.42);L.dep=clamp(.12+wl*.62+rnd(-.05,.05),.1,.78);}
     const dip=L.d>0?L.dep*Math.sin(PI*(1-L.d/L.dur)):0;fl=.985+.012*Math.sin(rt*1.3+x)+wl*(-.05+.06*Math.sin(rt*11+x)+.03*Math.sin(rt*27+x*2))-dip;}
   g.globalCompositeOperation='source-over';g.fillStyle=`rgba(255,207,122,${clamp(.35+.65*fl,.25,1)})`;g.fillRect(-6,-86,12,15);g.globalCompositeOperation='lighter';gr.addColorStop(0,`rgba(255,190,110,${.45*fl})`);gr.addColorStop(1,'rgba(255,140,80,0)');
   g.fillStyle=gr;g.beginPath();g.arc(0,-78,90*(.92+.08*fl),0,TAU);g.fill();g.globalCompositeOperation='source-over';g.restore();}
@@ -1960,17 +1960,21 @@ const knotAt=J=>{const nx=J.neck[0]-J.hip[0],ny=J.neck[1]-J.hip[1],l=Math.hypot(
 const TEAR=fr=>{const r=mkRng(((fr*1000)|0)+7),a=[];for(let i=0;i<14;i++)a.push(r());return a;};const TEARS={};
 function scarfTail(c,w0,w1,col,shade,rim,fr){const P=c.P,n=P.length;if(!c.init)return;const L=[],R=[],M=[],tw=[],tr=TEARS[fr]||(TEARS[fr]=TEAR(fr));
   for(let i=0;i<n;i++){const a=P[Math.max(0,i-1)],b=P[Math.min(n-1,i+1)];let dx=b.x-a.x,dy=b.y-a.y;const l=Math.hypot(dx,dy)||1;dx/=l;dy/=l;
-    const t=Math.cos(i*.42-rt*3.3+fr)*.5+.5,k=.45+.55*t,rag=i>n*.45?1+(tr[i%14]-.5)*.22:1,w=lerp(w0,w1,Math.pow(i/(n-1),.8))*rag*k/2;tw.push(t);
+    const t=Math.cos(i*.42-rt*3.3+fr)*.5+.5,k=.45+.55*t,rag=i>n*.45?1+(tr[i%14]-.5)*.22:1,ke=i>=n-2?Math.max(k,.88):k,w=lerp(w0,w1,Math.pow(i/(n-1),.8))*rag*ke*(i===n-1?1.38:1)/2;tw.push(t);
     L.push([P[i].x-dy*w,P[i].y+dx*w]);R.push([P[i].x+dy*w,P[i].y-dx*w]);M.push([P[i].x+dy*w*.15,P[i].y-dx*w*.15]);}
   // torn end: uneven tongues of cloth along the cut, longest in the middle, each fluttering a little
-  const e=P[n-1],e2=P[n-2];let ex=e.x-e2.x,ey=e.y-e2.y;const el=Math.hypot(ex,ey)||1;ex/=el;ey/=el;const END=[],m=5,ws=Math.max(w1,4);
-  for(let j=0;j<=m*2;j++){const u=j/(m*2),bx=lerp(L[n-1][0],R[n-1][0],u),by=lerp(L[n-1][1],R[n-1][1],u),tip=j%2===1,len=tip?(3+tr[j]*8+(j===m||j===m+1?3:0))*(ws/7):-(tr[j+1]*1.6),fl=tip?Math.sin(rt*7+j*1.7+fr)*1.2:0;
-    END.push([bx+ex*len+(-ey)*fl,by+ey*len+ex*fl]);}
+  const e=P[n-1],e2=P[n-2];let ex=e.x-e2.x,ey=e.y-e2.y;const el=Math.hypot(ex,ey)||1;ex/=el;ey/=el;const END=[],TIPS=[],ws=Math.max(w1,5)/7,nx=-ey,ny=ex,nt=2+(tr[0]>.45?1:0);
+  const cuts=[0];for(let j=1;j<nt;j++)cuts.push(j/nt+(tr[j]-.5)*.16);cuts.push(1);
+  const at=(u,len,side)=>{const bx=lerp(L[n-1][0],R[n-1][0],u),by=lerp(L[n-1][1],R[n-1][1],u);return[bx+ex*len+nx*side,by+ey*len+ny*side];};
+  for(let j=0;j<nt;j++){const u0=cuts[j],u1=cuts[j+1],um=(u0+u1)/2,len=(4.5+tr[j+3]*9)*ws,fl=Math.sin(rt*5.2+j*2.3+fr)*1.8,tw=(tr[j+6]-.5)*.14;
+    if(j>0)END.push(at(u0,-(3+tr[j+9]*4)*ws,0));
+    END.push(at(lerp(u0,um,.22),len*.62,fl*.4));END.push(at(um-.12+tw,len+fl*.4,fl));TIPS.push(END.length-1);END.push(at(um+.02+tw,len*1.04+fl*.3,fl*1.05));END.push(at(um+.13+tw,len*.84,fl*1.1));END.push(at(lerp(um,u1,.8),len*.55,fl*.4));}
+  {const a=L[n-2],b=R[n-2],t=.3+tr[12]*.12;L[n-2]=[lerp(a[0],b[0],t),lerp(a[1],b[1],t)];}
   g.fillStyle=col;g.beginPath();g.moveTo(L[0][0],L[0][1]);for(let i=1;i<n;i++)g.lineTo(L[i][0],L[i][1]);for(const q of END)g.lineTo(q[0],q[1]);for(let i=n-1;i>=0;i--)g.lineTo(R[i][0],R[i][1]);g.closePath();g.fill();
   g.fillStyle=shade;g.beginPath();g.moveTo(M[0][0],M[0][1]);for(let i=1;i<n;i++)g.lineTo(M[i][0],M[i][1]);for(let i=n-1;i>=0;i--){const e=tw[i]<.5?L[i]:R[i];g.lineTo(e[0],e[1]);}g.closePath();g.globalAlpha=.55;g.fill();g.globalAlpha=1;
   if(rim){g.strokeStyle=rim;g.lineWidth=.9;g.globalAlpha=.55;g.beginPath();g.moveTo(L[0][0],L[0][1]);for(let i=1;i<n;i++)g.lineTo(L[i][0],L[i][1]);g.stroke();g.globalAlpha=1;}
   // a few loose threads at the tear
-  g.strokeStyle=col;g.lineWidth=.7;g.globalAlpha=.7;g.beginPath();for(const j of[1,5,9]){const q=END[Math.min(END.length-1,j)];g.moveTo(q[0],q[1]);g.lineTo(q[0]+ex*2.6+Math.sin(rt*9+j)*.8,q[1]+ey*2.6);}g.stroke();g.globalAlpha=1;}
+  g.strokeStyle=col;g.lineWidth=.7;g.globalAlpha=.7;g.beginPath();for(const j of TIPS){const q=END[j];g.moveTo(q[0],q[1]);g.lineTo(q[0]+ex*3.2+Math.sin(rt*9+j)*.9,q[1]+ey*3.2);}g.stroke();g.globalAlpha=1;}
 function scarfWrap(J,rim){const f=p.fwd||1,nx=J.neck[0]-J.hip[0],ny=J.neck[1]-J.hip[1],an=Math.atan2(ny,nx)+PI/2,cx=J.neck[0]-f*.5,cy=J.neck[1]+2.2;
   g.save();g.translate(cx,cy);g.rotate(an);
   g.fillStyle='#b5233c';g.beginPath();g.ellipse(0,2.6,10.4,4.6,0,0,TAU);g.fill();
@@ -2234,7 +2238,7 @@ const SLD=[{k:'incHit',l:'보정 증가량 (히트당)',min:0,max:20,step:.5,u:'
   {k:'bellTh',l:'종이 울리는 기울기',min:5,max:60,step:1,u:'°',d:'처마 종이 이 각도보다 크게 흔들리면 울려요 (낮을수록 잘 울림)',sec:'c_bell',v:'0.4.6'},
   {k:'bellCD',l:'다시 울리기까지',min:0,max:10,step:.5,u:'초',d:'한 번 울린 종이 다시 울릴 수 있을 때까지',sec:'c_bell',v:'0.4.7'},
   {k:'chainIv',l:'환영연참 베기 간격',min:.05,max:.4,step:.01,u:'초',d:'여섯 번 베기 사이 간격 (기본 0.10초). 느리게 하면 자세를 보기 좋지만 콤보가 끊길 수 있어요',sec:'c_chain',v:'0.4.8'},
-  {k:'clothStiff',l:'천의 뻣뻣함',min:0,max:1,step:.05,u:'',d:'0 = 흐물흐물, 높을수록 덜 꺾여요 (머플러)',sec:'c_cloth',v:'0.4.8'},
+  {k:'clothStiff',l:'천의 뻣뻣함',min:0,max:1,step:.05,u:'',d:'0 = 부드럽게 흐름 (기본), 높을수록 덜 꺾여요 (머플러)',sec:'c_cloth',v:'0.4.8'},
   {k:'saPowX',l:'질주베기 가로 힘',min:0,max:1400,step:20,u:'',d:'3번째 회전에 맞은 적이 앞으로 날아가는 힘',sec:'c_tech',v:'0.4.4'},
   {k:'saPowY',l:'질주베기 세로 힘',min:0,max:1400,step:20,u:'',d:'위로 뜨는 힘 (0이면 거의 바닥으로 미끄러져요)',sec:'c_tech',v:'0.4.4'}];
 const GSL=[{k:'zoomOut',l:'넓게 보기 배율',min:.35,max:.95,step:.01,u:'×2',d:'작을수록 더 넓게 보여요'},{k:'zoomDur',l:'전환 시간',min:.15,max:1.2,step:.05,u:'초',d:'넓어지고 돌아오는 데 걸리는 시간'}];
@@ -2273,7 +2277,7 @@ $('c_on').onchange=e=>{CFG.on=e.target.checked;saveCfg();buildCfg();e.target.blu
 document.querySelectorAll('#c_mode button').forEach(b=>b.onclick=()=>{CFG.mode=b.dataset.v;saveCfg();buildCfg();b.blur();});
 function cdReset(){for(const k in p.cd)p.cd[k]=0;p.dashCD=0;cfgMsg('쿨타임 초기화!');}
 function cfgMsg(t){$('c_msg').textContent=t;clearTimeout(cfgMsg.t);cfgMsg.t=setTimeout(()=>$('c_msg').textContent='',1800);}
-function cfgText(){return['[검무 v0.4.8 테스트 설정]',`쿨타임 없음: ${CFG.noCD?'ON':'OFF'}`,`공중 관성: ${({decay:'감속',onhit:'타격 시 감속',mix:'혼합'})[CFG.inertia]}`,`바운드 모든타: ${BLIST.filter(([id])=>CFG.bounce[id]===2).map(x=>x[1]).join(', ')||'없음'}`,`연출 ON: ${FXL.filter(x=>FX(x[0])).map(x=>x[0]).join(', ')||'없음'}`,`바운드: ${CFG.bounceMode==='fixed'?'고정 높이 '+CFG.bounceH+'px':'충격 비례'}`,`콤보 보정: ${CFG.on?'ON':'OFF'}`,`누적 방식: ${CFG.mode==='hit'?'히트당':'공격당'}`].concat(SLD.map(sd=>`${sd.l}: ${fmtV(sd,CFG[sd.k])}`)).concat([`바운드 ON: ${BLIST.filter(([id])=>CFG.bounce[id]).map(x=>x[1]).join(', ')||'없음'}`]).join('\n');}
+function cfgText(){return['[검무 v0.4.9 테스트 설정]',`쿨타임 없음: ${CFG.noCD?'ON':'OFF'}`,`공중 관성: ${({decay:'감속',onhit:'타격 시 감속',mix:'혼합'})[CFG.inertia]}`,`바운드 모든타: ${BLIST.filter(([id])=>CFG.bounce[id]===2).map(x=>x[1]).join(', ')||'없음'}`,`연출 ON: ${FXL.filter(x=>FX(x[0])).map(x=>x[0]).join(', ')||'없음'}`,`바운드: ${CFG.bounceMode==='fixed'?'고정 높이 '+CFG.bounceH+'px':'충격 비례'}`,`콤보 보정: ${CFG.on?'ON':'OFF'}`,`누적 방식: ${CFG.mode==='hit'?'히트당':'공격당'}`].concat(SLD.map(sd=>`${sd.l}: ${fmtV(sd,CFG[sd.k])}`)).concat([`바운드 ON: ${BLIST.filter(([id])=>CFG.bounce[id]).map(x=>x[1]).join(', ')||'없음'}`]).join('\n');}
 $('c_copy').onclick=()=>{const t=cfgText();const ta=$('c_txt');ta.value=t;
   const ok=()=>cfgMsg('복사됨! 채팅에 붙여넣으세요');
   try{navigator.clipboard.writeText(t).then(ok,()=>{ta.hidden=false;ta.select();cfgMsg('아래 글을 길게 눌러 복사하세요');});}catch(e){ta.hidden=false;ta.select();cfgMsg('아래 글을 복사하세요');}};
@@ -2529,7 +2533,7 @@ function frame(now){const rdt=Math.min(.05,(now-last)/1000);last=now;requestAnim
 requestAnimationFrame(frame);
 
 // test hook
-window.__bd={scr:(x,y)=>{const k=KZ(1)*(1+cam.zk);return[W/2+(x-cam.x)*k,GY+(y-cam.y)*k,k];},GUST,EV,fxEvent,playFx,CLONE,get NOTES(){return NOTES},saveLast,setMap,keyAssign,get KEYS(){return KEYS},CFG:()=>CFG,p,dummy,press,combo,startAct,ACT,objs,loadout,setAx:v=>{touchAx=v;},dirPress,begin,renderGuide,windS,BELLS,hold:v=>{TEST_HOLD=v;},adv:sec=>{for(let i=0;i<Math.round(sec*60);i++)update(1/60);render();}};
+window.__bd={scr:(x,y)=>{const k=KZ(1)*(1+cam.zk);return[W/2+(x-cam.x)*k,GY+(y-cam.y)*k,k];},GUST,EV,fxEvent,playFx,CLONE,get NOTES(){return NOTES},saveLast,setMap,keyAssign,get KEYS(){return KEYS},CFG:()=>CFG,p,dummy,press,combo,startAct,ACT,objs,loadout,setAx:v=>{touchAx=v;},dirPress,begin,renderGuide,windS,BELLS,scarfEnd:()=>{const q=scarfA.P[scarfA.n-1];return[q.x,q.y];},hold:v=>{TEST_HOLD=v;},adv:sec=>{for(let i=0;i<Math.round(sec*60);i++)update(1/60);render();}};
 })();
 </script>
 </body>
