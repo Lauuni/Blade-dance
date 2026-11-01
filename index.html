@@ -372,7 +372,7 @@ body.nohint #keys{display:none}
 <canvas id="c"></canvas>
 
 <div class="hud" id="brand">
-  <div class="t">검무<i>.</i><small>BLADE DANCE · <span id="mapNm">수련장</span> · v0.4.6</small></div>
+  <div class="t">검무<i>.</i><small>BLADE DANCE · <span id="mapNm">수련장</span> · v0.4.7</small></div>
   <div id="stats">
     <div>총 데미지<b id="stTot">0</b></div>
     <div>최대 콤보<b id="stBest">0</b></div>
@@ -382,10 +382,10 @@ body.nohint #keys{display:none}
 
 <div class="hud" id="tr">
   <button class="ib" id="bReset" title="허수아비 리셋 + 쿨타임 초기화"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.5-5.8"/><path d="M4 4v4h4"/></svg><kbd>R</kbd></button>
-  <button class="ib" id="bSet" title="설정 (사운드·화면·키)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg><span>설정</span></button>
   <button class="ib" id="bCfg" title="테스트 설정"><svg viewBox="0 0 24 24"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg><span>테스트 설정</span><kbd>T</kbd></button>
   <div class="mwrap"><button class="ib" id="bMenu" title="메뉴"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span>메뉴</span></button>
   <div id="mnu">
+  <button class="ib" id="bSet" title="설정 (사운드·화면·키)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg><span>설정</span></button>
     <button class="ib" id="bLoad"><svg viewBox="0 0 24 24"><path d="M4 7h11M4 12h7M4 17h11"/><path d="M17 4l3 3-3 3M17 14l3 3-3 3"/></svg><span>기술 교체</span><kbd>Tab</kbd></button>
     <button class="ib" id="bNote" title="콤보 노트"><svg viewBox="0 0 24 24"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/><path d="M9 8h6"/></svg><span>콤보 노트</span><kbd>L</kbd></button>
     <button class="ib" id="bMap" title="맵 선택"><svg viewBox="0 0 24 24"><path d="M3 19l6-10 4 6 3-4 5 8z"/><circle cx="17" cy="6" r="2"/></svg><span>맵 선택</span></button>
@@ -428,18 +428,19 @@ body.nohint #keys{display:none}
 <div class="modal" id="mLoad"><div class="panel">
   <h2>기술 교체 <small>LOADOUT</small></h2>
   <div class="sub">기술을 고른 뒤 넣을 칸을 누르세요. 이미 장착된 기술은 자리가 서로 바뀝니다.</div>
-  <div class="lshint">카드를 위 칸으로 <b>끌어 놓거나</b>, 카드에 마우스를 올리고 <b>1 · 2 · 3</b>. 칸끼리 끌면 <b>자리 바꾸기</b>, 칸을 밖으로 끌거나 <b>우클릭</b>하면 <b>비우기</b>.</div>
+  <div class="lshint">카드를 위 칸으로 <b>끌어 놓거나</b>, 카드에 마우스를 올리고 <b>1 · 2 · 3</b>. 칸끼리 끌면 <b>자리 바꾸기</b>, 칸을 창 바깥(어두운 배경)으로 끌거나 <b>우클릭</b>하면 <b>비우기</b>.</div>
   <div class="slots" id="lsWrap"></div>
   <div class="cards" id="cardWrap"></div>
   <div class="row"><button class="btn" id="bDone">완료</button></div>
 </div></div>
 
-<div id="cfg"><div class="cfgh"><b>테스트 설정</b><small>v0.4.6 · T</small><div class="hb"><button id="c_def" class="pri" title="모든 테스트 수치를 기본값으로 (키 설정은 그대로)">기본값</button><button id="c_copy" title="현재 설정을 글로 복사">설정 복사</button></div><button id="cfgX" title="닫기 (Q / Esc)">✕</button><div class="pmsg" id="c_msg"></div></div>
+<div id="cfg"><div class="cfgh"><b>테스트 설정</b><small>v0.4.7 · T</small><div class="hb"><button id="c_def" class="pri" title="모든 테스트 수치를 기본값으로 (키 설정은 그대로)">기본값</button><button id="c_copy" title="현재 설정을 글로 복사">설정 복사</button></div><button id="cfgX" title="닫기 (Q / Esc)">✕</button><div class="pmsg" id="c_msg"></div></div>
   <textarea id="c_txt" hidden readonly></textarea>
   <details class="cs"><summary><span>💾 설정 슬롯<i class="vt">v0.4.4</i></span></summary><div class="note">지금 테스트 수치를 슬롯에 저장해 두고 언제든 불러와요. 이름 칸을 눌러 이름을 바꿀 수 있어요. (키 설정은 설정 → 키 설정의 슬롯)</div><div class="slots3" id="c_slots"></div></details>
   <details class="cs"><summary><span>🧪 테스트 도구<i class="vt">v0.4.0</i></span></summary>
     <label class="sw"><span>쿨타임 없음<i class="vt">v0.4.0</i> <small style="color:rgba(255,255,255,.4)">(대쉬 포함)</small></span><input type="checkbox" id="c_nocd"></label>
-    <div class="note">R 키: 허수아비 리셋 + 쿨타임 초기화 + 분신 제거</div></details>
+    <div class="note">R 키: 허수아비 리셋 + 쿨타임 초기화 + 분신 제거</div>
+    <div class="sl-t">기술 교체 끌기 방식<i class="vt">v0.4.7</i></div><div class="seg" id="c_drag"><button data-v="new">새 방식 (즉시)</button><button data-v="old">이전 방식</button></div></details>
   <details class="cs"><summary><span>📉 콤보 보정<i class="vt">v0.3.0</i></span></summary>
     <label class="sw"><span>보정 사용</span><input type="checkbox" id="c_on"></label>
     <div class="seg" id="c_mode"><button data-v="hit">히트당 누적</button><button data-v="atk">공격당 누적</button></div>
@@ -461,10 +462,13 @@ body.nohint #keys{display:none}
     <div id="c_tech"></div></details>
   <details class="cs"><summary><span>🎬 연출<i class="vt">v0.4.2</i></span></summary>
     <div class="note">이번 버전에서 손본 연출만 남겼어요. 켜고 끄며 비교하고, ▶로 바로 볼 수 있어요. 나머지 연출은 확정되어 항상 켜져 있어요.</div>
-    <div class="sl-t">처마 종 확인용<i class="vt">v0.4.6</i></div><div id="c_bell"></div><button class="pbtn" id="c_gust" style="margin:2px 0 10px">🌬️ 바람 불기 (지금 돌풍)</button>
+    <div class="sl-t">처마 종 확인용<i class="vt">v0.4.6</i></div>
+    <div class="sl-t">종소리<i class="vt">v0.4.7</i></div><div class="seg" id="c_bsnd"><button data-v="old">이전 소리</button><button data-v="new">새 종소리</button></div>
+    <div class="sl-t">울리는 방식<i class="vt">v0.4.7</i></div><div class="seg" id="c_bmode"><button data-v="tilt">기울기만 넘으면</button><button data-v="peak">흔들림이 꺾일 때 (A안)</button></div>
+    <div id="c_bell"></div><button class="pbtn" id="c_gust" style="margin:2px 0 10px">🌬️ 바람 불기 (지금 돌풍)</button>
     <div id="c_fx"></div></details>
 </div>
-<div id="gset"><div class="cfgh"><b>설정</b><small>v0.4.6</small><button id="gsX" title="닫기 (Q / Esc)">✕</button><div class="pmsg" id="g_msg"></div></div>
+<div id="gset"><div class="cfgh"><b>설정</b><small>v0.4.7</small><button id="gsX" title="닫기 (Q / Esc)">✕</button><div class="pmsg" id="g_msg"></div></div>
   <details class="cs"><summary><span>🔊 소리<i class="vt">v0.4.5</i></span></summary>
     <label class="sw"><span>소리 켜기 <small style="color:rgba(255,255,255,.4)">(M 키)</small></span><input type="checkbox" id="gsSnd"></label>
     <div id="g_vol"></div>
@@ -502,7 +506,7 @@ body.nohint #keys{display:none}
     <div><h3>PC 키보드</h3><ul id="helpKeys"></ul></div>
     <div><h3>화면 · 마우스</h3><ul>
       <li>오른쪽 위 <b>☰ 메뉴</b> → 기술 교체 · 콤보 노트 · 맵 · 넓게 보기 · 전체화면 · 도움말</li>
-      <li><b>⚙ 설정</b> → 소리 채널 · 화면(UI 크기) · 바람 · 카메라 · 키 설정</li>
+      <li>메뉴 → <b>⚙ 설정</b> → 소리 채널 · 화면(UI 크기) · 바람 · 카메라 · 키 설정</li>
       <li>아래 기술 칸에 마우스를 올리면 기술 설명</li>
       <li>기술 교체 창: 카드를 칸으로 <b>끌어 놓거나</b>, 카드에 마우스를 올리고 <b>1·2·3</b></li>
       <li>슬라이더는 숫자 칸에 직접 입력, <b>더블클릭</b>하면 기본값</li>
@@ -540,7 +544,7 @@ function resize(){DPR=Math.min(2,window.devicePixelRatio||1);W=innerWidth;H=inne
 addEventListener('resize',resize);resize();
 
 // ============================================================ audio
-const S={c:null,on:true,out:null,nb:null,bus:{}};let CUR_BUS='sfx';const BUSV={bgm:'vBgm',amb:'vAmb',sfx:'vSfx',ui:'vUi'};
+const S={c:null,on:true,out:null,nb:null,bus:{}};let CUR_BUS='sfx',CUR_DEST=null;const BUSV={bgm:'vBgm',amb:'vAmb',sfx:'vSfx',ui:'vUi'};
 const onBus=(b,f)=>{const o=CUR_BUS;CUR_BUS=b;try{f()}finally{CUR_BUS=o}};
 const GS={snd:1,vol:.8,vBgm:.8,vAmb:.8,vSfx:1,vUi:.8,wind:1,zoomOut:.62,zoomDur:.45,ui:1,hints:1};try{Object.assign(GS,JSON.parse(localStorage.getItem('bd_game')||'{}'));}catch(e){}
 S.on=!!GS.snd;const saveGS=()=>{try{localStorage.setItem('bd_game',JSON.stringify(GS))}catch(e){}};
@@ -553,11 +557,11 @@ function nz({d=.1,type='bandpass',f0=1000,f1=f0,q=1,v=.3,a=.004,dl=0}){if(!S.c||
   const s=c.createBufferSource();s.buffer=S.nb;s.loop=true;const f=c.createBiquadFilter();f.type=type;f.Q.value=q;
   f.frequency.setValueAtTime(f0,t);f.frequency.exponentialRampToValueAtTime(Math.max(30,f1),t+d);
   const gn=c.createGain();gn.gain.setValueAtTime(.0001,t);gn.gain.exponentialRampToValueAtTime(v,t+a);gn.gain.exponentialRampToValueAtTime(.0001,t+d);
-  s.connect(f);f.connect(gn);gn.connect(S.bus[CUR_BUS]||S.out);s.start(t,Math.random()*.5);s.stop(t+d+.05);}
+  s.connect(f);f.connect(gn);gn.connect(CUR_DEST||S.bus[CUR_BUS]||S.out);s.start(t,Math.random()*.5);s.stop(t+d+.05);}
 function tn({d=.1,type='sine',f0=440,f1=f0,v=.3,a=.003,dl=0}){if(!S.c||!S.on)return;const c=S.c,t=c.currentTime+dl;
   const o=c.createOscillator();o.type=type;o.frequency.setValueAtTime(f0,t);o.frequency.exponentialRampToValueAtTime(Math.max(20,f1),t+d);
   const gn=c.createGain();gn.gain.setValueAtTime(.0001,t);gn.gain.exponentialRampToValueAtTime(v,t+a);gn.gain.exponentialRampToValueAtTime(.0001,t+d);
-  o.connect(gn);gn.connect(S.bus[CUR_BUS]||S.out);o.start(t);o.stop(t+d+.05);}
+  o.connect(gn);gn.connect(CUR_DEST||S.bus[CUR_BUS]||S.out);o.start(t);o.stop(t+d+.05);}
 const sfx={
   swing:(p=1)=>nz({d:.14,f0:450*p,f1:2800*p,q:1.3,v:.2}),
   hit:(h=0)=>{nz({d:.05,type:'highpass',f0:2400,v:.32});tn({d:h?.24:.11,f0:h?160:200,f1:42,v:h?.95:.6});nz({d:h?.32:.12,type:'lowpass',f0:h?1300:2400,f1:180,v:h?.6:.32});if(h)tn({d:.2,type:'square',f0:95,f1:38,v:.12});},
@@ -604,7 +608,7 @@ const vib=ms=>{try{navigator.vibrate&&navigator.vibrate(ms)}catch(e){}};
 const keys={}, buf={attack:0,jump:0,dash:0,s0:0,s1:0,s2:0}, held={attack:false};
 let touchAx=0, paused=true;
 const KEY_DEF={close:['KeyQ',''],zoom:['KeyB',''],left:['ArrowLeft',''],right:['ArrowRight',''],attack:['KeyX',''],jump:['KeyC','ArrowUp'],dash:['KeyZ','ShiftLeft'],s0:['KeyA','Digit1'],s1:['KeyS','Digit2'],s2:['KeyD','Digit3']};
-const KEY_NM={close:'창 닫기',zoom:'넓게 보기',left:'왼쪽 이동',right:'오른쪽 이동',attack:'공격',jump:'점프',dash:'대쉬',s0:'기술 1',s1:'기술 2',s2:'기술 3'};
+const KEY_NM={close:'메뉴 / 창 닫기',zoom:'넓게 보기',left:'왼쪽 이동',right:'오른쪽 이동',attack:'공격',jump:'점프',dash:'대쉬',s0:'기술 1',s1:'기술 2',s2:'기술 3'};
 const SYS_KEYS=['Tab','KeyT','KeyR','KeyM','KeyL','KeyF','Escape'];
 let KEYS=JSON.parse(JSON.stringify(KEY_DEF));
 try{const k=JSON.parse(localStorage.getItem('bd_keys')||'null');if(k&&typeof k==='object')for(const a in KEY_DEF)if(Array.isArray(k[a]))KEYS[a]=[k[a][0]||'',k[a][1]||''];}catch(e){}
@@ -625,7 +629,7 @@ addEventListener('keydown',e=>{
   aInit();
   if(!$('start').classList.contains('hide')){begin();return}
   if(e.code==='Tab'){toggleLoad();return}
-  if(e.code==='Escape'||KM[e.code]==='close'){if($('mnu').classList.contains('on')){closeMenu();return}if(document.querySelector('.modal.on')){closeModals();return}if($('cfg').classList.contains('on')||$('gset').classList.contains('on')){toggleCfg(false);toggleGS(false);return}if(KM[e.code]==='close')return;return}
+  if(e.code==='Escape'||KM[e.code]==='close'){if($('mnu').classList.contains('on')){closeMenu();return}if(document.querySelector('.modal.on')){closeModals();return}if($('cfg').classList.contains('on')||$('gset').classList.contains('on')){toggleCfg(false);toggleGS(false);return}if(KM[e.code]==='close'&&$('start').classList.contains('hide')){$('mnu').classList.add('on');$('bMenu').classList.add('on');sfx.click();}return}
   if(e.code==='KeyF'&&!KM.KeyF&&!e.repeat){toggleFull();return}
   if($('mLoad').classList.contains('on')&&HOVER_CARD){const n=['Digit1','Digit2','Digit3'].indexOf(e.code);const m=n>=0?n:['s0','s1','s2'].indexOf(KM[e.code]);if(m>=0){assign(m,HOVER_CARD);return}}
   if(e.code==='KeyL'&&!KM.KeyL){toggleNote();return}
@@ -722,12 +726,12 @@ const ANAME={A1:'평1',A2:'평2',A3:'평3',A4:'평4',AA1:'점프평1',AA2:'점�
 for(const k in SK)ANAME[SK[k].act]=SK[k].name;
 // ---- test config
 const FXL=[['M4','시선 (적의 가슴 높이)','c',null,'v0.4.6 개선'],
-  ['M6','대기: 피 털기','c','IDLE_CHIBURI','v0.4.6 개선'],['M10','대기: 지루해하기','c','IDLE_BORED','v0.4.6 신규'],['M13','대기: 칼끝 짚고 쉬기','c','IDLE_REST','v0.4.6 신규'],['M11','30히트+ 콤보 뒤 숨 고르기','c','IDLE_EXHALE','v0.4.6 개선'],
+  ['M6','대기: 피 털기','c','IDLE_CHIBURI','v0.4.7 개선'],['M10','대기: 지루해하기','c','IDLE_BORED','v0.4.7 개선'],['M13','대기: 칼끝 짚고 쉬기','c','IDLE_REST','v0.4.6 신규'],['M11','30히트+ 콤보 뒤 숨 고르기','c','IDLE_EXHALE','v0.4.6 개선'],
   ['D1','등불 (센 돌풍 때 가끔 어둡게)','b',null,'v0.4.6 개선']];
 const FXK=new Set(FXL.map(x=>x[0]));const FX=k=>!FXK.has(k)||!!(CFG.fx&&CFG.fx[k]);
-const CFG_DEF={ver:404,bellTh:23,inertia:'mix',inDecay:.25,inKeep:70,saPowX:700,saPowY:805,fx:Object.fromEntries(FXL.map(x=>[x[0],1])),on:true,mode:'hit',incHit:2.5,incAtk:14,rec:30,maxFall:4,stunCut:60,dashCD:.8,noCD:false,bounceMode:'fixed',bounceH:120,bounce:{AA3:1,S_THUNDER:2,S_CYCLONE:1,S_WHEEL:1,S_BLOSSOM:1}};
+const CFG_DEF={ver:404,bellTh:23,bellCD:4,bellSnd:'new',bellMode:'peak',dragMode:'new',inertia:'mix',inDecay:.25,inKeep:70,saPowX:700,saPowY:805,fx:Object.fromEntries(FXL.map(x=>[x[0],1])),on:true,mode:'hit',incHit:2.5,incAtk:14,rec:30,maxFall:4,stunCut:60,dashCD:.8,noCD:false,bounceMode:'fixed',bounceH:120,bounce:{AA3:1,S_THUNDER:2,S_CYCLONE:1,S_WHEEL:1,S_BLOSSOM:1}};
 let CFG=JSON.parse(JSON.stringify(CFG_DEF));
-try{const c=JSON.parse(localStorage.getItem('bd_cfg')||'null');if(c&&typeof c==='object'){Object.assign(CFG,c);if(c.bounceMode===undefined){CFG.bounceMode='fixed';CFG.bounceH=120;}CFG.fx=Object.assign({},CFG_DEF.fx,c.fx||{});for(const k of['inDecay','inKeep','saPowX','saPowY','bellTh'])if(c[k]===undefined)CFG[k]=CFG_DEF[k];
+try{const c=JSON.parse(localStorage.getItem('bd_cfg')||'null');if(c&&typeof c==='object'){Object.assign(CFG,c);if(c.bounceMode===undefined){CFG.bounceMode='fixed';CFG.bounceH=120;}CFG.fx=Object.assign({},CFG_DEF.fx,c.fx||{});for(const k of['inDecay','inKeep','saPowX','saPowY','bellTh','bellCD','bellSnd','bellMode','dragMode'])if(c[k]===undefined)CFG[k]=CFG_DEF[k];
   if((c.ver||0)<404){CFG.inDecay=.25;CFG.inKeep=70;if(c.saPow){CFG.saPowX=c.saPow;CFG.saPowY=Math.round(c.saPow*1.15);}}
   delete CFG.saPow;delete CFG.zoomOut;delete CFG.zoomDur;
   if(!c.ver||c.ver<403){CFG.inertia='mix';if(CFG.bounce.S_THUNDER)CFG.bounce.S_THUNDER=2;}CFG.ver=404;CFG.bounce=Object.assign({},c.bounce||CFG_DEF.bounce);}}catch(e){}
@@ -742,8 +746,8 @@ const saveLo=()=>{try{localStorage.setItem('bd_loadout',JSON.stringify(loadout))
 const svg=(id)=>`<svg viewBox="0 0 24 24">${IC[id]}</svg>`;
 
 // ============================================================ pose system
-const PK=['lean','hd','aFU','aFL','aBU','aBL','lFU','lFL','lBU','lBL','sw','rot','sx','sq','hx','hy','g2'];
-const BASE={lean:8,hd:0,aFU:30,aFL:80,aBU:-15,aBL:20,lFU:25,lFL:-5,lBU:-25,lBL:-10,sw:120,rot:0,sx:1,sq:1,hx:0,hy:0,g2:1};
+const PK=['lean','hd','aFU','aFL','aBU','aBL','lFU','lFL','lBU','lBL','sw','rot','sx','sq','hx','hy','g2','ft'];
+const BASE={lean:8,hd:0,aFU:30,aFL:80,aBU:-15,aBL:20,lFU:25,lFL:-5,lBU:-25,lBL:-10,sw:120,rot:0,sx:1,sq:1,hx:0,hy:0,g2:1,ft:0};
 const STAND={lean:10,hd:0,aFU:30,aFL:72,aBU:-15,aBL:20,lFU:26,lFL:-5,lBU:-26,lBL:-10,sw:116,rot:0,sx:1,sq:1,hx:0,hy:0,g2:1};
 function lerpPose(a,b,t,o){o=o||{};for(const k of PK){const x=a[k]??BASE[k],y=b[k]??BASE[k];o[k]=x+(y-x)*t;}return o;}
 function K(arr){let prev=BASE;return arr.map(([t,ov,e])=>{const p=Object.assign({},prev,ov);prev=p;return{t,p,e:e||'oq'};});}
@@ -774,7 +778,7 @@ function rigLocal(P){
   L.sh=[td[0]*LEN.to*.86,td[1]*LEN.to*.86];
   let v=dv(P.aFU);L.eF=[L.sh[0]+v[0]*LEN.ua,L.sh[1]+v[1]*LEN.ua];v=dv(P.aFL);L.hF=[L.eF[0]+v[0]*LEN.fa,L.eF[1]+v[1]*LEN.fa];
   v=dv(P.lFU);L.kF=[v[0]*LEN.th,v[1]*LEN.th];v=dv(P.lFL);L.aF=[L.kF[0]+v[0]*LEN.sh,L.kF[1]+v[1]*LEN.sh];
-  v=dv(lerp(P.lFL+90,90,.5));L.tF=[L.aF[0]+v[0]*9,L.aF[1]+v[1]*9];
+  v=dv(lerp(P.lFL+90,90,.5)+(P.ft||0));L.tF=[L.aF[0]+v[0]*9,L.aF[1]+v[1]*9];
   v=dv(P.lBU);L.kB=[v[0]*LEN.th,v[1]*LEN.th];v=dv(P.lBL);L.aB=[L.kB[0]+v[0]*LEN.sh,L.kB[1]+v[1]*LEN.sh];
   v=dv(lerp(P.lBL+90,90,.5));L.tB=[L.aB[0]+v[0]*9,L.aB[1]+v[1]*9];
   v=dv(P.sw);L.st=[L.hF[0]+v[0]*LEN.sw,L.hF[1]+v[1]*LEN.sw];L.sp=[L.hF[0]-v[0]*11,L.hF[1]-v[1]*11];
@@ -1222,12 +1226,12 @@ const mouthAt=()=>p.J?headFr(p.J).hp(9,-6.5):[p.x,p.y-108];
 const dropsAt=(n,spd,down)=>{if(!p.J)return;for(let i=0;i<n;i++){const u=.35+Math.random()*.65,[x,y]=tipAt(u);parts.push({t:'drop',x,y,vx:p.f*rnd(spd*.5,spd)*u,vy:rnd(down*.3,down)*u+rnd(-30,30),s:rnd(1,2.2),life:1.4,max:1.4,col:DROP_COL});}};
 def('IDLE_CHIBURI',{idle:1,dur:2.7,cancelAt:0,blend:.2,
   keys:[[0,{...ST}],[.44,{lean:2,hd:-5,aFU:168,aFL:232,sw:252,lFU:30,lFL:-4,lBU:-30,lBL:-10,sq:1.02},'io'],[.52,{lean:0,aFU:172,aFL:238,sw:258,sq:1.03},'lin'],
-    [.63,{lean:27,hd:7,aFU:56,aFL:36,sw:62,lFU:58,lFL:-8,lBU:-48,lBL:-21,sq:.93},'ox'],[.74,{lean:26,sw:59,sq:.94},'oq'],
-    [1.0,{lean:25,g2:0},'io'],[1.1,{sw:80,aFL:46},'oq'],[1.16,{sw:60,aFL:36},'ox'],[1.34,{sw:79,aFL:46},'oq'],[1.4,{sw:59,aFL:35},'ox'],
-    [1.85,{lean:24,sw:60},'lin'],[2.25,{lean:13,hd:1,aFU:38,aFL:66,sw:92,lFU:32,lFL:-5,lBU:-30,lBL:-10,sq:.99,g2:1},'io'],[2.7,{...ST},'lin']],
+    [.63,{lean:17,hd:7,aFU:56,aFL:36,sw:62,lFU:44,lFL:-7,lBU:-40,lBL:-16,sq:.95},'ox'],[.74,{lean:16,sw:59,sq:.955},'oq'],
+    [1.0,{lean:12,g2:0},'io'],[1.1,{lean:8,sw:80,aFL:46},'oq'],[1.16,{lean:7,sw:60,aFL:36},'ox'],[1.34,{lean:5,sw:79,aFL:46},'oq'],[1.4,{lean:4,sw:59,aFL:35},'ox'],
+    [1.85,{lean:6,sw:60},'lin'],[2.25,{lean:13,hd:1,aFU:38,aFL:66,sw:92,lFU:32,lFL:-5,lBU:-30,lBL:-10,sq:.99,g2:1},'io'],[2.7,{...ST},'lin']],
   ev:[{t:.08,f:()=>nz({d:.5,type:'lowpass',f0:500,f1:900,v:.012,a:.2})},{t:.5,f:()=>nz({d:.2,f0:500,f1:2400,q:1.4,v:.1})},
-    {t:.6,f:()=>{nz({d:.08,type:'lowpass',f0:900,f1:200,v:.1});tn({d:.06,f0:150,f1:90,v:.08});addTrauma(.04);dropsAt(16,640,220);}},
-    {t:1.155,f:()=>{tn({d:.03,type:'triangle',f0:900,f1:600,v:.03});dropsAt(4,260,260);}},{t:1.395,f:()=>{tn({d:.03,type:'triangle',f0:860,f1:580,v:.025});dropsAt(3,220,240);}}]});
+    {t:.6,f:()=>{nz({d:.08,type:'lowpass',f0:900,f1:200,v:.1});tn({d:.06,f0:150,f1:90,v:.08});addTrauma(.04);dropsAt(7+((Math.random()*3)|0),640,220);}},
+    {t:1.155,f:()=>{tn({d:.03,type:'triangle',f0:900,f1:600,v:.03});dropsAt(2+(Math.random()<.5?1:0),260,260);}},{t:1.395,f:()=>{tn({d:.03,type:'triangle',f0:860,f1:580,v:.025});dropsAt(1+(Math.random()<.5?1:0),220,240);}}]});
 // M9 noto: left hand to the sheath mouth, tip finds the mouth, the blade slides home, click. stillness. then a flash draw.
 def('IDLE_SHEATHE',{idle:1,dur:3.7,cancelAt:0,blend:.16,
   keys:[[0,{...ST,g2:0}],[.38,{lean:12,hd:4,aFU:64,aFL:116,sw:205,lFU:30,lFL:-6,lBU:-30,lBL:-12,sq:.99},'io'],[.95,{lean:14,hd:6,lFU:32,lBU:-32},'io'],
@@ -1246,15 +1250,15 @@ def('IDLE_SHEATHE',{idle:1,dur:3.7,cancelAt:0,blend:.16,
     {t:2.38,f:()=>{tn({d:.035,type:'square',f0:2100,f1:1600,v:.04});nz({d:.05,type:'highpass',f0:4000,v:.06});}},
     {t:2.9,f:()=>{nz({d:.18,type:'highpass',f0:2000,f1:7500,v:.2});tn({d:.5,f0:3100,f1:2900,v:.018,dl:.02});}},{t:2.955,f:()=>{if(p.J)parts.push({t:'cut',x:p.J.st[0]-p.f*24,y:p.J.st[1],ang:p.f===1?0:PI,col:'#dfe6ff',size:150,life:.18,max:.18});}}]});
 // M10 bored: the blade goes up onto the shoulder, neck roll with a little crack, a sigh, two taps of the front foot, then back to guard
-def('IDLE_BORED',{idle:1,dur:4.4,cancelAt:0,blend:.2,
+def('IDLE_BORED',{idle:1,dur:4.6,cancelAt:0,blend:.2,
   keys:[[0,{...ST}],[.5,{g2:0,lean:4,hd:2,aFU:30,aFL:170,sw:-80,aBU:-12,aBL:8,lFU:24,lFL:-4,lBU:-22,lBL:-8,sq:1},'io'],[1.0,{lean:3,hd:4},'lin'],
     [1.35,{hd:-15},'io'],[1.7,{hd:17},'io'],[1.95,{hd:3},'io'],
     [2.35,{lean:1,sq:1.022,hd:-3,aFU:34},'io'],[2.75,{lean:6,sq:.97,hd:5,aFU:26},'oq'],
-    [2.95,{lFL:-5},'lin'],[3.03,{lFL:18,lFU:28},'oq'],[3.1,{lFL:-5,lFU:24},'iq'],[3.2,{lFL:18,lFU:28},'oq'],[3.27,{lFL:-5,lFU:24},'iq'],
-    [3.9,{...ST,lean:9},'io'],[4.4,{...ST},'lin']],
+    [2.95,{ft:0},'lin'],[3.3,{ft:30},'io'],[3.46,{ft:0},'iq'],[3.6,{ft:0},'lin'],
+    [4.1,{...ST,lean:9},'io'],[4.6,{...ST},'lin']],
   ev:[{t:.45,f:()=>tn({d:.05,type:'triangle',f0:520,f1:380,v:.03})},{t:1.68,f:()=>{tn({d:.025,type:'square',f0:2100,f1:1500,v:.012});nz({d:.02,type:'highpass',f0:4000,v:.01,dl:.03});}},
     {t:2.4,f:()=>nz({d:.5,type:'lowpass',f0:500,f1:900,v:.012,a:.25})},{t:2.75,f:()=>{nz({d:.7,type:'lowpass',f0:800,f1:260,v:.03,a:.06});const[x,y]=mouthAt();for(let k=0;k<4;k++){const lf=rnd(.7,1);parts.push({t:'mist',x,y,vx:p.fwd*rnd(10,30),vy:rnd(4,18),s0:2.5,s1:rnd(9,13),life:lf,max:lf,a:.16});}}},
-    {t:3.1,f:()=>sfx.step(.18)},{t:3.27,f:()=>sfx.step(.18)},{t:3.85,f:()=>tn({d:.04,type:'triangle',f0:700,v:.025})}]});
+    {t:3.46,f:()=>sfx.step(.12)},{t:4.05,f:()=>tn({d:.04,type:'triangle',f0:700,v:.025})}]});
 // M13 rest: the tip comes down to touch the ground in front, both hands stacked on the hilt, weight eased onto it; a few slow breaths, then up again
 def('IDLE_REST',{idle:1,dur:4.6,cancelAt:0,blend:.2,
   keys:[[0,{...ST}],[.7,{lean:6,hd:6,lFU:20,lFL:-6,lBU:-21,lBL:-9,sq:.99},'io'],[2.0,{hd:2},'io'],[3.0,{hd:7},'io'],[3.6,{lean:7,hd:5},'lin'],[4.1,{...ST},'io'],[4.6,{...ST},'lin']],
@@ -1558,10 +1562,12 @@ function breath(dt){const B=p.brS||(p.brS={ph:Math.random(),dur:4,v:0,fat:0});co
   B.fat=fat;B.ph+=dt/(B.dur*(1-.5*fat));if(B.ph>=1){B.ph-=1;B.dur=rnd(3.5,4.7);}
   const u=B.ph;B.v=u<.34?E.io(u/.34):u<.41?1:u<.86?1-E.io((u-.41)/.45):0;return B.v;}
 // everything that bends in the wind is a damped spring driven by the gust: it leans in, overshoots a little, and settles - no hard stop
-const WS={n:28,a:new Float32Array(28),v:new Float32Array(28)};const BELLS=[[520,-1],[520,1],[-1300,-1],[-1300,1]].map(([x,s])=>({x,s,a:0,v:0}));
+const WS={n:28,a:new Float32Array(28),v:new Float32Array(28)};const BELLS=[[520,-1],[520,1]].map(([x,s])=>({x,s,a:0,v:0}));
 function stepWindSprings(dt){const n=WS.n;for(let i=0;i<n;i++){const sx=-.12+1.24*i/(n-1),tg=windAt(sx);WS.v[i]+=(16*(tg-WS.a[i])-3.4*WS.v[i])*dt;WS.a[i]+=WS.v[i]*dt;}
   for(const b of BELLS){const tg=windS(scrX(b.x+b.s*142,.7))*.55+Math.sin(rt*.7+b.x+b.s)*.03;b.v+=(7*(tg-b.a)-.85*b.v)*dt;b.a+=b.v*dt;
-    const th=(CFG.bellTh??23)*D2R;if(MAP==='dojo'&&Math.abs(b.a)>th&&rt>(b.cd||0)&&rt>BELL_CD){b.cd=rt+1.6;BELL_CD=rt+.5;chime(clamp(Math.abs(b.a)/(th*1.8),.45,1));}}}
+    // A mode: the clapper strikes where the swing turns round (velocity changes sign); tilt mode: as soon as the angle is past the threshold
+    const th=(CFG.bellTh??23)*D2R,turn=(b.pv||0)*b.v<0,trig=CFG.bellMode==='peak'?turn&&Math.abs(b.a)>th:Math.abs(b.a)>th;b.pv=b.v;
+    if(MAP==='dojo'&&trig&&rt>(b.cd||0)&&rt>BELL_CD){b.cd=rt+(CFG.bellCD??4);BELL_CD=rt+.5;chime(clamp(Math.abs(b.a)/(th*1.8),.45,1),b);}}}
 let BELL_CD=0;
 function windS(sx){const n=WS.n,f=clamp((sx+.12)/1.24,0,1)*(n-1),i=Math.min(n-2,f|0),u=f-i;return WS.a[i]*(1-u)+WS.a[i+1]*u;}
 function windAtPlayer(){return windS(scrX(p.x));}
@@ -1741,7 +1747,16 @@ function fxEvent(k){const k0=K0;
   else if(k==='birds'){const dir=Math.random()<.5?1:-1,n=5+((Math.random()*5)|0);EV.birds={x:dir>0?-.1:1.1,y:.12+Math.random()*.2,dir,sp:.045+Math.random()*.03,b:Array.from({length:n},(_,i)=>({dx:-dir*(i*.018+Math.random()*.01),dy:(Math.abs(i-n/2))*.012+Math.random()*.01,ph:Math.random()*TAU}))};}
   else if(k==='petals'){if(!WIND.a)startGust(rnd(.7,.95));return;const k1=KZ(1)*(1+cam.zk),R=cam.x+W/2/k1+40;for(let i=0;i<46;i++)parts.push({t:'petal',x:R+rnd(0,300),y:-rnd(20,420)+cam.y,vx:-rnd(380,760),vy:rnd(-40,80),rot:rnd(0,TAU),vr:rnd(-9,9),s:rnd(3,6),life:rnd(2.2,3),max:3,ph:rnd(0,TAU)});}
   else if(k==='star')EV.stars.push({x:.3+Math.random()*.6,y:.05+Math.random()*.25,vx:-(.5+Math.random()*.4),vy:.22+Math.random()*.12,t:0,life:.9});}
-function chime(str=1){if(!S.c||!S.on)return;onBus('amb',()=>chime0(str));}
+// bells are heard from where they hang: quieter as you walk away, panned left/right
+function chime(str=1,b){if(!S.c||!S.on)return;let out=null;
+  if(b){const sx=scrX(b.x+b.s*142,.7),dx=(b.x+b.s*142)-p.x,vol=clamp(1.15-Math.abs(dx)/1100,.12,1);const gn=S.c.createGain();gn.gain.value=vol;gn.connect(S.bus.amb||S.out);
+    if(S.c.createStereoPanner){const pn=S.c.createStereoPanner();pn.pan.value=clamp((sx-.5)*1.7,-.95,.95);pn.connect(gn);out=pn;}else out=gn;setTimeout(()=>{try{gn.disconnect()}catch(e){}},6000);}
+  CUR_DEST=out;try{onBus('amb',()=>CFG.bellSnd==='old'?chime0(str):chimeBell(str));}finally{CUR_DEST=null;}}
+// bronze wind bell: a bright metallic tick, an inharmonic set of partials with slow beating, long ring; the same bell rings again softer
+function chimeBell(str){const f0=2350+Math.random()*260,v0=(.011+Math.random()*.004)*str;
+  const strike=(v,dl)=>{nz({d:.018,type:'highpass',f0:5200,v:v*1.1,dl});nz({d:.05,type:'bandpass',f0:f0*3.1,q:6,v:v*.35,dl});
+    [[1,1,2.6],[1.0016,.55,2.4],[2.76,.42,1.5],[5.4,.2,.8],[8.93,.09,.45]].forEach(([r,a,d])=>tn({d,f0:f0*r,f1:f0*r*.999,v:v*a,a:.0015,dl}));};
+  strike(v0,0);strike(v0*.42,.42+Math.random()*.08);if(Math.random()<.6)strike(v0*.18,.86+Math.random()*.12);}
 function chime0(str){const f0=1850+Math.random()*350,v0=(.012+Math.random()*.004)*str;
   const strike=(v,dl)=>{[[1,1],[2.32,.45],[4.25,.22],[6.63,.1]].forEach(([r,a])=>tn({d:1.6-r*.12,f0:f0*r,f1:f0*r*.997,v:v*a,a:.002,dl}));nz({d:.02,type:'highpass',f0:6500,v:v*.7,dl});};
   strike(v0,0);strike(v0*.42,.4+Math.random()*.08);if(Math.random()<.6)strike(v0*.18,.82+Math.random()*.12);}
@@ -1841,7 +1856,7 @@ function drawBG(){const T=TH[MAP];
   g.setTransform(DPR,0,0,DPR,0,0);let hz=g.createLinearGradient(0,GY-120*K0,0,GY);hz.addColorStop(0,`rgba(${T.haze},0)`);hz.addColorStop(1,`rgba(${T.haze},.28)`);g.fillStyle=hz;g.fillRect(0,GY-160*K0-cam.y*.3*K0,W,200*K0);
   layerT(.7,.55);
   if(FX('B1'))drawMist(.7,4,.16,26);
-  if(MAP==='dojo'){drawGate(520,T.near,'#ffb38a');drawGate(-1300,T.near,'#ffb38a');drawNearPines(T.near);}
+  if(MAP==='dojo'){drawGate(520,T.near,'#ffb38a');drawNearPines(T.near);}
   else{drawNearPines(T.near,3);
     g.setTransform(DPR,0,0,DPR,0,0);const fg=g.createLinearGradient(0,GY-90*K0,0,GY+10*K0);fg.addColorStop(0,'rgba(120,150,205,0)');fg.addColorStop(.7,'rgba(120,150,205,.22)');fg.addColorStop(1,'rgba(120,150,205,.1)');g.fillStyle=fg;g.fillRect(0,GY-90*K0-cam.y*.5*K0,W,100*K0);
     layerT(.7,.55);drawReeds(.7,10,'rgba(22,36,66,.75)','rgba(150,176,222,.32)',.85,2);}
@@ -2202,6 +2217,7 @@ const SLD=[{k:'incHit',l:'보정 증가량 (히트당)',min:0,max:20,step:.5,u:'
   {k:'inKeep',l:'타격 시 남는 속도',min:0,max:100,step:5,u:'%',d:'점프평이 맞는 순간 남는 속도 (타격 시 감속·혼합)',sec:'c_mv',v:'0.4.3',im:['onhit','mix']},
   {k:'dashCD',l:'대쉬 쿨타임',min:0,max:2,step:.05,u:'초',d:'대쉬평 반복 방지용',sec:'c_mv',v:'0.3.0'},
   {k:'bellTh',l:'종이 울리는 기울기',min:5,max:60,step:1,u:'°',d:'처마 종이 이 각도보다 크게 흔들리면 울려요 (낮을수록 잘 울림)',sec:'c_bell',v:'0.4.6'},
+  {k:'bellCD',l:'다시 울리기까지',min:0,max:10,step:.5,u:'초',d:'한 번 울린 종이 다시 울릴 수 있을 때까지',sec:'c_bell',v:'0.4.7'},
   {k:'saPowX',l:'질주베기 가로 힘',min:0,max:1400,step:20,u:'',d:'3번째 회전에 맞은 적이 앞으로 날아가는 힘',sec:'c_tech',v:'0.4.4'},
   {k:'saPowY',l:'질주베기 세로 힘',min:0,max:1400,step:20,u:'',d:'위로 뜨는 힘 (0이면 거의 바닥으로 미끄러져요)',sec:'c_tech',v:'0.4.4'}];
 const GSL=[{k:'zoomOut',l:'넓게 보기 배율',min:.35,max:.95,step:.01,u:'×2',d:'작을수록 더 넓게 보여요'},{k:'zoomDur',l:'전환 시간',min:.15,max:1.2,step:.05,u:'초',d:'넓어지고 돌아오는 데 걸리는 시간'}];
@@ -2214,6 +2230,7 @@ function buildCfg(){
   $('c_bsl').innerHTML=CFG.bounceMode==='fixed'?slRow(BSL,CFG.bounceH,'px'):'<div class="note" style="margin:4px 0 8px">떨어진 속도의 50%로 튀어요 (약 44~176px). 보정이 차면 더 낮게 튑니다.</div>';
   const bsl=$('c_bsl').querySelector('.sl');if(bsl)bindRow(bsl,()=>CFG.bounceH,v=>{CFG.bounceH=v;saveCfg();},CFG_DEF.bounceH);
   buildSlots('c');
+  for(const[id,k]of[['c_bsnd','bellSnd'],['c_bmode','bellMode'],['c_drag','dragMode']])document.querySelectorAll('#'+id+' button').forEach(b=>{b.classList.toggle('on',b.dataset.v===CFG[k]);b.onclick=()=>{CFG[k]=b.dataset.v;saveCfg();buildCfg();b.blur();};});
   $('c_on').checked=CFG.on;document.body.classList.toggle('nocorr',!CFG.on);
   document.querySelectorAll('#c_mode button').forEach(b=>b.classList.toggle('on',b.dataset.v===CFG.mode));
   const unitOf=sd=>({'%':'%',px:'px','초':'초','×':'×','k':'','':'','°':'°'})[sd.u]??'';
@@ -2238,7 +2255,7 @@ $('c_on').onchange=e=>{CFG.on=e.target.checked;saveCfg();buildCfg();e.target.blu
 document.querySelectorAll('#c_mode button').forEach(b=>b.onclick=()=>{CFG.mode=b.dataset.v;saveCfg();buildCfg();b.blur();});
 function cdReset(){for(const k in p.cd)p.cd[k]=0;p.dashCD=0;cfgMsg('쿨타임 초기화!');}
 function cfgMsg(t){$('c_msg').textContent=t;clearTimeout(cfgMsg.t);cfgMsg.t=setTimeout(()=>$('c_msg').textContent='',1800);}
-function cfgText(){return['[검무 v0.4.6 테스트 설정]',`쿨타임 없음: ${CFG.noCD?'ON':'OFF'}`,`공중 관성: ${({decay:'감속',onhit:'타격 시 감속',mix:'혼합'})[CFG.inertia]}`,`바운드 모든타: ${BLIST.filter(([id])=>CFG.bounce[id]===2).map(x=>x[1]).join(', ')||'없음'}`,`연출 ON: ${FXL.filter(x=>FX(x[0])).map(x=>x[0]).join(', ')||'없음'}`,`바운드: ${CFG.bounceMode==='fixed'?'고정 높이 '+CFG.bounceH+'px':'충격 비례'}`,`콤보 보정: ${CFG.on?'ON':'OFF'}`,`누적 방식: ${CFG.mode==='hit'?'히트당':'공격당'}`].concat(SLD.map(sd=>`${sd.l}: ${fmtV(sd,CFG[sd.k])}`)).concat([`바운드 ON: ${BLIST.filter(([id])=>CFG.bounce[id]).map(x=>x[1]).join(', ')||'없음'}`]).join('\n');}
+function cfgText(){return['[검무 v0.4.7 테스트 설정]',`쿨타임 없음: ${CFG.noCD?'ON':'OFF'}`,`공중 관성: ${({decay:'감속',onhit:'타격 시 감속',mix:'혼합'})[CFG.inertia]}`,`바운드 모든타: ${BLIST.filter(([id])=>CFG.bounce[id]===2).map(x=>x[1]).join(', ')||'없음'}`,`연출 ON: ${FXL.filter(x=>FX(x[0])).map(x=>x[0]).join(', ')||'없음'}`,`바운드: ${CFG.bounceMode==='fixed'?'고정 높이 '+CFG.bounceH+'px':'충격 비례'}`,`콤보 보정: ${CFG.on?'ON':'OFF'}`,`누적 방식: ${CFG.mode==='hit'?'히트당':'공격당'}`].concat(SLD.map(sd=>`${sd.l}: ${fmtV(sd,CFG[sd.k])}`)).concat([`바운드 ON: ${BLIST.filter(([id])=>CFG.bounce[id]).map(x=>x[1]).join(', ')||'없음'}`]).join('\n');}
 $('c_copy').onclick=()=>{const t=cfgText();const ta=$('c_txt');ta.value=t;
   const ok=()=>cfgMsg('복사됨! 채팅에 붙여넣으세요');
   try{navigator.clipboard.writeText(t).then(ok,()=>{ta.hidden=false;ta.select();cfgMsg('아래 글을 길게 눌러 복사하세요');});}catch(e){ta.hidden=false;ta.select();cfgMsg('아래 글을 복사하세요');}};
@@ -2256,7 +2273,7 @@ function keyAssign(code){const L=listenKey;listenKey=null;
 $('c_kdef').onclick=()=>{KEYS=JSON.parse(JSON.stringify(KEY_DEF));saveKeys();buildKM();buildKB();paintKeys();gMsg('키 기본값으로 되돌림');};
 function paintKeys(){const L=a=>keyLabel(KEYS[a][0]||KEYS[a][1]);
   const hk=$('helpKeys');if(hk){const K2=a=>KEYS[a].filter(Boolean).map(c=>`<kbd>${keyLabel(c)}</kbd>`).join(' / ')||'<kbd>—</kbd>';
-    hk.innerHTML=`<li>${K2('left')} ${K2('right')} 걷기 · 두 번 누르면 <b>질주</b> (질주 중 공격 = 질주베기)</li><li>${K2('attack')} 공격 (연타·꾹 누르기로 4연격)</li><li>${K2('jump')} 점프 · 공중 2단 점프</li><li>${K2('dash')} 대시 (대시 중 공격 = 돌진 찌르기)</li><li>${K2('s0')} ${K2('s1')} ${K2('s2')} 기술 1·2·3</li><li>${K2('zoom')} 넓게 보기 (베타) · ${K2('close')} 창 닫기 (전체화면에서는 Esc 대신)</li><li><kbd>Tab</kbd> 기술 교체 · <kbd>L</kbd> 콤보 노트 · <kbd>T</kbd> 테스트 설정 · <kbd>R</kbd> 리셋 · <kbd>M</kbd> 소리 · <kbd>F</kbd> 전체화면 · <kbd>Esc</kbd> 닫기</li><li style="opacity:.6">키는 설정(⚙) → 키 설정에서 바꿀 수 있어요</li>`;}
+    hk.innerHTML=`<li>${K2('left')} ${K2('right')} 걷기 · 두 번 누르면 <b>질주</b> (질주 중 공격 = 질주베기)</li><li>${K2('attack')} 공격 (연타·꾹 누르기로 4연격)</li><li>${K2('jump')} 점프 · 공중 2단 점프</li><li>${K2('dash')} 대시 (대시 중 공격 = 돌진 찌르기)</li><li>${K2('s0')} ${K2('s1')} ${K2('s2')} 기술 1·2·3</li><li>${K2('zoom')} 넓게 보기 (베타) · ${K2('close')} 메뉴 열기 / 창 닫기 (전체화면에서는 Esc 대신)</li><li><kbd>Tab</kbd> 기술 교체 · <kbd>L</kbd> 콤보 노트 · <kbd>T</kbd> 테스트 설정 · <kbd>R</kbd> 리셋 · <kbd>M</kbd> 소리 · <kbd>F</kbd> 전체화면 · <kbd>Esc</kbd> 닫기</li><li style="opacity:.6">키는 설정(⚙) → 키 설정에서 바꿀 수 있어요</li>`;}
   document.querySelectorAll('[data-kl]').forEach(el=>el.textContent=L(el.dataset.kl));
   $('kh1').innerHTML=`<kbd>${L('left')}</kbd><kbd>${L('right')}</kbd>걷기 · 두 번 누르면 질주`;
   $('kh2').innerHTML=`<kbd>${L('attack')}</kbd>공격 <kbd>${L('jump')}</kbd>점프 <kbd>${L('dash')}</kbd>대시`;
@@ -2379,14 +2396,38 @@ function renderLoad(){
     el.ondragstart=e=>{e.dataTransfer.setData('text/plain',el.dataset.card);e.dataTransfer.effectAllowed='move';el.classList.add('drag');};el.ondragend=()=>{el.classList.remove('drag');document.querySelectorAll('.ls').forEach(x=>x.classList.remove('dropok'));};});
   document.querySelectorAll('[data-ls]').forEach(el=>{const i=+el.dataset.ls;
     el.ondragstart=e=>{if(!loadout[i]){e.preventDefault();return;}LS_DROP=false;e.dataTransfer.setData('text/plain','slot:'+i);e.dataTransfer.effectAllowed='move';el.classList.add('drag');};
-    el.ondragend=()=>{el.classList.remove('drag');document.querySelectorAll('.ls').forEach(x=>x.classList.remove('dropok'));if(!LS_DROP&&loadout[i])unassign(i);};
+    el.ondragend=()=>{el.classList.remove('drag');document.querySelectorAll('.ls').forEach(x=>x.classList.remove('dropok'));if(CFG.dragMode==='old'&&!LS_DROP&&loadout[i])unassign(i);};
     el.oncontextmenu=e=>{e.preventDefault();if(loadout[i])unassign(i);};
     el.ondragover=e=>{e.preventDefault();el.classList.add('dropok');};el.ondragleave=()=>el.classList.remove('dropok');
     el.ondrop=e=>{e.preventDefault();e.stopPropagation();el.classList.remove('dropok');LS_DROP=true;const v=e.dataTransfer.getData('text/plain');
       if(v.startsWith('slot:')){const j=+v.slice(5);if(j!==i){const t=loadout[i];loadout[i]=loadout[j];loadout[j]=t;saveLo();paintSlots();renderLoad();renderGuide();sfx.ready();}}
       else if(SK[v])assign(i,v);};});
-  document.querySelectorAll('[data-card]').forEach(el=>el.onclick=()=>{const id=el.dataset.card;if(selSlot!==null){assign(selSlot,id);}else{selSkill=selSkill===id?null:id;renderLoad();}});
+  document.querySelectorAll('[data-card]').forEach(el=>el.onclick=()=>{if(PD.swallow){PD.swallow=false;return;}const id=el.dataset.card;if(selSlot!==null){assign(selSlot,id);}else{selSkill=selSkill===id?null:id;renderLoad();}});
+  if(CFG.dragMode!=='old'){document.querySelectorAll('[data-card],[data-ls]').forEach(el=>{el.draggable=false;el.ondragstart=e=>e.preventDefault();el.onpointerdown=pdDown;});
+    document.querySelectorAll('[data-ls]').forEach(el=>{const f=el.onclick;el.onclick=e=>{if(PD.swallow){PD.swallow=false;return;}f(e);};});}
 }
+// pointer drag: starts after 5px, the card follows the cursor at once; drop on a slot = equip/swap,
+// drop a slot on the dark backdrop = empty it; anything else snaps back. Pointer capture means releasing outside the window still ends the drag.
+const PD={on:false,src:null,x:0,y:0,ghost:null,el:null,id:-1,swallow:false};
+function pdDown(e){if(e.button!==0||PD.el)return;const el=e.currentTarget;const isCard=el.hasAttribute('data-card');const src=isCard?{card:el.dataset.card}:{slot:+el.dataset.ls};
+  if(!isCard&&!loadout[src.slot])return;Object.assign(PD,{on:false,src,x:e.clientX,y:e.clientY,el,id:e.pointerId,swallow:false});
+  try{el.setPointerCapture(e.pointerId);}catch(_){}
+  el.onpointermove=pdMove;el.onpointerup=pdUp;el.onpointercancel=()=>pdEnd(false);el.onlostpointercapture=()=>{if(PD.el===el)pdEnd(false);};}
+function pdTarget(x,y){if(PD.ghost)PD.ghost.style.display='none';const t=document.elementFromPoint(x,y);if(PD.ghost)PD.ghost.style.display='';return t;}
+function pdMove(e){if(!PD.el)return;const dx=e.clientX-PD.x,dy=e.clientY-PD.y;
+  if(!PD.on){if(Math.hypot(dx,dy)<5)return;PD.on=true;const r=PD.el.getBoundingClientRect(),g=PD.el.cloneNode(true);
+    g.style.cssText=`position:fixed;left:0;top:0;width:${r.width}px;height:${r.height}px;margin:0;pointer-events:none;z-index:40;opacity:.92;transform:translate(${r.left}px,${r.top}px) scale(.96);box-shadow:0 18px 40px rgba(0,0,0,.55);transition:none`;
+    document.body.appendChild(g);PD.ghost=g;PD.ox=e.clientX-r.left;PD.oy=e.clientY-r.top;PD.el.classList.add('drag');}
+  PD.ghost.style.transform=`translate(${e.clientX-PD.ox}px,${e.clientY-PD.oy}px) scale(.96)`;
+  const t=pdTarget(e.clientX,e.clientY),ls=t&&t.closest&&t.closest('[data-ls]');document.querySelectorAll('.ls').forEach(x=>x.classList.toggle('dropok',x===ls));}
+function pdUp(e){if(!PD.el)return;if(!PD.on){pdEnd(false);return;}const t=pdTarget(e.clientX,e.clientY);pdEnd(true,t);}
+function pdEnd(drop,t){const el=PD.el,src=PD.src,was=PD.on;if(PD.ghost)PD.ghost.remove();PD.ghost=null;if(el){el.classList.remove('drag');el.onpointermove=el.onpointerup=el.onpointercancel=el.onlostpointercapture=null;try{el.releasePointerCapture(PD.id)}catch(_){}}
+  PD.el=null;PD.on=false;document.querySelectorAll('.ls').forEach(x=>x.classList.remove('dropok'));
+  if(!was||!drop)return;PD.swallow=true;setTimeout(()=>{PD.swallow=false;},0);
+  const ls=t&&t.closest&&t.closest('[data-ls]'),bg=t&&t.classList&&t.classList.contains('modal');
+  if(ls){const i=+ls.dataset.ls;if(src.card)assign(i,src.card);else if(src.slot!==i){const tmp=loadout[i];loadout[i]=loadout[src.slot];loadout[src.slot]=tmp;saveLo();paintSlots();renderLoad();renderGuide();sfx.ready();}}
+  else if(bg&&src.slot!=null)unassign(src.slot);}
+addEventListener('blur',()=>{if(PD.el)pdEnd(false);});
 let LS_DROP=false;
 function unassign(i){loadout[i]=null;selSkill=null;selSlot=null;saveLo();paintSlots();renderLoad();renderGuide();sfx.click();}
 function assign(i,id){setTimeout(renderGuide,0);const o=loadout.indexOf(id);if(o>=0&&o!==i)loadout[o]=loadout[i];loadout[i]=id;selSkill=null;selSlot=null;saveLo();paintSlots();renderLoad();sfx.ready();}
