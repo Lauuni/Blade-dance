@@ -6,6 +6,9 @@ HTML5 액션 콤보 프로토타입 — 허수아비 수련장.
 - 또는 `index.html`을 브라우저로 열기
 - 목표: 어떤 기술 조합으로 가장 긴 콤보를 넣을 수 있는지 연구하는 수련장
 
+## 설계 문서
+작업 규칙·현재 상태·결정·다음 순서: [검무 설계 문서](https://claude.ai/artifact/1yJgErXyuRuoisJYvb2SBL) (Claude 계정에서만 열림)
+
 ## 버전
 자세한 내용은 [CHANGELOG.md](CHANGELOG.md)
 
