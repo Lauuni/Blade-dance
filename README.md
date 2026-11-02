@@ -36,7 +36,7 @@ HTML5 액션 콤보 프로토타입 — 허수아비 수련장.
 
 | 버전 | 커밋 | 바로가기 |
 |---|---|---|
-| 0.5.3 | `NEWHASH` | [▶ 플레이](https://lauuni.github.io/Blade-dance/versions/v0.5.3.html) · [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/NEWHASH) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/NEWHASH) |
+| 0.5.3 | `5e35a55` | [▶ 플레이](https://lauuni.github.io/Blade-dance/versions/v0.5.3.html) · [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/5e35a55) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/5e35a55) |
 | 0.5.2 | `36e888c` | [▶ 플레이](https://lauuni.github.io/Blade-dance/versions/v0.5.2.html) · [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/36e888c) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/36e888c) |
 | 0.5.1 | `b8a9209` | [▶ 플레이](https://lauuni.github.io/Blade-dance/versions/v0.5.1.html) · [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/b8a9209) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/b8a9209) |
 | 0.5.0 | `5bbb92d` | [▶ 플레이](https://lauuni.github.io/Blade-dance/versions/v0.5.0.html) · [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/5bbb92d) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/5bbb92d) |
