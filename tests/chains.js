@@ -1,0 +1,10 @@
+const {chromium}=require('playwright');(async()=>{const b=await chromium.launch();const pg=await b.newPage({viewport:{width:1280,height:720}});
+const errs=[];pg.on('pageerror',e=>errs.push(e.message));
+await pg.goto('file://'+process.cwd()+'/index.html');await pg.evaluate(()=>localStorage.clear());await pg.reload();await pg.waitForTimeout(300);
+await pg.evaluate(()=>__bd.begin());const ev=(f,a)=>pg.evaluate(f,a);
+const r=await ev(()=>{__bd.hold(true);const p=__bd.p,o=[];
+  const go=(seq)=>{p.x=0;p.y=0;p.vy=0;p.ground=true;p.act=null;p.dashCD=0;__bd.adv(.5);const names=[];for(const [k,t] of seq){__bd.press(k);__bd.adv(t);names.push(p.act?p.act.def.name:'-');}return names.join(' > ');};
+  o.push('jump→dash→atk: '+go([['jump',.12],['dash',.06],['attack',.05]]));
+  o.push('ground dash→atk: '+go([['dash',.06],['attack',.05]]));
+  return o;});
+console.log(r.join('\n'));console.log('ERR',errs.join('\n'));await b.close();})();

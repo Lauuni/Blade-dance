@@ -1,0 +1,20 @@
+const {chromium}=require('playwright');(async()=>{const b=await chromium.launch();const pg=await b.newPage({viewport:{width:1280,height:720}});
+const errs=[];pg.on('pageerror',e=>errs.push(e.message));
+await pg.goto('file://'+process.cwd()+'/index.html');await pg.evaluate(()=>{localStorage.clear();localStorage.setItem('bd_char','yeon')});await pg.reload();await pg.waitForTimeout(300);
+await pg.keyboard.press('KeyX');await pg.waitForTimeout(300);
+const st=()=>pg.evaluate(()=>{const m=document.querySelector('.modal.on');return {open:m&&m.id,kbnav:m&&m.classList.contains('kbnav'),kf:[...document.querySelectorAll('.modal.on .kf')].map(e=>e.dataset.ch||e.dataset.mp),sel:[...document.querySelectorAll('.modal.on .sel')].map(e=>e.dataset.ch||e.dataset.mp),char:localStorage.getItem('bd_char')}});
+// park mouse where the musa card will appear, open with comma
+await pg.keyboard.press('Comma');await pg.waitForTimeout(200);
+const box=await pg.evaluate(()=>{const r=document.querySelector('[data-ch=musa]').getBoundingClientRect();return[r.x+r.width/2,r.y+r.height/2]});
+await pg.keyboard.press('KeyQ');await pg.waitForTimeout(200);
+await pg.mouse.move(box[0],box[1]);await pg.waitForTimeout(100);
+await pg.keyboard.press('Comma');await pg.waitForTimeout(250);console.log('open under still mouse',await st());
+await pg.mouse.move(box[0]+0,box[1]+0);await pg.waitForTimeout(100);console.log('same-spot move',await st());
+await pg.mouse.move(box[0]+8,box[1]+5,{steps:3});await pg.waitForTimeout(100);console.log('real move over musa',await st());
+await pg.keyboard.press('ArrowRight');await pg.waitForTimeout(100);console.log('first arrow (shows ring, no move)',await st());
+await pg.keyboard.press('ArrowRight');await pg.waitForTimeout(100);console.log('second arrow',await st());
+await pg.keyboard.press('KeyQ');await pg.waitForTimeout(200);
+await pg.keyboard.press('Comma');await pg.waitForTimeout(250);console.log('reopen',await st());
+await pg.keyboard.press('ArrowLeft');await pg.keyboard.press('ArrowLeft');await pg.keyboard.press('Enter');await pg.waitForTimeout(300);console.log('pick musa',await st());
+await pg.keyboard.press('KeyM');await pg.waitForTimeout(250);console.log('map open',await st());
+console.log('ERR',errs.join());await b.close();})();
