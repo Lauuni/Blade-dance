@@ -3,6 +3,7 @@
 HTML5 액션 콤보 프로토타입 — 허수아비 수련장.
 
 - ▶ **바로 플레이: https://lauuni.github.io/Blade-dance/** (PC 기준)
+- 🧪 **체험판 (적과 싸우기, 버릴 수도 있는 실험): https://lauuni.github.io/Blade-dance/lab.html** — 본 게임과 별도 파일
 - 또는 `index.html`을 브라우저로 열기
 - 목표: 어떤 기술 조합으로 가장 긴 콤보를 넣을 수 있는지 연구하는 수련장
 

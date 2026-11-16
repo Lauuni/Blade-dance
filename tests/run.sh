@@ -4,3 +4,5 @@
 for f in load mobile finite chains idle_ground move_wind yeon_all_acts picker_camera preview_fixed impact_modes picker_cursor; do
   echo "== $f"; node tests/$f.js 2>&1 | tail -4
 done
+# 체험판 (lab.html)
+echo "== lab_enemy"; node tests/lab_enemy.js 2>&1 | tail -1

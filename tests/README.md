@@ -16,3 +16,4 @@
 | preview_fixed.js | 캐릭터 카드 미리보기가 항상 같은지, 0.12초 닫힘 | 전부 `true` |
 | impact_modes.js | 임팩트 프레임 켬/약하게/끔 (스크린샷 /tmp/im_*.png) | 오류 없음 |
 | picker_cursor.js | 창이 사용 중인 것에서 시작, 가만있는 마우스 무시 | 열 때 `kf` = `sel` |
+| lab_enemy.js | **체험판(lab.html)**: 적이 다가와 때림, 대쉬 회피, 버팀, 끊기, 격파 후 다음 적, 쓰러지면 다시 시작 (스크린샷 /tmp/lab_*.png) | `errors 0` |
