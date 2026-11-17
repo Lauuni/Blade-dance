@@ -1,7 +1,7 @@
 const {chromium}=require('playwright');(async()=>{const b=await chromium.launch();const pg=await b.newPage({viewport:{width:1280,height:720}});
 const errs=[];pg.on('pageerror',e=>errs.push(e.message));
 await pg.goto('file://'+process.cwd()+'/index.html');await pg.evaluate(()=>{localStorage.clear();localStorage.setItem('bd_char','yeon')});await pg.reload();await pg.waitForTimeout(300);
-await pg.keyboard.press('KeyX');await pg.waitForTimeout(300);
+await pg.keyboard.press('ArrowLeft');await pg.keyboard.press('KeyX');await pg.waitForTimeout(300);
 const st=()=>pg.evaluate(()=>{const m=document.querySelector('.modal.on');return {open:m&&m.id,kbnav:m&&m.classList.contains('kbnav'),kf:[...document.querySelectorAll('.modal.on .kf')].map(e=>e.dataset.ch||e.dataset.mp),sel:[...document.querySelectorAll('.modal.on .sel')].map(e=>e.dataset.ch||e.dataset.mp),char:localStorage.getItem('bd_char')}});
 // park mouse where the musa card will appear, open with comma
 await pg.keyboard.press('Comma');await pg.waitForTimeout(200);

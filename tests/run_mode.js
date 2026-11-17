@@ -9,7 +9,7 @@ const fight=(sec)=>pg.evaluate((sec)=>{const B=__bd;B.p.x=B.dummy.x-80;B.p.f=1;f
   if(i%9===4)B.press('s0');else if(i%9===7)B.press('s1');else if(i%13===10)B.press('s2');else if(i%11===6)B.press('jump');else B.press('attack');B.adv(.1);if(B.RUN.phase!=='practice'&&B.RUN.phase!=='stage')break;}},sec);
 const idle=(sec)=>pg.evaluate((sec)=>{for(let i=0;i<sec*10;i++)__bd.adv(.1);},sec);
 await shot('title');
-await pg.keyboard.press('ArrowRight');R.titleToggle=await pg.evaluate(()=>document.querySelector('#modes .sel').dataset.mode);await pg.keyboard.press('ArrowLeft');
+await pg.keyboard.press('ArrowRight');R.titleToggle=await pg.evaluate(()=>document.querySelector('#modes .sel').dataset.mode);
 await pg.keyboard.press('Enter');await pg.evaluate(()=>__bd.hold(true));await pg.waitForTimeout(200);
 R.intro=await st();await shot('intro');
 await pg.keyboard.press('Enter');R.practice=await st();
@@ -31,7 +31,7 @@ await pg.keyboard.press('Enter');R.over=await st();await pg.waitForTimeout(100);
 R.swap=await pg.evaluate(()=>{const B=__bd,r=B.RUN;B.loadout[0]='rise';B.loadout[1]='gale';B.loadout[2]='thunder';r.phase='pick';r.cards=[{t:'sk',id:'iai'}];r.ci=0;B.runPick(0);const ph=r.phase,n=r.cards.length;B.runPick(1);return{ph,n,lo:B.loadout.join(),after:r.phase};});
 // back to the title: practice loadout is restored and nothing was saved
 R.title=await pg.evaluate(()=>{const B=__bd;B.toTitle();return{on:B.RUN.on,lo:B.loadout.join(),saved:localStorage.getItem('bd_loadout'),start:!document.getElementById('start').classList.contains('hide'),run:document.body.classList.contains('run')};});
-await pg.keyboard.press('ArrowRight');await pg.keyboard.press('Enter');R.practiceMode=await pg.evaluate(()=>({on:__bd.RUN.on,hud:getComputedStyle(document.getElementById('runHud')).display,lo:__bd.loadout.join()}));
+await pg.keyboard.press('ArrowRight');await pg.keyboard.press('Enter');R.practiceMode=await pg.evaluate(()=>({on:__bd.RUN.on,raid:__bd.RAID.on,hud:getComputedStyle(document.getElementById('runHud')).display,lo:__bd.loadout.join()}));
 console.log(JSON.stringify(R));
 const m=await b.newPage({viewport:{width:740,height:360},hasTouch:true,isMobile:true});m.on('pageerror',e=>{if(e.message){errs++;console.log('ERR mobile',e.message);}});
 await m.goto('file://'+process.cwd()+'/index.html');await m.waitForTimeout(300);await m.screenshot({path:'/tmp/run_m_title.png'});await m.tap('#modes .mode[data-mode=run]');await m.waitForTimeout(300);await m.screenshot({path:'/tmp/run_m_intro.png'});

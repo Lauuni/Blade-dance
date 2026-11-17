@@ -1,7 +1,7 @@
 const {chromium}=require('playwright');(async()=>{const b=await chromium.launch();const pg=await b.newPage({viewport:{width:1280,height:720}});
 const errs=[];pg.on('pageerror',e=>errs.push(e.message));
 await pg.goto('file://'+process.cwd()+'/index.html');await pg.evaluate(()=>localStorage.clear());await pg.reload();await pg.waitForTimeout(300);
-await pg.keyboard.press('KeyX');await pg.waitForTimeout(300);
+await pg.keyboard.press('ArrowLeft');await pg.keyboard.press('KeyX');await pg.waitForTimeout(300);
 const grab=()=>pg.evaluate(()=>[...document.querySelectorAll('canvas.chv')].map(c=>c.toDataURL()));
 await pg.keyboard.press('Comma');await pg.waitForTimeout(200);const a=await grab();
 await pg.keyboard.press('KeyQ');await pg.waitForTimeout(2500);// wind and time move on

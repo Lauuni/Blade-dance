@@ -1,7 +1,7 @@
 const {chromium}=require('playwright');(async()=>{const b=await chromium.launch();const pg=await b.newPage({viewport:{width:1280,height:720}});
 const errs=[];pg.on('pageerror',e=>errs.push(e.message));pg.on('console',m=>{if(m.type()==='error')errs.push('console: '+m.text())});
 await pg.goto('file://'+process.cwd()+'/index.html');await pg.evaluate(()=>localStorage.clear());await pg.reload();await pg.waitForTimeout(300);
-await pg.keyboard.press('KeyX');await pg.waitForTimeout(300);
+await pg.keyboard.press('ArrowLeft');await pg.keyboard.press('KeyX');await pg.waitForTimeout(300);
 const st=()=>pg.evaluate(()=>({char:localStorage.getItem('bd_char'),map:localStorage.getItem('bd_map'),open:[...document.querySelectorAll('.modal.on')].map(e=>e.id),kf:[...document.querySelectorAll('.kf')].map(e=>e.dataset.ch||e.dataset.mp),x:__bd.p.x}));
 await pg.keyboard.press('Comma');await pg.waitForTimeout(200);console.log('open char',await st());
 await pg.screenshot({path:'/tmp/p_char.png'});

@@ -5,5 +5,6 @@ for f in load mobile finite chains idle_ground move_wind yeon_all_acts picker_ca
   echo "== $f"; node tests/$f.js 2>&1 | tail -4
 done
 echo "== run_mode"; node tests/run_mode.js 2>&1 | tail -1
+echo "== raid_mode"; node tests/raid_mode.js 2>&1 | tail -1
 # 체험판 (lab.html)
 echo "== lab_enemy"; node tests/lab_enemy.js 2>&1 | tail -1
