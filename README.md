@@ -3,7 +3,7 @@
 HTML5 액션 콤보 프로토타입 — 허수아비 수련장.
 
 - ▶ **바로 플레이: https://lauuni.github.io/Blade-dance/** (PC 기준)
-- 🧪 **지금 main은 v0.5.3 + 레이드 모드(1차) + 프로토타입 모드** (실험, 정식 버전 아님). 시작 화면에서 "연습 모드"를 고르면 기존 게임 그대로. 순수한 v0.5.3은 [여기](https://lauuni.github.io/Blade-dance/versions/v0.5.3.html)
+- 🧪 **지금 main은 v0.5.3 + 프로토타입 P4 (레이드 2차 · 로그라이크 모드)** (실험, 정식 버전 아님. 아래 "프로토타입 기록" 표 참고). 시작 화면에서 "연습 모드"를 고르면 기존 게임 그대로. 순수한 v0.5.3은 [여기](https://lauuni.github.io/Blade-dance/versions/v0.5.3.html)
 - 🧪 **체험판 (적과 싸우기, 버릴 수도 있는 실험): https://lauuni.github.io/Blade-dance/lab.html** — 본 게임과 별도 파일
 - 또는 `index.html`을 브라우저로 열기
 - 목표: 어떤 기술 조합으로 가장 긴 콤보를 넣을 수 있는지 연구하는 수련장
@@ -55,3 +55,13 @@ HTML5 액션 콤보 프로토타입 — 허수아비 수련장.
 | 0.3.0 | `e8df7ff` | [▶ 플레이](https://lauuni.github.io/Blade-dance/versions/v0.3.0.html) · [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/e8df7ff) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/e8df7ff) |
 | 0.2.0 | `48cc041` | [▶ 플레이](https://lauuni.github.io/Blade-dance/versions/v0.2.0.html) · [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/48cc041) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/48cc041) |
 | 0.1.0 | `3aa7fbf` | [▶ 플레이](https://lauuni.github.io/Blade-dance/versions/v0.1.0.html) · [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/3aa7fbf) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/3aa7fbf) |
+
+### 프로토타입 기록 (정식 버전 아님)
+
+방향을 정하기 위한 실험들이에요. 정식 버전과 따로 모아둬요.
+
+| 번호 | 커밋 | 내용 | 바로가기 |
+|---|---|---|---|
+| P3 | `6ded6e4` | 레이드 모드 1차 (보스 흑월, 패턴 8개, 그로기 4종) | [▶ 플레이](https://lauuni.github.io/Blade-dance/versions/p3.html) · [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/6ded6e4) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/6ded6e4) |
+| P2 | `a3fc145` | 프로토타입 모드 (로그라이크: 층 오르기, 점수, 유물) | [▶ 플레이](https://lauuni.github.io/Blade-dance/versions/p2.html) · [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/a3fc145) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/a3fc145) |
+| P1 | `95d6524` | 적 체험판 (lab.html: 반격하는 적, 플레이어 체력) | [▶ 플레이](https://lauuni.github.io/Blade-dance/versions/p1.html) · [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/95d6524) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/95d6524) |

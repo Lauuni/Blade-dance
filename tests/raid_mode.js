@@ -21,41 +21,47 @@ for(const k in pats){await stage(k,...pats[k]);await shot('tele_'+k);}
 await stage('lunge',330,.62);await shot('strike_lunge');
 await stage('leap',330,.75);await shot('strike_leap');
 await stage('wave',520,.75);await shot('strike_wave');
-// 1. armor: hitting the boss does 25% damage, no launch, fills nothing but the break gauge
-R.armor=await pg.evaluate(()=>{const B=__bd,R=B.RAID;R.ai='idle';R.pat=null;R.cd=99;B.p.x=B.dummy.x-70;B.p.f=1;const h0=R.hp,b0=R.brk;B.startAct('A4');B.adv(.5);return{dmg:Math.round(h0-R.hp),brk:+(b0-R.brk).toFixed(1),state:B.dummy.state,air:B.dummy.air};});
-// 2. counter: hit during a blue wind-up -> short groggy, the hit itself launches
-R.counter=await pg.evaluate(()=>{const B=__bd,R=B.RAID;B.adv(.5);R.ai='idle';B.p.x=B.dummy.x-80;B.p.f=1;B.startPat('spin');B.adv(.3);B.startAct('S_RISE');B.adv(.25);return{grog:R.grog,gk:R.gk,air:B.dummy.air};});
+// 1. armor: hitting the armored boss bounces the blade and staggers the player, no damage
+R.armor=await pg.evaluate(()=>{const B=__bd,R=B.RAID;R.ai='idle';R.pat=null;R.cd=99;R.stag=0;R.shots.length=0;B.p.hurtT=0;B.p.invT=9;B.p.x=B.dummy.x-70;B.p.f=1;const h0=R.hp,b0=R.brk;B.press('attack');B.adv(.2);return{dmg:Math.round(h0-R.hp),hurt:B.p.hurtT>0,act:!!B.p.act};});
+await pg.evaluate(()=>__bd.adv(.02));await shot('bounce');
+// 1b. opening: after a big attack's last swing, hits land at 50% and wear the break gauge
+R.open=await pg.evaluate(()=>{const B=__bd,R=B.RAID;B.adv(.6);B.p.hurtT=0;B.p.invT=9;B.p.x=B.dummy.x-140;R.cd=99;B.startPat('lunge');B.adv(.8);B.p.x=B.dummy.x-70;B.p.f=1;const ai=R.ai,h0=R.hp,b0=R.brk;B.press('attack');B.adv(.25);return{ai,dmg:Math.round(h0-R.hp),brk:+(b0-R.brk).toFixed(1)};});
+await shot('open');
+// 2. counter: only a dash attack during a blue wind-up counts; a plain hit bounces
+R.counterPlain=await pg.evaluate(()=>{const B=__bd,R=B.RAID;B.adv(1.5);R.ai='idle';R.pat=null;R.cd=99;B.p.hurtT=0;B.p.x=B.dummy.x-80;B.p.f=1;B.startPat('spin');B.adv(.2);B.press('attack');B.adv(.2);return{grog:R.grog,hurt:B.p.hurtT>0};});
+R.counter=await pg.evaluate(()=>{const B=__bd,R=B.RAID;B.adv(1.5);R.ai='idle';R.pat=null;R.cd=99;B.p.hurtT=0;B.p.invT=9;B.p.x=B.dummy.x-110;B.p.f=1;B.startPat('iai');B.adv(.3);B.startAct('DA');B.adv(.2);return{grog:R.grog,gk:R.gk,air:B.dummy.air,fall:R.fall,gT:+R.gT.toFixed(1)};});
 await pg.evaluate(()=>__bd.adv(.1));await shot('counter');
 R.counterEnd=await pg.evaluate(()=>{const B=__bd,R=B.RAID;for(let i=0;i<60&&R.grog;i++)B.adv(.1);return{grog:R.grog,state:B.dummy.state};});
-// 3. just guard: V right before the gold hit lands
-R.guard=await pg.evaluate(()=>{const B=__bd,R=B.RAID;R.cd=99;B.adv(.6);B.p.x=B.dummy.x-120;B.p.f=1;B.p.invT=0;const b0=R.brk;B.startPat('cleave');B.adv(.88);
-  window.dispatchEvent(new KeyboardEvent('keydown',{code:'KeyV',key:'v'}));B.adv(.12);return{hp:B.p.hp,brk:+(b0-R.brk).toFixed(1),stag:R.stag>0};});
+// 3. just guard: the shrinking ring, then V right before the gold hit lands
+await pg.evaluate(()=>{const B=__bd,R=B.RAID;R.cd=99;R.ai='idle';R.pat=null;B.adv(.6);B.p.x=B.dummy.x-120;B.p.f=1;B.p.invT=0;B.p.hurtT=0;B.startPat('cleave');B.adv(.55);});await shot('guard_ring');
+await pg.evaluate(()=>__bd.adv(.27));await shot('guard_window');
+R.guard=await pg.evaluate(()=>{const B=__bd,R=B.RAID,b0=R.brk;window.dispatchEvent(new KeyboardEvent('keydown',{code:'KeyV',key:'v'}));B.adv(.15);return{hp:B.p.hp,brk:+(b0-R.brk).toFixed(1),stag:R.stag>0,open:R.stag>0};});
 await pg.evaluate(()=>__bd.adv(.03));await shot('guard');
 R.guardLate=await pg.evaluate(()=>{const B=__bd,R=B.RAID;B.adv(1.5);B.p.x=B.dummy.x-120;B.p.invT=0;B.p.hp=100;B.p.guardCD=0;B.startPat('cleave');B.adv(1.2);return{hp:B.p.hp};});
-// 4. just evade: dash into the gray sweep -> world slows, the player does not
-R.just=await pg.evaluate(()=>{const B=__bd,R=B.RAID;B.adv(1.6);B.p.x=B.dummy.x-150;B.p.f=1;B.p.invT=0;B.p.hp=100;B.p.hurtT=0;B.startPat('sweep');B.adv(1.02);B.startAct('DASH');B.adv(.06);
-  const wt=R.wt,hp=B.p.hp,t0=R.t;B.adv(.5);return{wt:+wt.toFixed(2),hp,bossT:+(R.t-t0).toFixed(3)};});
+// 4. just evade: dash in the first 0.12 s against the gray sweep -> slow time, one attack, crits
+R.justLate=await pg.evaluate(()=>{const B=__bd,R=B.RAID;B.adv(1.6);B.p.x=B.dummy.x-150;B.p.f=1;B.p.invT=0;B.p.hp=100;B.p.hurtT=0;B.p.sta=100;B.startPat('sweep');B.adv(.86);B.startAct('DASH');B.adv(.17);return{wt:R.wt,hp:B.p.hp};});
+R.just=await pg.evaluate(()=>{const B=__bd,R=B.RAID;B.adv(2);R.ai='idle';R.pat=null;B.p.x=B.dummy.x-150;B.p.f=1;B.p.invT=0;B.p.hp=100;B.p.hurtT=0;B.p.sta=100;B.startPat('sweep');B.adv(.99);B.startAct('DASH');B.adv(.06);
+  const m0=R.wtM,x0=B.p.x;B.adv(.5);const slowMove=Math.abs(B.p.x-x0);return{wtM:m0,hp:B.p.hp,slowMove:Math.round(slowMove)};});
 await shot('just');
-R.justDmg=await pg.evaluate(()=>{const B=__bd,R=B.RAID,h0=R.hp;B.p.x=B.dummy.x-70;B.p.f=1;B.startAct('S_RISE');B.adv(.5);return Math.round(h0-R.hp);});
-// 5. break: empty the gauge -> long groggy, combos land, ending the combo does not end it
-R.brk=await pg.evaluate(()=>{const B=__bd,R=B.RAID;B.adv(3);R.wt=0;document.body.classList.remove('wt');R.ai='idle';R.pat=null;R.cd=99;R.brk=.5;B.p.x=B.dummy.x-70;B.p.f=1;B.press('attack');B.adv(.2);return{grog:R.grog,gk:R.gk,gT:+R.gT.toFixed(1)};});
+R.punish=await pg.evaluate(()=>{const B=__bd,R=B.RAID,h0=R.hp;B.p.x=B.dummy.x-60;B.p.f=1;B.press('attack');const seq=[];for(let i=0;i<40&&R.wtM;i++){B.adv(.05);const n=B.p.act&&B.p.act.def.name;if(n&&seq[seq.length-1]!==n)seq.push(n);}
+  return{seq:seq.join('>'),dmg:Math.round(h0-R.hp),crits:R.wtHits,ended:!R.wtM};});
+await shot('punish');
+// 5. break: empty the gauge in an opening -> long groggy at 200%
+R.brk=await pg.evaluate(()=>{const B=__bd,R=B.RAID;B.adv(3);R.ai='idle';R.pat=null;R.cd=99;R.brk=.5;R.stag=1;B.p.hurtT=0;B.p.x=B.dummy.x-70;B.p.f=1;B.press('attack');B.adv(.2);return{grog:R.grog,gk:R.gk,gT:+R.gT.toFixed(1)};});
 await pg.evaluate(()=>__bd.adv(.6));await shot('break');
-// bot combo inside the break window, measure damage
-R.brkCombo=await pg.evaluate(()=>{const B=__bd,R=B.RAID,h0=R.hp;let maxc=0,ends=0,last=0;
-  for(let i=0;i<120&&R.grog;i++){B.p.f=B.dummy.x>=B.p.x?1:-1;if(Math.abs(B.dummy.x-B.p.x)>120)B.p.x=B.dummy.x-B.p.f*70;
+R.brkCombo=await pg.evaluate(()=>{const B=__bd,R=B.RAID,h0=R.hp;let maxc=0;
+  for(let i=0;i<120&&R.grog;i++){B.p.f=B.dummy.x>=B.p.x?1:-1;if(Math.abs(B.dummy.x-B.p.x)>120)B.p.x=B.dummy.x-B.p.f*70;B.p.sta=100;
     if(i%10===2)B.press('s1');else if(i%10===6)B.press('s0');else if(i%13===9)B.press('s2');else if(i%7===3)B.press('jump');else B.press('attack');B.adv(.1);maxc=Math.max(maxc,B.combo.n);}
   return{dmg:Math.round(h0-R.hp),maxCombo:maxc,grogAfter:R.grog,brkRefill:R.brk};});
 await shot('after_break');
-// 6. armored DPS for tuning: 20 s of plain attacking with i-frames on
-R.armorDps=await pg.evaluate(()=>{const B=__bd,R=B.RAID;R.cd=99;R.ai='idle';R.pat=null;const h0=R.hp,b0=R.brk;let n=0;
-  for(let i=0;i<200;i++){B.p.invT=9;B.p.f=B.dummy.x>=B.p.x?1:-1;if(Math.abs(B.dummy.x-B.p.x)>110)B.p.x=B.dummy.x-B.p.f*70;if(i%10===2)B.press('s1');else B.press('attack');B.adv(.1);if(R.grog){n++;break;}}
-  return{dmg:Math.round(h0-R.hp),brkUsed:+(b0-R.brk).toFixed(1),broke:n};});
+// 5b. stamina: dashes and skills spend it, it runs out
+R.sta=await pg.evaluate(()=>{const B=__bd,R=B.RAID;R.ai='idle';R.pat=null;R.cd=99;B.p.sta=100;B.p.hurtT=0;let n=0;for(let i=0;i<8;i++){const a=B.p.sta;B.press('dash');B.adv(.3);if(B.p.sta<a)n++;}return{dashes:n,sta:Math.round(B.p.sta)};});
 // 7. a real unattended fight: boss AI on, bot attacks and dashes, checks no errors and the boss uses every pattern
 R.soak=await pg.evaluate(()=>{const B=__bd,R=B.RAID;B.raidBegin();B.adv(1.7);const seen={};let hits=0;
-  for(let i=0;i<1200&&!B.p.dead;i++){B.p.f=B.dummy.x>=B.p.x?1:-1;if(R.pat)seen[R.pat]=1;if(i%3===0)B.press('attack');if(i%37===0)B.press('dash');if(i%29===5)B.press('s0');B.p.hp=Math.max(B.p.hp,40);B.adv(.1);}
+  for(let i=0;i<1200&&!B.p.dead;i++){B.p.f=B.dummy.x>=B.p.x?1:-1;if(R.pat)seen[R.pat]=1;if(i%3===0)B.press('attack');if(i%37===0)B.press('dash');if(i%29===5)B.press('s0');B.p.hp=Math.max(B.p.hp,40);B.p.hurtT=Math.min(B.p.hurtT,.2);B.adv(.1);}
   return{seen:Object.keys(seen).sort().join(),hp:Math.round(R.hp),t:Math.round(R.time)};});
 // 8. boss defeat and player death panels
-R.win=await pg.evaluate(()=>{const B=__bd,R=B.RAID;R.grog=1;R.gk='break';R.gT=5;R.hp=5;B.p.x=B.dummy.x-70;B.p.f=1;B.p.invT=9;B.press('attack');B.adv(.3);const dead=R.dead;for(let i=0;i<40;i++)B.adv(.1);return{dead,phase:R.phase,panel:document.getElementById('mRun').classList.contains('on')};});
+R.win=await pg.evaluate(()=>{const B=__bd,R=B.RAID;B.p.hurtT=0;B.p.dead=false;R.grog=1;R.gk='break';R.gT=5;R.hp=5;B.p.x=B.dummy.x-70;B.p.f=1;B.p.invT=9;B.press('attack');B.adv(.3);const dead=R.dead;for(let i=0;i<40;i++)B.adv(.1);return{dead,phase:R.phase,panel:document.getElementById('mRun').classList.contains('on')};});
 await pg.waitForTimeout(450);await shot('win');
 await pg.keyboard.press('Enter');R.again=await pg.evaluate(()=>{__bd.adv(1.7);return{ph:__bd.RAID.phase,hp:__bd.RAID.hp};});
 R.lose=await pg.evaluate(()=>{const B=__bd;B.p.invT=0;B.p.hp=5;B.raidHurt(20,1,300,true,'red');const d=B.p.dead;for(let i=0;i<30;i++)B.adv(.1);return{dead:d,phase:B.RAID.phase};});
