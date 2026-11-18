@@ -62,6 +62,7 @@ HTML5 액션 콤보 프로토타입 — 허수아비 수련장.
 
 | 번호 | 커밋 | 내용 | 바로가기 |
 |---|---|---|---|
+| P5 | `d315539` | 레이드 모드 3차 (벽력일섬 회피, 속박 삼연격 가드, 머리 위 체력·기력) | [▶ 플레이](https://lauuni.github.io/Blade-dance/versions/p5.html) · [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/d315539) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/d315539) |
 | P4 | `e01de00` | 레이드 모드 2차 (튕김, 빈틈, 기력, 저스트 회피 반격, 가드 고리) | [▶ 플레이](https://lauuni.github.io/Blade-dance/versions/p4.html) · [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/e01de00) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/e01de00) |
 | P3 | `6ded6e4` | 레이드 모드 1차 (보스 흑월, 패턴 8개, 그로기 4종) | [▶ 플레이](https://lauuni.github.io/Blade-dance/versions/p3.html) · [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/6ded6e4) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/6ded6e4) |
 | P2 | `a3fc145` | 프로토타입 모드 (로그라이크: 층 오르기, 점수, 유물) | [▶ 플레이](https://lauuni.github.io/Blade-dance/versions/p2.html) · [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/a3fc145) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/a3fc145) |
