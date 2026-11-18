@@ -32,22 +32,26 @@ R.counterPlain=await pg.evaluate(()=>{const B=__bd,R=B.RAID;B.adv(1.5);R.ai='idl
 R.counter=await pg.evaluate(()=>{const B=__bd,R=B.RAID;B.adv(1.5);R.ai='idle';R.pat=null;R.cd=99;B.p.hurtT=0;B.p.invT=9;B.p.x=B.dummy.x-110;B.p.f=1;B.startPat('iai');B.adv(.3);B.startAct('DA');B.adv(.2);return{grog:R.grog,gk:R.gk,air:B.dummy.air,fall:R.fall,gT:+R.gT.toFixed(1)};});
 await pg.evaluate(()=>__bd.adv(.1));await shot('counter');
 R.counterEnd=await pg.evaluate(()=>{const B=__bd,R=B.RAID;for(let i=0;i<60&&R.grog;i++)B.adv(.1);return{grog:R.grog,state:B.dummy.state};});
-// 3. just guard: the shrinking ring, then V right before the gold hit lands
-await pg.evaluate(()=>{const B=__bd,R=B.RAID;R.cd=99;R.ai='idle';R.pat=null;B.adv(.6);B.p.x=B.dummy.x-120;B.p.f=1;B.p.invT=0;B.p.hurtT=0;B.startPat('cleave');B.adv(.55);});await shot('guard_ring');
-await pg.evaluate(()=>__bd.adv(.27));await shot('guard_window');
-R.guard=await pg.evaluate(()=>{const B=__bd,R=B.RAID,b0=R.brk;window.dispatchEvent(new KeyboardEvent('keydown',{code:'KeyV',key:'v'}));B.adv(.15);return{hp:B.p.hp,brk:+(b0-R.brk).toFixed(1),stag:R.stag>0,open:R.stag>0};});
+// 3. bind + just guard x3: the boss roots you, steps in, swings three times; V on each ring
+R.bind=await pg.evaluate(()=>{const B=__bd,R=B.RAID;R.cd=99;R.ai='idle';R.pat=null;R.grog=0;B.adv(.6);B.p.x=B.dummy.x-300;B.p.f=1;B.p.invT=0;B.p.hurtT=0;B.p.hp=100;B.startPat('cleave');B.adv(.95);
+  return{bind:R.bind,lock:R.lock,dist:Math.round(Math.abs(B.dummy.x-B.p.x)),x0:Math.round(B.p.x)};});
+await pg.evaluate(()=>__bd.adv(.4));await shot('guard_ring');
+await pg.evaluate(()=>__bd.adv(.1));await shot('guard_window');
+R.guard=await pg.evaluate(()=>{const B=__bd,R=B.RAID,b0=R.brk,o=[],vd={};const V=()=>window.dispatchEvent(new KeyboardEvent('keydown',{code:'KeyV',key:'v'}));
+  for(let i=0;i<300&&R.pat&&!R.grog;i++){if(R.ai==='wind'&&R.mi>0&&!vd[R.mi]&&R.t>=[0,.6,.5,.55][R.mi]-.1){V();vd[R.mi]=1;}B.adv(.02);if(vd[R.mi]&&o[o.length-1]!==R.gs)o.push(R.gs);}
+  return{gs:o.join(','),hp:B.p.hp,grog:R.grog,gk:R.gk,bind:R.bind,lock:R.lock,brk:+(b0-R.brk).toFixed(1)};});
 await pg.evaluate(()=>__bd.adv(.03));await shot('guard');
-R.guardLate=await pg.evaluate(()=>{const B=__bd,R=B.RAID;B.adv(1.5);B.p.x=B.dummy.x-120;B.p.invT=0;B.p.hp=100;B.p.guardCD=0;B.startPat('cleave');B.adv(1.2);return{hp:B.p.hp};});
+R.bindFail=await pg.evaluate(()=>{const B=__bd,R=B.RAID;for(let i=0;i<40&&R.grog;i++)B.adv(.1);R.cd=99;R.ai='idle';R.pat=null;B.p.hp=100;B.p.invT=0;B.p.hurtT=0;B.p.guardCD=0;B.p.x=B.dummy.x-200;B.startPat('cleave');for(let i=0;i<40&&R.pat;i++)B.adv(.1);return{hp:B.p.hp,bind:R.bind,lock:R.lock};});
 // 4. just evade: dash in the first 0.12 s against the gray sweep -> slow time, one attack, crits
-R.justLate=await pg.evaluate(()=>{const B=__bd,R=B.RAID;B.adv(1.6);B.p.x=B.dummy.x-150;B.p.f=1;B.p.invT=0;B.p.hp=100;B.p.hurtT=0;B.p.sta=100;B.startPat('sweep');B.adv(.86);B.startAct('DASH');B.adv(.17);return{wt:R.wt,hp:B.p.hp};});
-R.just=await pg.evaluate(()=>{const B=__bd,R=B.RAID;B.adv(2);R.ai='idle';R.pat=null;B.p.x=B.dummy.x-150;B.p.f=1;B.p.invT=0;B.p.hp=100;B.p.hurtT=0;B.p.sta=100;B.startPat('sweep');B.adv(.99);B.startAct('DASH');B.adv(.06);
+R.justLate=await pg.evaluate(()=>{const B=__bd,R=B.RAID;B.adv(1.6);R.ai='idle';R.pat=null;B.p.x=B.dummy.x-250;B.p.f=1;B.p.invT=0;B.p.hp=100;B.p.hurtT=0;B.p.sta=100;B.startPat('sweep');B.adv(.86);B.startAct('DASH');B.adv(.17);return{wt:R.wt,hp:B.p.hp};});
+R.just=await pg.evaluate(()=>{const B=__bd,R=B.RAID;B.adv(2);R.ai='idle';R.pat=null;R.push=0;B.p.x=B.dummy.x-250;B.p.f=1;B.p.invT=0;B.p.hp=100;B.p.hurtT=0;B.p.sta=100;B.startPat('sweep');B.adv(.99);B.startAct('DASH');B.adv(.06);
   const m0=R.wtM,x0=B.p.x;B.adv(.5);const slowMove=Math.abs(B.p.x-x0);return{wtM:m0,hp:B.p.hp,slowMove:Math.round(slowMove)};});
 await shot('just');
-R.punish=await pg.evaluate(()=>{const B=__bd,R=B.RAID,h0=R.hp;B.p.x=B.dummy.x-60;B.p.f=1;B.press('attack');const seq=[];for(let i=0;i<40&&R.wtM;i++){B.adv(.05);const n=B.p.act&&B.p.act.def.name;if(n&&seq[seq.length-1]!==n)seq.push(n);}
-  return{seq:seq.join('>'),dmg:Math.round(h0-R.hp),crits:R.wtHits,ended:!R.wtM};});
+R.punish=await pg.evaluate(()=>{const B=__bd,R=B.RAID,h0=R.hp,b0=R.brk,gap=Math.round(Math.abs(B.dummy.x-B.p.x));B.press('attack');B.adv(.02);const snap=Math.round(Math.abs(B.dummy.x-B.p.x));const seq=[];for(let i=0;i<90&&R.wtM;i++){B.adv(.05);const n=B.p.act&&B.p.act.def.name;if(n&&seq[seq.length-1]!==n)seq.push(n);}
+  return{gap,snap,seq:seq.join('>'),dmg:Math.round(h0-R.hp),crits:R.wtHits,ended:!R.wtM,push:Math.round(R.push),brk:+(b0-R.brk).toFixed(1)};});
 await shot('punish');
 // 5. break: empty the gauge in an opening -> long groggy at 200%
-R.brk=await pg.evaluate(()=>{const B=__bd,R=B.RAID;B.adv(3);R.ai='idle';R.pat=null;R.cd=99;R.brk=.5;R.stag=1;B.p.hurtT=0;B.p.x=B.dummy.x-70;B.p.f=1;B.press('attack');B.adv(.2);return{grog:R.grog,gk:R.gk,gT:+R.gT.toFixed(1)};});
+R.brk=await pg.evaluate(()=>{const B=__bd,R=B.RAID;B.adv(3);R.ai='idle';R.pat=null;R.cd=99;R.brk=.5;R.stag=1;R.push=0;R.bind=false;R.lock=false;B.p.hurtT=0;B.p.x=B.dummy.x-70;B.p.f=1;B.press('attack');B.adv(.2);return{grog:R.grog,gk:R.gk,gT:+R.gT.toFixed(1)};});
 await pg.evaluate(()=>__bd.adv(.6));await shot('break');
 R.brkCombo=await pg.evaluate(()=>{const B=__bd,R=B.RAID,h0=R.hp;let maxc=0;
   for(let i=0;i<120&&R.grog;i++){B.p.f=B.dummy.x>=B.p.x?1:-1;if(Math.abs(B.dummy.x-B.p.x)>120)B.p.x=B.dummy.x-B.p.f*70;B.p.sta=100;
@@ -55,13 +59,15 @@ R.brkCombo=await pg.evaluate(()=>{const B=__bd,R=B.RAID,h0=R.hp;let maxc=0;
   return{dmg:Math.round(h0-R.hp),maxCombo:maxc,grogAfter:R.grog,brkRefill:R.brk};});
 await shot('after_break');
 // 5b. stamina: dashes and skills spend it, it runs out
-R.sta=await pg.evaluate(()=>{const B=__bd,R=B.RAID;R.ai='idle';R.pat=null;R.cd=99;B.p.sta=100;B.p.hurtT=0;let n=0;for(let i=0;i<8;i++){const a=B.p.sta;B.press('dash');B.adv(.3);if(B.p.sta<a)n++;}return{dashes:n,sta:Math.round(B.p.sta)};});
+R.sta=await pg.evaluate(()=>{const B=__bd,R=B.RAID;R.ai='idle';R.pat=null;R.cd=99;B.p.sta=100;B.p.hurtT=0;let n=0;for(let i=0;i<6;i++){const a=B.p.sta;B.press('dash');B.adv(.3);if(B.p.sta<a)n++;}
+  B.adv(4);const s0=B.p.sta;B.press('jump');B.adv(.15);const s1=B.p.sta;B.press('jump');B.adv(.15);const s2=B.p.sta;B.adv(1.5);
+  B.cfgSet&&0;return{dashes:n,jump:Math.round(s0-s1),dj:Math.round(s1-s2)};});
 // 7. a real unattended fight: boss AI on, bot attacks and dashes, checks no errors and the boss uses every pattern
 R.soak=await pg.evaluate(()=>{const B=__bd,R=B.RAID;B.raidBegin();B.adv(1.7);const seen={};let hits=0;
   for(let i=0;i<1200&&!B.p.dead;i++){B.p.f=B.dummy.x>=B.p.x?1:-1;if(R.pat)seen[R.pat]=1;if(i%3===0)B.press('attack');if(i%37===0)B.press('dash');if(i%29===5)B.press('s0');B.p.hp=Math.max(B.p.hp,40);B.p.hurtT=Math.min(B.p.hurtT,.2);B.adv(.1);}
   return{seen:Object.keys(seen).sort().join(),hp:Math.round(R.hp),t:Math.round(R.time)};});
 // 8. boss defeat and player death panels
-R.win=await pg.evaluate(()=>{const B=__bd,R=B.RAID;B.p.hurtT=0;B.p.dead=false;R.grog=1;R.gk='break';R.gT=5;R.hp=5;B.p.x=B.dummy.x-70;B.p.f=1;B.p.invT=9;B.press('attack');B.adv(.3);const dead=R.dead;for(let i=0;i<40;i++)B.adv(.1);return{dead,phase:R.phase,panel:document.getElementById('mRun').classList.contains('on')};});
+R.win=await pg.evaluate(()=>{const B=__bd,R=B.RAID;B.p.hurtT=0;B.p.dead=false;R.bind=false;R.lock=false;R.pat=null;R.ai='idle';R.grog=1;R.gk='break';R.gT=5;R.hp=5;B.p.x=B.dummy.x-70;B.p.f=1;B.p.invT=9;B.press('attack');B.adv(.3);const dead=R.dead;for(let i=0;i<40;i++)B.adv(.1);return{dead,phase:R.phase,panel:document.getElementById('mRun').classList.contains('on')};});
 await pg.waitForTimeout(450);await shot('win');
 await pg.keyboard.press('Enter');R.again=await pg.evaluate(()=>{__bd.adv(1.7);return{ph:__bd.RAID.phase,hp:__bd.RAID.hp};});
 R.lose=await pg.evaluate(()=>{const B=__bd;B.p.invT=0;B.p.hp=5;B.raidHurt(20,1,300,true,'red');const d=B.p.dead;for(let i=0;i<30;i++)B.adv(.1);return{dead:d,phase:B.RAID.phase};});
