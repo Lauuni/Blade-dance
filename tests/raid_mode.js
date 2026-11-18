@@ -9,7 +9,12 @@ await pg.keyboard.press('Enter');await pg.waitForTimeout(450);await shot('pick')
 R.pick=await pg.evaluate(()=>{const B=__bd;return{sel:B.RAID.sel.join(),map:B.map};});
 await pg.keyboard.press('ArrowRight');await pg.keyboard.press('ArrowRight');await pg.keyboard.press('Space');await pg.keyboard.press('ArrowRight');await pg.keyboard.press('ArrowRight');await pg.keyboard.press('Space');
 R.pick2=await pg.evaluate(()=>__bd.RAID.sel.join());
+await pg.click('#runPanel [data-go=cfg]');await pg.waitForTimeout(200);await shot('cfg');
+R.cfg=await pg.evaluate(()=>{const ins=[...document.querySelectorAll('.rcfg input')];for(const el of ins){el.value=el.dataset.k==='sweep'?'100':'0';el.dispatchEvent(new Event('input'));}return document.querySelector('[data-v=sweep]').textContent;});
+await pg.keyboard.press('Escape');R.cfgBack=await pg.evaluate(()=>__bd.RAID.phase);
 await pg.keyboard.press('Enter');await pg.evaluate(()=>__bd.hold(true));
+R.weights=await pg.evaluate(()=>{const B=__bd,R=B.RAID;B.adv(1.7);const seen={};for(let i=0;i<300;i++){B.p.invT=9;B.p.hp=100;if(R.pat)seen[R.pat]=(seen[R.pat]||0)+1;B.adv(.1);}return Object.keys(seen).join();});
+await pg.evaluate(()=>__bd.resetW());
 R.begin=await pg.evaluate(()=>{const B=__bd;B.adv(1.7);return{ph:B.RAID.phase,lo:B.loadout.join(),hp:B.RAID.hp};});
 // stage a pattern: player stands in range, boss frozen until we start it
 const stage=(k,dist,t)=>pg.evaluate(([k,dist,t])=>{const B=__bd,R=B.RAID;R.grog=0;R.stag=0;R.shots.length=0;R.wt=0;document.body.classList.remove('wt');
@@ -21,6 +26,9 @@ for(const k in pats){await stage(k,...pats[k]);await shot('tele_'+k);}
 await stage('lunge',330,.62);await shot('strike_lunge');
 await stage('leap',330,.75);await shot('strike_leap');
 await stage('wave',520,.75);await shot('strike_wave');
+// 0. blink cue: glint fires .24 s before the slash
+R.cue=await pg.evaluate(()=>{const B=__bd,R=B.RAID;R.ai='idle';R.pat=null;R.cd=99;B.p.x=0;B.p.invT=9;B.dummy.x=300;B.startPat('sweep');B.adv(.8);const c0=R.cued;B.adv(.04);return{before:c0,after:R.cued,guide:!!R.guide};});
+await pg.evaluate(()=>__bd.adv(.03));await shot('cue');
 // 1. armor: hitting the armored boss bounces the blade and staggers the player, no damage
 R.armor=await pg.evaluate(()=>{const B=__bd,R=B.RAID;R.ai='idle';R.pat=null;R.cd=99;R.stag=0;R.shots.length=0;B.p.hurtT=0;B.p.invT=9;B.p.x=B.dummy.x-70;B.p.f=1;const h0=R.hp,b0=R.brk;B.press('attack');B.adv(.2);return{dmg:Math.round(h0-R.hp),hurt:B.p.hurtT>0,act:!!B.p.act};});
 await pg.evaluate(()=>__bd.adv(.02));await shot('bounce');
@@ -33,12 +41,12 @@ R.counter=await pg.evaluate(()=>{const B=__bd,R=B.RAID;B.adv(1.5);R.ai='idle';R.
 await pg.evaluate(()=>__bd.adv(.1));await shot('counter');
 R.counterEnd=await pg.evaluate(()=>{const B=__bd,R=B.RAID;for(let i=0;i<60&&R.grog;i++)B.adv(.1);return{grog:R.grog,state:B.dummy.state};});
 // 3. bind + just guard x3: the boss roots you, steps in, swings three times; V on each ring
-R.bind=await pg.evaluate(()=>{const B=__bd,R=B.RAID;R.cd=99;R.ai='idle';R.pat=null;R.grog=0;B.adv(.6);B.p.x=B.dummy.x-300;B.p.f=1;B.p.invT=0;B.p.hurtT=0;B.p.hp=100;B.startPat('cleave');B.adv(.95);
+R.bind=await pg.evaluate(()=>{const B=__bd,R=B.RAID;R.cd=99;R.ai='idle';R.pat=null;R.grog=0;B.adv(.6);B.p.x=B.dummy.x-300;B.p.f=1;B.p.invT=0;B.p.hurtT=0;B.p.hp=100;B.startPat('cleave');B.adv(.65);
   return{bind:R.bind,lock:R.lock,dist:Math.round(Math.abs(B.dummy.x-B.p.x)),x0:Math.round(B.p.x)};});
-await pg.evaluate(()=>__bd.adv(.4));await shot('guard_ring');
+await pg.evaluate(()=>__bd.adv(.12));await shot('guard_ring');
 await pg.evaluate(()=>__bd.adv(.1));await shot('guard_window');
 R.guard=await pg.evaluate(()=>{const B=__bd,R=B.RAID,b0=R.brk,o=[],vd={};const V=()=>window.dispatchEvent(new KeyboardEvent('keydown',{code:'KeyV',key:'v'}));
-  for(let i=0;i<300&&R.pat&&!R.grog;i++){if(R.ai==='wind'&&R.mi>0&&!vd[R.mi]&&R.t>=[0,.6,.5,.55][R.mi]-.1){V();vd[R.mi]=1;}B.adv(.02);if(vd[R.mi]&&o[o.length-1]!==R.gs)o.push(R.gs);}
+  for(let i=0;i<300&&R.pat&&!R.grog;i++){if(R.ai==='wind'&&R.mi>0&&!vd[R.mi]&&R.t>=[0,.38,.32,.36][R.mi]-.1){V();vd[R.mi]=1;}B.adv(.02);if(vd[R.mi]&&o[o.length-1]!==R.gs)o.push(R.gs);}
   return{gs:o.join(','),hp:B.p.hp,grog:R.grog,gk:R.gk,bind:R.bind,lock:R.lock,brk:+(b0-R.brk).toFixed(1)};});
 await pg.evaluate(()=>__bd.adv(.03));await shot('guard');
 R.bindFail=await pg.evaluate(()=>{const B=__bd,R=B.RAID;for(let i=0;i<40&&R.grog;i++)B.adv(.1);R.cd=99;R.ai='idle';R.pat=null;B.p.hp=100;B.p.invT=0;B.p.hurtT=0;B.p.guardCD=0;B.p.x=B.dummy.x-200;B.startPat('cleave');for(let i=0;i<40&&R.pat;i++)B.adv(.1);return{hp:B.p.hp,bind:R.bind,lock:R.lock};});
