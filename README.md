@@ -62,6 +62,7 @@ HTML5 액션 콤보 프로토타입 — 허수아비 수련장.
 
 | 번호 | 커밋 | 내용 | 바로가기 |
 |---|---|---|---|
+| P7 | `84c1d9e` | 레이드 5차 (연기 전조, 짧은 카운터 창, 대검기 가드, 레이드 설정 탭) | [▶ 플레이](https://lauuni.github.io/Blade-dance/versions/p7.html) · [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/84c1d9e) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/84c1d9e) |
 | P6 | `4f41075` | 레이드 4차 + 게임 필 (패턴 비율 설정, 벽력일섬 전조, 보정 넘침, 카메라·소리) | [▶ 플레이](https://lauuni.github.io/Blade-dance/versions/p6.html) · [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/4f41075) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/4f41075) |
 | P5 | `d315539` | 레이드 모드 3차 (벽력일섬 회피, 속박 삼연격 가드, 머리 위 체력·기력) | [▶ 플레이](https://lauuni.github.io/Blade-dance/versions/p5.html) · [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/d315539) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/d315539) |
 | P4 | `e01de00` | 레이드 모드 2차 (튕김, 빈틈, 기력, 저스트 회피 반격, 가드 고리) | [▶ 플레이](https://lauuni.github.io/Blade-dance/versions/p4.html) · [그 시점 파일들](https://github.com/Lauuni/Blade-dance/tree/e01de00) · [바뀐 내용](https://github.com/Lauuni/Blade-dance/commit/e01de00) |
