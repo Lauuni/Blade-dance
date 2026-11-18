@@ -20,12 +20,14 @@ R.begin=await pg.evaluate(()=>{const B=__bd;B.adv(1.7);return{ph:B.RAID.phase,lo
 const stage=(k,dist,t)=>pg.evaluate(([k,dist,t])=>{const B=__bd,R=B.RAID;R.grog=0;R.stag=0;R.shots.length=0;R.wt=0;document.body.classList.remove('wt');
   B.p.hp=100;B.p.dead=false;B.p.hurtT=0;B.p.invT=0;B.p.vx=0;B.p.x=0;B.p.f=1;B.dummy.x=dist;B.dummy.state='stand';B.dummy.air=false;B.dummy.y=0;R.ai='idle';R.cd=99;
   B.adv(.3);B.startPat(k);B.adv(t);return{ai:R.ai,pat:R.pat};},[k,dist,t]);
-const pats={tri:[150,.32],lunge:[330,.45],leap:[330,.3],wave:[500,.4],iai:[300,.7],spin:[150,.6],sweep:[180,.85],cleave:[160,.7]};
+const pats={tri:[150,.32],lunge:[330,.45],leap:[330,.3],wave:[500,.4],iai:[300,.7],spin:[150,.6],sweep:[250,.85],gwave:[300,.7]};
 for(const k in pats){await stage(k,...pats[k]);await shot('tele_'+k);}
 // strikes in motion
 await stage('lunge',330,.62);await shot('strike_lunge');
 await stage('leap',330,.75);await shot('strike_leap');
 await stage('wave',520,.75);await shot('strike_wave');
+// 0a. smoke + cue on a red pattern
+R.redCue=await pg.evaluate(()=>{const B=__bd,R=B.RAID;R.ai='idle';R.pat=null;R.cd=99;B.p.x=0;B.p.invT=9;B.dummy.x=330;B.startPat('lunge');B.adv(.2);const sm=R.smoke.length;B.adv(.18);return{smoke:sm,cued:R.cued};});
 // 0. blink cue: glint fires .24 s before the slash
 R.cue=await pg.evaluate(()=>{const B=__bd,R=B.RAID;R.ai='idle';R.pat=null;R.cd=99;B.p.x=0;B.p.invT=9;B.dummy.x=300;B.startPat('sweep');B.adv(.8);const c0=R.cued;B.adv(.04);return{before:c0,after:R.cued,guide:!!R.guide};});
 await pg.evaluate(()=>__bd.adv(.03));await shot('cue');
@@ -37,19 +39,21 @@ R.open=await pg.evaluate(()=>{const B=__bd,R=B.RAID;B.adv(.6);B.p.hurtT=0;B.p.in
 await shot('open');
 // 2. counter: only a dash attack during a blue wind-up counts; a plain hit bounces
 R.counterPlain=await pg.evaluate(()=>{const B=__bd,R=B.RAID;B.adv(1.5);R.ai='idle';R.pat=null;R.cd=99;B.p.hurtT=0;B.p.x=B.dummy.x-80;B.p.f=1;B.startPat('spin');B.adv(.2);B.press('attack');B.adv(.2);return{grog:R.grog,hurt:B.p.hurtT>0};});
-R.counter=await pg.evaluate(()=>{const B=__bd,R=B.RAID;B.adv(1.5);R.ai='idle';R.pat=null;R.cd=99;B.p.hurtT=0;B.p.invT=9;B.p.x=B.dummy.x-110;B.p.f=1;B.startPat('iai');B.adv(.3);B.startAct('DA');B.adv(.2);return{grog:R.grog,gk:R.gk,air:B.dummy.air,fall:R.fall,gT:+R.gT.toFixed(1)};});
+R.counter=await pg.evaluate(()=>{const B=__bd,R=B.RAID;B.adv(1.5);R.ai='idle';R.pat=null;R.cd=99;B.p.hurtT=0;B.p.invT=9;B.p.x=B.dummy.x-110;B.p.f=1;B.startPat('iai');B.adv(.3);B.startAct('DA');B.adv(.12);const early=R.grog;B.adv(.6);R.ai='idle';R.pat=null;B.p.hurtT=0;B.p.x=B.dummy.x-110;B.p.f=1;B.startPat('iai');B.adv(.68);B.startAct('DA');B.adv(.14);return{early,grog:R.grog,gk:R.gk,air:B.dummy.air,gT:+R.gT.toFixed(1)};});
 await pg.evaluate(()=>__bd.adv(.1));await shot('counter');
 R.counterEnd=await pg.evaluate(()=>{const B=__bd,R=B.RAID;for(let i=0;i<60&&R.grog;i++)B.adv(.1);return{grog:R.grog,state:B.dummy.state};});
-// 3. bind + just guard x3: the boss roots you, steps in, swings three times; V on each ring
-R.bind=await pg.evaluate(()=>{const B=__bd,R=B.RAID;R.cd=99;R.ai='idle';R.pat=null;R.grog=0;B.adv(.6);B.p.x=B.dummy.x-300;B.p.f=1;B.p.invT=0;B.p.hurtT=0;B.p.hp=100;B.startPat('cleave');B.adv(.65);
-  return{bind:R.bind,lock:R.lock,dist:Math.round(Math.abs(B.dummy.x-B.p.x)),x0:Math.round(B.p.x)};});
-await pg.evaluate(()=>__bd.adv(.12));await shot('guard_ring');
-await pg.evaluate(()=>__bd.adv(.1));await shot('guard_window');
-R.guard=await pg.evaluate(()=>{const B=__bd,R=B.RAID,b0=R.brk,o=[],vd={};const V=()=>window.dispatchEvent(new KeyboardEvent('keydown',{code:'KeyV',key:'v'}));
-  for(let i=0;i<300&&R.pat&&!R.grog;i++){if(R.ai==='wind'&&R.mi>0&&!vd[R.mi]&&R.t>=[0,.38,.32,.36][R.mi]-.1){V();vd[R.mi]=1;}B.adv(.02);if(vd[R.mi]&&o[o.length-1]!==R.gs)o.push(R.gs);}
-  return{gs:o.join(','),hp:B.p.hp,grog:R.grog,gk:R.gk,bind:R.bind,lock:R.lock,brk:+(b0-R.brk).toFixed(1)};});
-await pg.evaluate(()=>__bd.adv(.03));await shot('guard');
-R.bindFail=await pg.evaluate(()=>{const B=__bd,R=B.RAID;for(let i=0;i<40&&R.grog;i++)B.adv(.1);R.cd=99;R.ai='idle';R.pat=null;B.p.hp=100;B.p.invT=0;B.p.hurtT=0;B.p.guardCD=0;B.p.x=B.dummy.x-200;B.startPat('cleave');for(let i=0;i<40&&R.pat;i++)B.adv(.1);return{hp:B.p.hp,bind:R.bind,lock:R.lock};});
+// 3. gold wave: back-jump, huge wave, V on contact = no damage; miss = big damage; then a long kneeling opening
+await pg.evaluate(()=>{const B=__bd,R=B.RAID;R.cd=99;R.ai='idle';R.pat=null;R.grog=0;R.bind=false;R.lock=false;B.adv(.6);B.p.x=B.dummy.x-320;B.p.f=1;B.p.invT=0;B.p.hurtT=0;B.p.hp=100;B.startPat('gwave');B.adv(.6);});await shot('gwave_wind');
+await pg.evaluate(()=>__bd.adv(.5));await shot('gwave_fire');
+R.gwave=await pg.evaluate(()=>{const B=__bd,R=B.RAID,o={};let vd=0;const V=()=>window.dispatchEvent(new KeyboardEvent('keydown',{code:'KeyV',key:'v'}));
+  for(let i=0;i<200;i++){const s=R.shots.find(q=>q.kind==='gwave');if(s&&!vd&&Math.abs(s.x-B.p.x)<Math.abs(s.vx)*.12+34){V();vd=1;}B.adv(.02);if(R.ai==='rec'&&!o.rec){o.rec=1;o.dist=Math.round(Math.abs(B.dummy.x-B.p.x));}if(vd&&!R.shots.some(q=>q.kind==='gwave'))break;}
+  return{hp:B.p.hp,guarded:vd,ai:R.ai,open:R.ai==='rec',dist:o.dist};});
+await pg.evaluate(()=>__bd.adv(.04));await shot('guard');
+R.gwaveOpen=await pg.evaluate(()=>{const B=__bd,R=B.RAID;let t=0;while(R.ai==='rec'&&t<4){B.adv(.1);t+=.1;}return{openFor:+t.toFixed(1)};});
+R.gwaveMiss=await pg.evaluate(()=>{const B=__bd,R=B.RAID;R.ai='idle';R.pat=null;R.cd=99;B.p.hp=100;B.p.invT=0;B.p.hurtT=0;B.p.x=B.dummy.x-320;B.startPat('gwave');for(let i=0;i<60&&R.ai!=='rec';i++)B.adv(.05);B.adv(.6);return{hp:B.p.hp};});
+await pg.evaluate(()=>{const B=__bd,R=B.RAID;R.ai='idle';R.pat=null;R.cd=99;B.p.hp=100;B.p.hurtT=0;B.p.x=B.dummy.x-200;B.startPat('gwave');for(let i=0;i<60&&R.ai!=='rec';i++)B.adv(.05);B.adv(.6);});await shot('kneel');
+R.dashThrough=await pg.evaluate(()=>{const B=__bd,R=B.RAID;R.ai='idle';R.pat=null;R.cd=99;B.p.hp=100;B.p.invT=0;B.p.hurtT=0;B.p.sta=100;B.p.x=B.dummy.x-320;B.startPat('gwave');let d=0;
+  for(let i=0;i<200;i++){const s=R.shots.find(q=>q.kind==='gwave');if(s&&!d&&Math.abs(s.x-B.p.x)<60){B.startAct('DASH');d=1;}B.adv(.02);if(d&&!R.shots.some(q=>q.kind==='gwave'))break;}return{hp:B.p.hp};});
 // 4. just evade: dash in the first 0.12 s against the gray sweep -> slow time, one attack, crits
 R.justLate=await pg.evaluate(()=>{const B=__bd,R=B.RAID;B.adv(1.6);R.ai='idle';R.pat=null;B.p.x=B.dummy.x-250;B.p.f=1;B.p.invT=0;B.p.hp=100;B.p.hurtT=0;B.p.sta=100;B.startPat('sweep');B.adv(.86);B.startAct('DASH');B.adv(.17);return{wt:R.wt,hp:B.p.hp};});
 R.just=await pg.evaluate(()=>{const B=__bd,R=B.RAID;B.adv(2);R.ai='idle';R.pat=null;R.push=0;B.p.x=B.dummy.x-250;B.p.f=1;B.p.invT=0;B.p.hp=100;B.p.hurtT=0;B.p.sta=100;B.startPat('sweep');B.adv(.99);B.startAct('DASH');B.adv(.06);
