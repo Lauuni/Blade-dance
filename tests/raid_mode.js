@@ -74,6 +74,37 @@ await shot('after_break');
 R.sta=await pg.evaluate(()=>{const B=__bd,R=B.RAID;R.ai='idle';R.pat=null;R.cd=99;B.p.sta=100;B.p.hurtT=0;let n=0;for(let i=0;i<6;i++){const a=B.p.sta;B.press('dash');B.adv(.3);if(B.p.sta<a)n++;}
   B.adv(4);const s0=B.p.sta;B.press('jump');B.adv(.15);const s1=B.p.sta;B.press('jump');B.adv(.15);const s2=B.p.sta;B.adv(1.5);
   B.cfgSet&&0;return{dashes:n,jump:Math.round(s0-s1),dj:Math.round(s1-s2)};});
+// 6. big gimmicks
+const gimStart=(r)=>pg.evaluate((r)=>{const B=__bd,R=B.RAID;R.wt=0;R.wtM=null;R.grog=0;R.gim=null;R.gdone={};R.ai='idle';R.pat=null;R.cd=99;R.bind=false;R.lock=false;R.hp=R.max*r;B.p.hp=100;B.p.dead=false;B.p.hurtT=0;B.p.invT=0;B.p.x=-150;B.dummy.x=150;
+  if(r<.15){R.gdone.clone=1;R.gdone.seal=1;}else if(r<.35)R.gdone.clone=1;B.adv(.05);return R.gim&&R.gim.k;},r);
+R.gClone=await gimStart(.59);
+await pg.evaluate(()=>__bd.adv(1));await shot('gim_clone');
+R.cloneHunt=await pg.evaluate(()=>{const B=__bd,R=B.RAID,G=R.gim,o={ph:G.ph,clones:G.cl.length};const acts=['A1','A4','S_RISE'];
+  for(const n of acts){B.p.x=B.dummy.x-70;B.p.f=1;B.p.hurtT=0;B.startAct(n);B.adv(.35);}
+  o.after=R.gim?R.gim.ph:'done';o.grog=R.grog;o.gk=R.gk;return o;});
+R.cloneFail=await pg.evaluate(()=>{const B=__bd,R=B.RAID;for(let i=0;i<80&&R.grog;i++)B.adv(.1);R.gdone={};R.hp=R.max*.59;R.ai='idle';R.pat=null;B.p.hp=100;B.adv(.05);for(let i=0;i<140&&R.gim;i++)B.adv(.1);return{hp:B.p.hp,gim:!!R.gim,grog:R.grog};});
+R.gSeal=await gimStart(.29);
+await pg.evaluate(()=>__bd.adv(1.5));await shot('gim_seal');
+R.seal=await pg.evaluate(()=>{const B=__bd,R=B.RAID,G=R.gim,o={ph:G.ph,yo:Math.round(R.yo)};const t=G.tal[0];
+  B.p.x=t.x-55;B.p.f=1;B.p.y=t.y+70;B.p.vy=-200;B.p.ground=false;B.startAct('AA1');B.adv(.15);o.first=t.alive?'alive':'broken';for(const q of G.tal)q.alive=0;B.adv(.05);o.ph2=G.ph;
+  B.p.x=-100;B.p.y=0;B.p.ground=true;B.p.vy=0;B.adv(2);const V=()=>window.dispatchEvent(new KeyboardEvent('keydown',{code:'KeyV',key:'v'}));let n=0;
+  for(let i=0;i<300&&R.gim;i++){if(G.ph==='guard'&&G.gt<.1&&G.gt>0&&B.p.guardCD<=0){V();n++;}B.adv(.02);}
+  o.v=n;o.hp=B.p.hp;o.grog=R.grog;return o;});
+await pg.evaluate(()=>{const B=__bd,R=B.RAID;for(let i=0;i<80&&R.grog;i++)B.adv(.1);});
+R.gFlash=await gimStart(.09);
+await pg.evaluate(()=>__bd.adv(1.1));await shot('gim_flash');
+R.flash=await pg.evaluate(()=>{const B=__bd,R=B.RAID,V=()=>window.dispatchEvent(new KeyboardEvent('keydown',{code:'KeyV',key:'v'}));const log=[];let lastI=-9,did=0,round=0;
+  for(let i=0;i<900&&R.gim;i++){const G=R.gim;B.p.hp=Math.max(B.p.hp,50);B.p.sta=100;
+    if(G.ph==='dash'&&G.st==='wind'){if(G.i!==lastI||G.round!==round){lastI=G.i;round=G.round;did=0;}const col=G.seq[G.i],rem=.72-G.t;
+      if(!did&&col==='gray'&&rem<.03){B.p.hurtT=0;B.startAct('DASH');did=1;log.push('d');}
+      if(!did&&col==='gold'&&rem<.1){B.p.guardCD=0;B.p.hurtT=0;V();did=1;log.push('v');}
+      if(!did&&col==='blue'&&G.cued){B.p.hurtT=0;B.p.x=B.dummy.x-Math.sign(B.dummy.x-B.p.x||1)*90;B.p.f=Math.sign(B.dummy.x-B.p.x)||1;B.startAct('DA');did=1;log.push('c');}}
+    B.adv(.02);}
+  return{log:log.join(''),gim:!!R.gim,grog:R.grog,awakeAfter:R.awakeAfter};});
+R.awake=await pg.evaluate(()=>{const B=__bd,R=B.RAID;for(let i=0;i<80&&R.grog;i++)B.adv(.1);return{spd:R.spd,awake:R.awake};});
+await pg.evaluate(()=>__bd.adv(.3));await shot('awake');
+// dash takes damage but keeps going
+R.dashHit=await pg.evaluate(()=>{const B=__bd,R=B.RAID;R.spd=1;R.awake=0;B.p.hp=100;B.p.invT=0;B.p.hurtT=0;const ok=B.p.act;B.startAct('DASH');B.adv(.03);const r=B.raidHurt(10,1,300,false,'red');return{r,hp:B.p.hp,still:B.p.act&&B.p.act.def.name,hurt:B.p.hurtT>0};});
 // 7. a real unattended fight: boss AI on, bot attacks and dashes, checks no errors and the boss uses every pattern
 R.soak=await pg.evaluate(()=>{const B=__bd,R=B.RAID;B.raidBegin();B.adv(1.7);const seen={};let hits=0;
   for(let i=0;i<1200&&!B.p.dead;i++){B.p.f=B.dummy.x>=B.p.x?1:-1;if(R.pat)seen[R.pat]=1;if(i%3===0)B.press('attack');if(i%37===0)B.press('dash');if(i%29===5)B.press('s0');B.p.hp=Math.max(B.p.hp,40);B.p.hurtT=Math.min(B.p.hurtT,.2);B.adv(.1);}

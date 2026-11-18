@@ -3,7 +3,7 @@
 HTML5 액션 콤보 프로토타입 — 허수아비 수련장.
 
 - ▶ **바로 플레이: https://lauuni.github.io/Blade-dance/** (PC 기준)
-- 🧪 **지금 main은 v0.5.3 + 프로토타입 P7 (레이드 5차 · 로그라이크 모드)** (실험, 정식 버전 아님. 아래 "프로토타입 기록" 표 참고). 시작 화면에서 "연습 모드"를 고르면 기존 게임 그대로. 순수한 v0.5.3은 [여기](https://lauuni.github.io/Blade-dance/versions/v0.5.3.html)
+- 🧪 **지금 main은 v0.5.3 + 프로토타입 P8 (레이드 6차 · 로그라이크 모드)** (실험, 정식 버전 아님. 아래 "프로토타입 기록" 표 참고). 시작 화면에서 "연습 모드"를 고르면 기존 게임 그대로. 순수한 v0.5.3은 [여기](https://lauuni.github.io/Blade-dance/versions/v0.5.3.html)
 - 🧪 **체험판 (적과 싸우기, 버릴 수도 있는 실험): https://lauuni.github.io/Blade-dance/lab.html** — 본 게임과 별도 파일
 - 또는 `index.html`을 브라우저로 열기
 - 목표: 어떤 기술 조합으로 가장 긴 콤보를 넣을 수 있는지 연구하는 수련장

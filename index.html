@@ -515,6 +515,8 @@ body.wt canvas{filter:saturate(.35) brightness(.92)}
 .rcfg b{font-family:'Black Han Sans';font-weight:400;font-size:15px}
 .rcfg input{width:100%;accent-color:var(--red)}
 .rcfg i{font-style:normal;font-family:'Black Han Sans';font-size:15px;text-align:right;color:var(--gold)}
+#raidGM{position:fixed;inset:0;pointer-events:none;z-index:3;opacity:0;transition:opacity .5s;background:radial-gradient(ellipse at center,rgba(40,10,40,0) 40%,rgba(30,6,30,.55) 100%)}
+#raidGM.on{opacity:1}
 
 </style>
 </head>
@@ -556,7 +558,7 @@ body.wt canvas{filter:saturate(.35) brightness(.92)}
 <div class="hud" id="raidHud"><div class="rb-top"><b>흑월</b><em>BOSS</em><span id="rbSt"></span><i id="rbPct">100%</i></div><div class="rb-hp"><i id="rbHpL"></i><i id="rbHp"></i><u style="left:60%"></u><u style="left:30%"></u><u style="left:10%"></u></div><div class="rb-brk"><span>무력화</span><div><i id="rbBrk"></i></div></div></div>
 <div class="hud" id="raidP"><b>체력</b><div class="lb"><i id="rpHp"></i></div><span id="rpN">100</span><em><kbd>V</kbd> 저스트 가드</em></div>
 <div class="hud" id="raidS"><b>기력</b><div class="lb"><i id="rsSt"></i></div></div>
-<div id="raidWT"></div><div id="raidGD"></div>
+<div id="raidWT"></div><div id="raidGD"></div><div id="raidGM"></div>
 
 <div class="hud" id="combo">
   <div class="n" id="cN">0</div>
@@ -3139,7 +3141,8 @@ function raidHurt(dmg,dir,kb,heavy,col,pierce){if(p.dead||RAID.phase!=='fight')r
   if(col==='gold'&&p.guardT>0){if(pierce)rbWaveGuard(dir);else raidParry(dir);return 2;}
   if(RAID.bind&&col==='gold'){p.hp=Math.max(0,p.hp-dmg);hitFx('slash',p.x,p.y-70,0,'#ff5a6e',dir,true);sfx.hit(1);hitstop=Math.max(hitstop,.08);addTrauma(.35);
     nums.push({x:p.x,y:p.y-110,vy:-220,v:dmg,crit:false,big:false,life:.8,max:.8});if(p.hp<=0){RAID.bind=false;RAID.lock=false;p.dead=true;p.deadT=2.4;p.hurtT=9;slowmo(.3,.7);runBan('쓰러졌다',null,1,0);}return 1;}
-  if(!pierce&&a&&a.def.name==='DASH'&&a.t<.24){if(col==='gray'&&a.t<.12)raidJust();else rbNum('회피',p.x,p.y-150);p.invT=Math.max(p.invT,.3);return 2;}
+  const dashing=a&&a.def.name==='DASH';
+  if(!pierce&&dashing&&col==='gray'&&a.t<.12){raidJust();p.invT=Math.max(p.invT,.3);return 2;}
   if(p.invT>0&&!pierce)return 0;
   p.hp=Math.max(0,p.hp-dmg);p.invT=.9;
   const cy=p.y-70;hitFx('slash',p.x,cy,0,RB_COL[col]||'#ff5a6e',dir,heavy);sfx.hit(heavy?1:0);vib(heavy?40:20);
@@ -3147,7 +3150,7 @@ function raidHurt(dmg,dir,kb,heavy,col,pierce){if(p.dead||RAID.phase!=='fight')r
   nums.push({x:p.x+rnd(-10,10),y:cy-34,vy:-220,v:dmg,crit:false,big:false,life:.8,max:.8});
   if(combo.n>0&&!RAID.grog)endCombo();
   const die=p.hp<=0;
-  if(die||!(a&&a.def.skill)){p.hurtT=die?9:(heavy?.5:.34);for(const b in buf)buf[b]=0;if(a)endAct();p.sprint=false;p.stopT=0;p.skidT=0;
+  if(die||!(a&&(a.def.skill||dashing))){p.hurtT=die?9:(heavy?.5:.34);for(const b in buf)buf[b]=0;if(a)endAct();p.sprint=false;p.stopT=0;p.skidT=0;
     p.vx=dir*kb;if(heavy&&p.ground){p.vy=-260;p.ground=false;p.y=-1;}}
   if(die){p.dead=true;p.deadT=2.4;slowmo(.3,.7);runBan('쓰러졌다',null,1,0);}
   return 1;}
@@ -3164,7 +3167,7 @@ function raidParry(dir){const d=dummy;RAID.swung=99;const x=(p.x+d.x)/2;
   if(RAID.bind){RAID.gs++;rbGuardFx(x,'막음 '+RAID.gs+' / 3');p.vx=0;rbBreak(12);
     if(RAID.gs>=3){RAID.bind=false;RAID.lock=false;rbGrog('guard');}return;}
   RAID.ai='idle';RAID.pat=null;RAID.stag=1.2;RAID.t=0;rbGuardFx(x);rbGuardSlide(dir);rbBreak(25);}
-function rbBreak(v){if(RAID.grog||RAID.dead)return;RAID.brk-=v;if(RAID.brk<=0){RAID.brk=0;rbGrog('break');}}
+function rbBreak(v){if(RAID.grog||RAID.dead||RAID.gim)return;RAID.brk-=v;if(RAID.brk<=0){RAID.brk=0;rbGrog('break');}}
 // ---- groggy
 function rbGrog(k){const d=dummy;if(combo.n>0)endCombo();RAID.grog=1;RAID.gk=k;RAID.gT=k==='break'?5:k==='guard'?3:2.8;RAID.fall=1;RAID.bind=false;RAID.lock=false;
   RAID.ai='idle';RAID.pat=null;RAID.stag=0;RAID.yo=0;RAID.trail.length=0;
@@ -3174,15 +3177,16 @@ function rbGrog(k){const d=dummy;if(combo.n>0)endCombo();RAID.grog=1;RAID.gk=k;R
   else{if(k==='counter')rbNum('카운터!',d.x,-210,1);tn({d:.16,type:'square',f0:980,f1:1960,v:.05});}}
 function rbGrogEnd(){const d=dummy,k=RAID.gk;RAID.grog=0;RAID.gk=null;RAID.fall=1;if(combo.n>0)endCombo();
   Object.assign(d,{state:'stand',air:false,y:0,vy:0,vx:0,stun:0,rot:0,rv:0,frozen:false,iceT:0,forced:false,heldT:0,bounceProp:false,downT:0});
-  if(k==='break')RAID.brk=RB_BRK;RAID.ai='idle';RAID.cd=.55;RAID.stag=0;
+  if(k==='break')RAID.brk=RB_BRK;if(RAID.awakeAfter){rbAwaken(RAID.awakeAfter);RAID.awakeAfter=0;}RAID.ai='idle';RAID.cd=.55;RAID.stag=0;
   ring(d.x,-80,'#ffffff',110,.3);dust(d.x,0,12);if(Math.abs(p.x-d.x)<140&&!p.dead)p.vx=Math.sign(p.x-d.x||1)*420;tn({d:.18,type:'sawtooth',f0:160,f1:420,v:.05});}
 function raidComboEnd(){if(RAID.grog&&RAID.gk!=='break')RAID.gT=Math.min(RAID.gT,0);}
-function rbDie(){rbWtEnd();RAID.bind=false;RAID.lock=false;const d=dummy,away=Math.sign(d.x-p.x)||p.f;RAID.dead=true;RAID.deadT=2.6;RAID.grog=0;RAID.ai='idle';RAID.pat=null;RAID.shots.length=0;
+function rbDie(){rbWtEnd();RAID.gim=null;$('raidGM').classList.remove('on');RAID.bind=false;RAID.lock=false;const d=dummy,away=Math.sign(d.x-p.x)||p.f;RAID.dead=true;RAID.deadT=2.6;RAID.grog=0;RAID.ai='idle';RAID.pat=null;RAID.shots.length=0;
   d.air=true;d.y=Math.min(d.y,-1);d.vy=Math.min(d.vy,-560);d.vx=away*380;d.state='air';d.rv+=away*5;d.bounceProp=false;
   slowmo(.25,.9);addTrauma(.5);rbImpact(d.x,-90);rbThump(.12);runBan('격파',null,0,0);tn({d:.9,type:'sawtooth',f0:300,f1:60,v:.06});}
 // ---- hits on the boss
 function applyHit(h,a,box,o){if(!RAID.on)return applyHit0(h,a,box,o);
   const d=dummy;if(RAID.dead||RAID.phase!=='fight')return false;
+  if(RAID.gim)return rbGimHit(h,a);
   const pun=!!RAID.wtM;
   let ctr=false;if(!RAID.grog&&!pun&&RAID.ai==='wind'&&RAID.cued&&rbP()&&rbP().col==='blue'&&a&&a.def&&a.def.name==='DA'){rbGrog('counter');rbBreak(10);ctr=true;}
   const arm=!RAID.grog,open=rbOpen();
@@ -3263,11 +3267,13 @@ function rbStrike(P,M){const d=dummy;RAID.ai='strike';RAID.t=0;RAID.swung=0;RAID
   if(M.area)addTrauma(.3);}
 function rbShots(dt){const S=RAID.shots;for(let i=S.length-1;i>=0;i--){const s=S[i];s.x+=s.vx*dt;s.life-=dt;s.age=(s.age||0)+dt;
     if(!s.done&&RAID.phase==='fight'){const box=s.kind==='wave'?[s.x-28,-44,s.x+28,0]:s.kind==='gwave'?[s.x-34,-235,s.x+34,0]:[s.x-26,s.y-32,s.x+26,s.y+30];
-      if(ov(box,[p.x-18,p.y-118,p.x+18,p.y])){const gw=s.kind==='gwave',r=raidHurt(s.dmg,Math.sign(s.vx),gw?600:320,gw,gw?'gold':'red',gw);if(r){s.done=true;if(gw&&r===2){s.life=0;sparks(s.x,-110,24,'#ffd36b',null,PI,1.6);}}}}
+      if(ov(box,[p.x-18,p.y-118,p.x+18,p.y])){const gw=s.kind==='gwave',r=raidHurt(s.dmg,Math.sign(s.vx),gw?600:320,gw,gw?'gold':'red',gw);if(r){s.done=true;if(gw&&r===2)sparks(p.x,-110,24,'#ffd36b',null,PI,1.6);if(gw&&r===1&&!p.dead){if(p.act)endAct();p.vx=Math.sign(s.vx)*980;p.vy=-580;p.ground=false;p.y=Math.min(p.y,-1);p.hurtT=.9;}}}}
     if(s.life<=0||s.x<-ARENA-200||s.x>ARENA+200)S.splice(i,1);}}
 // ---- boss body
 function rbPose(dt){const d=dummy;let T,k=16;const P=rbP(),M=rbM();
-  if(d.air||d.state==='down'||d.state==='air'||RAID.dead)T=RB_POSE.air;
+  const GP=!RAID.dead&&!RAID.grog&&rbGimPose();
+  if(GP){T=GP;k=RAID.gim.pose==='cut'?60:16;}
+  else if(d.air||d.state==='down'||d.state==='air'||RAID.dead)T=RB_POSE.air;
   else if(d.state==='getup'){T=RB_POSE.crouch;k=10;}
   else if(RAID.grog){T=Object.assign({},RAID.gk==='break'?RB_POSE.kneel:RB_POSE.stun);T.hd=(T.hd||0)+Math.sin(gt*3)*4;k=9;}
   else if(RAID.stag>0){T=RB_POSE.stun;k=20;}
@@ -3313,7 +3319,8 @@ function rbDrawHair(){const h=RAID.hair;if(!h)return;const L=[],R=[];
   const gr=g.createLinearGradient(h[0].x,h[0].y,h[h.length-1].x,h[h.length-1].y);gr.addColorStop(0,'#c9cee0');gr.addColorStop(1,'#5b6078');
   g.fillStyle=gr;g.beginPath();g.moveTo(L[0][0],L[0][1]);for(const q of L)g.lineTo(q[0],q[1]);for(let i=R.length-1;i>=0;i--)g.lineTo(R[i][0],R[i][1]);g.closePath();g.fill();
   g.fillStyle='#e8384f';g.beginPath();g.arc(h[1].x,h[1].y,3,0,TAU);g.fill();}
-function drawBoss(flat){const d=dummy,J=RAID.J;if(!J)return;
+function drawBoss(flat){const G=RAID.gim;if(G&&G.cl&&G.cl.length&&!flat){for(const cx of G.cl){g.save();g.translate(cx-dummy.x,0);g.globalAlpha=1;rbDrawBody(false,1);g.restore();}}rbDrawBody(flat,0);}
+function rbDrawBody(flat,clone){const d=dummy,J=RAID.J;if(!J)return;
   const jx=hitstop>0?(Math.random()-.5)*7*d.jit:0,jy=hitstop>0?(Math.random()-.5)*4*d.jit:0,py=lerp(-6,-72,d.pb),by=d.y-RAID.yo;
   g.save();g.translate(d.x+jx,by+jy);g.translate(0,py);g.rotate(d.rot);g.translate(0,-py);g.translate(0,-70);g.scale(1+d.sq*.5,1-d.sq*.7);g.translate(0,70);g.scale(1.12*(RAID.sx||1),1.12*(RAID.sy||1));g.translate(-d.x,-by);
   const sv=[p.fwd,p.swordOut,CHR];p.fwd=RAID.f;p.swordOut=false;CHR=CHARS.musa;
@@ -3321,23 +3328,23 @@ function drawBoss(flat){const d=dummy,J=RAID.J;if(!J)return;
     if(flat){drawFlat(J,flat);}
     else if(d.flash>0&&RAID.grog)drawFlat(J,'#ffffff');
     else{const P=rbP(),tele=P&&(RAID.ai==='wind'||RAID.ai==='jump'||(RAID.ai==='hop'&&!RAID.fired))?P.col:null,act=P&&RAID.ai==='strike'?P.col:null;
-      for(const q of RAID.ghost){g.globalAlpha=q.a*.32;drawFlat(q.J,act?RB_COL[act]:'#9fb2d8');}g.globalAlpha=1;
+      if(!clone)for(const q of RAID.ghost){g.globalAlpha=q.a*.32;drawFlat(q.J,act?RB_COL[act]:'#9fb2d8');}g.globalAlpha=1;
       if(RAID.trail.length>1){g.globalCompositeOperation='lighter';const c=RB_COL[act||(P&&P.col)||'red'],T=RAID.trail;
         for(let i=1;i<T.length;i++){const a=T[i-1],b=T[i];g.globalAlpha=b[4]*.55;g.fillStyle=c;g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(a[2],a[3]);g.lineTo(b[2],b[3]);g.lineTo(b[0],b[1]);g.closePath();g.fill();}
         g.globalAlpha=1;g.globalCompositeOperation='source-over';}
       rbDrawHair();
       const Ld=lightDir(),rc=MAP==='dojo'?['#ff9f78','#c56a6a','#ffd2b8']:['#bcd4ff','#7f98cc','#e6efff'];
-      if(tele==='gold'){const u=RAID.ai==='hop'?1:Math.min(1,RAID.t/rbM().wind),pu=.7+.3*Math.sin(rt*30);
-        g.globalCompositeOperation='lighter';const hx=J.hp?J.hp[0]:d.x,gr=g.createRadialGradient(d.x,by-80,0,d.x,by-80,150);gr.addColorStop(0,`rgba(255,211,107,${.35*pu})`);gr.addColorStop(1,'rgba(255,211,107,0)');
+      if(tele==='gold'||(tele==='blue'&&RAID.cued)){const gb=tele==='blue',gc=gb?['#4fb4ff','#2a7fd0','79,180,255']:['#ffd36b','#e0a93c','255,211,107'],u=RAID.ai==='hop'||gb?1:Math.min(1,RAID.t/rbM().wind),pu=gb?.8+.2*Math.sin(rt*44):.7+.3*Math.sin(rt*30);
+        g.globalCompositeOperation='lighter';const hx=J.hp?J.hp[0]:d.x,gr=g.createRadialGradient(d.x,by-80,0,d.x,by-80,150);gr.addColorStop(0,`rgba(${gc[2]},${(gb?.5:.35)*pu})`);gr.addColorStop(1,`rgba(${gc[2]},0)`);
         g.fillStyle=gr;g.beginPath();g.arc(d.x,by-80,150,0,TAU);g.fill();g.globalCompositeOperation='source-over';
-        g.globalAlpha=pu;for(const[ox,oy]of[[4,0],[-4,0],[0,-4],[0,3.5]]){g.save();g.translate(ox*(1+u*.4),oy*(1+u*.4));figure(J,'#ffd36b','#e0a93c',null,null,true);g.restore();}g.globalAlpha=1;}
+        g.globalAlpha=pu;for(const[ox,oy]of[[4,0],[-4,0],[0,-4],[0,3.5]]){g.save();g.translate(ox*(1+u*.4),oy*(1+u*.4));figure(J,gc[0],gc[1],null,null,true);g.restore();}g.globalAlpha=1;}
       else if(tele){const c=RB_COL[tele];g.globalAlpha=.3+.15*Math.sin(rt*24);for(const[ox,oy]of[[2.6,0],[-2.6,0],[0,-2.6],[0,2.2]]){g.save();g.translate(ox,oy);figure(J,c,c,null,null,true);g.restore();}g.globalAlpha=1;}
       else if(!RAID.grog&&!RAID.dead){const op=rbOpen(),c=op?'#ff9f4a':'#ffffff';g.globalAlpha=op?.45+.25*Math.sin(rt*20):.6;for(const[ox,oy]of[[2.2,0],[-2.2,0],[0,-2.2],[0,1.8]]){g.save();g.translate(ox,oy);figure(J,c,c,null,null,true);g.restore();}g.globalAlpha=1;}
       else{g.save();g.translate(Ld[0]*1.9,Ld[1]*1.9);figure(J,rc[0],rc[1],null,null,true);g.restore();}
       figure(J,'#121319','#262938','#e4ebfa','#23262f');
       sheathRim(J,Ld,rc[0]);bladeRim(J,Ld,rc[2]);
-      {const H=headFr(J).hp,[ex,ey]=H(5.6,-1.4),e0=H(4,-1.1),e1=H(8.4,-2.2),ec=RAID.grog?'#9fb2d8':'#eef6ff';g.globalCompositeOperation='lighter';
-        const eg=g.createRadialGradient(ex,ey,0,ex,ey,9);eg.addColorStop(0,'rgba(170,210,255,.65)');eg.addColorStop(1,'rgba(120,170,255,0)');g.fillStyle=eg;g.beginPath();g.arc(ex,ey,9,0,TAU);g.fill();
+      {const H=headFr(J).hp,[ex,ey]=H(5.6,-1.4),e0=H(4,-1.1),e1=H(8.4,-2.2),ec=RAID.grog?'#9fb2d8':RAID.awake?'#ff5a6e':'#eef6ff';g.globalCompositeOperation='lighter';
+        const eg=g.createRadialGradient(ex,ey,0,ex,ey,9);eg.addColorStop(0,RAID.awake?'rgba(255,80,100,.75)':'rgba(170,210,255,.65)');eg.addColorStop(1,RAID.awake?'rgba(255,60,80,0)':'rgba(120,170,255,0)');g.fillStyle=eg;g.beginPath();g.arc(ex,ey,9,0,TAU);g.fill();
         g.globalCompositeOperation='source-over';g.strokeStyle=ec;g.lineCap='round';g.lineWidth=1.7;g.beginPath();g.moveTo(e0[0],e0[1]);g.lineTo(e1[0],e1[1]);g.stroke();}
       if(tele||act){const c=RB_COL[tele||act],u=tele&&rbM()?Math.min(1,RAID.t/rbM().wind):1;g.globalCompositeOperation='lighter';g.strokeStyle=c;g.globalAlpha=.2+.55*u;g.lineWidth=4+5*u;g.lineCap='round';
         g.beginPath();g.moveTo(J.sg[0],J.sg[1]);g.lineTo(J.st[0],J.st[1]);g.stroke();g.globalAlpha=1;g.globalCompositeOperation='source-over';}
@@ -3353,7 +3360,8 @@ function rbIcon(col,x,y,s){g.save();g.translate(x,y);g.scale(s,s);const c=RB_COL
   else if(col==='gray'){g.moveTo(-8,-6);g.lineTo(-2,0);g.lineTo(-8,6);g.moveTo(0,-6);g.lineTo(6,0);g.lineTo(0,6);g.stroke();}
   else{g.moveTo(0,-9);g.lineTo(8,-5);g.lineTo(7,3);g.quadraticCurveTo(5,8,0,10);g.quadraticCurveTo(-5,8,-7,3);g.lineTo(-8,-5);g.closePath();g.globalAlpha=.3;g.fill();g.globalAlpha=1;g.stroke();}
   g.restore();}
-function raidWorld(){const d=dummy,P=rbP(),M=rbM();
+function raidWorld(){const d=dummy,P=rbP(),M=rbM();rbGimWorld();
+  if(P&&P.col==='blue'&&RAID.ai==='wind'&&RAID.cued){g.save();g.globalCompositeOperation='lighter';for(let i=0;i<2;i++){const f=((RAID.t*5)+i*.5)%1;g.globalAlpha=(1-f)*.7;g.strokeStyle='#4fb4ff';g.lineWidth=4;g.beginPath();g.arc(d.x,-85,40+f*90,0,TAU);g.stroke();}g.restore();}
   // gray: show the reach of the big sweep on the ground while it winds up
   if(P&&M&&M.area&&(RAID.ai==='wind'||RAID.ai==='strike')){const u=RAID.ai==='wind'?Math.min(1,RAID.t/M.wind):1;g.save();g.globalAlpha=.16+.2*u;g.fillStyle='#d4d7e3';
     g.beginPath();g.ellipse(d.x,0,M.area*u,16,0,0,TAU);g.fill();g.globalAlpha=.55;g.strokeStyle='#ffffff';g.setLineDash([10,8]);g.lineWidth=2;g.beginPath();g.ellipse(d.x,0,M.area,16,0,0,TAU);g.stroke();g.restore();}
@@ -3402,6 +3410,8 @@ function raidStep(dt){const d=dummy,bdt=RAID.wt>0?dt*.06:dt;RAID.moving=false;
         else if(p.act&&p.act.def.basic&&A&&A.def.basic)RAID.wtAct=p.act;
         else rbPunishEnd();}
       if(RAID.wt<=0)rbPunishEnd();}}
+  if(RAID.fs){RAID.fs.a-=dt*2.5;if(RAID.fs.a<=0)RAID.fs=null;}
+  if(RAID.awake&&RAID.phase==='fight'&&!RAID.dead&&Math.random()<dt*14)RAID.smoke.push({x:d.x+rnd(-18,18),y:-rnd(30,150),vx:rnd(-15,15),vy:-rnd(30,70),r:rnd(5,10),life:.6,max:.6,c:'#e8384f'});
   if(RAID.slide>0){RAID.slide-=dt;if(p.ground&&Math.random()<.7)dust(p.x,0,1,-Math.sign(p.vx||1));}
   if(RAID.push){d.x=clamp(d.x+RAID.push*dt,-ARENA+40,ARENA-40);RAID.push*=Math.exp(-dt*7);if(Math.abs(RAID.push)<20)RAID.push=0;else if(Math.random()<.5)dust(d.x,0,1,-Math.sign(RAID.push));}
   for(const q of RAID.smoke){q.x+=q.vx*bdt;q.y+=q.vy*bdt;q.life-=bdt;}RAID.smoke=RAID.smoke.filter(q=>q.life>0);if(RAID.bl){RAID.bl.a-=dt*2.5;if(RAID.bl.a<=0)RAID.bl=null;}
@@ -3414,15 +3424,15 @@ function raidStep(dt){const d=dummy,bdt=RAID.wt>0?dt*.06:dt;RAID.moving=false;
     else if(RAID.grog){RAID.gT-=dt;if(RAID.gT<=0&&!d.air&&d.state!=='air')rbGrogEnd();}
     else{if(d.state!=='stand'||d.air)Object.assign(d,{state:'stand',air:false,y:0,vy:0,vx:0,rot:0,rv:0,stun:0});
       d.frozen=false;d.iceT=0;d.forced=false;d.heldT=0;
-      if(RAID.stag>0)RAID.stag-=bdt;else rbAI(bdt);}
+      rbGimCheck();if(RAID.gim)rbGimStep(bdt);else if(RAID.stag>0)RAID.stag-=bdt;else rbAI(bdt);}
     rbShots(bdt);}
   else if(RAID.phase==='intro'){RAID.f=p.x>=d.x?1:-1;RAID.introT-=dt;if(RAID.introT<=0){RAID.phase='fight';RAID.lock=false;}}
   rbPose(bdt);}
 // ---- HUD
 let RBH='';
 function raidHud(){const r=Math.max(0,RAID.hp/RAID.max);RAID.hpShow+=(r-RAID.hpShow)*.08;
-  const st=RAID.dead?'':RAID.wtM==='wait'?'저스트 회피 · 공격 하나 '+Math.max(0,RAID.wt).toFixed(1)+'초':RAID.wtM==='punish'?'저스트 회피 · 반격':RAID.grog?(RAID.gk==='break'?'무력화 그로기 ':RAID.gk==='guard'?'가드 그로기 ':'카운터 그로기 ')+Math.max(0,RAID.gT).toFixed(1)+'초':'';
-  const k=[(r*1000|0),(RAID.hpShow*400|0),RAID.brk|0,st,RAID.grog].join('|');if(k===RBH)return;RBH=k;
+  const G=RAID.gim,st=RAID.dead?'':G?(G.nm+(G.k==='clone'&&G.ph==='hunt'?' · 간파 '+G.hits+'/3 · '+Math.max(0,G.left).toFixed(1)+'초':G.k==='seal'&&G.ph==='charge'?' · 부적 '+G.tal.filter(q=>!q.alive).length+'/3 · '+Math.max(0,G.left).toFixed(1)+'초':G.k==='seal'&&G.ph==='guard'?' · 저스트 가드 '+G.gi+'/3':G.k==='flash'&&G.ph==='dash'?' · '+G.round+'차 '+(G.i+1)+'/'+G.seq.length:'')):RAID.wtM==='wait'?'저스트 회피 · 공격 하나 '+Math.max(0,RAID.wt).toFixed(1)+'초':RAID.wtM==='punish'?'저스트 회피 · 반격':RAID.grog?(RAID.gk==='break'?'무력화 그로기 ':RAID.gk==='guard'?'가드 그로기 ':'카운터 그로기 ')+Math.max(0,RAID.gT).toFixed(1)+'초':'';
+  const k=[(r*1000|0),(RAID.hpShow*400|0),RAID.brk|0,st,RAID.grog,RAID.awake].join('|');if(k===RBH)return;RBH=k;
   $('rbHp').style.width=(r*100)+'%';$('rbHpL').style.width=(Math.max(r,RAID.hpShow)*100)+'%';$('rbPct').textContent=(r*100).toFixed(r<.1?1:0)+'%';
   $('rbBrk').style.width=(RAID.grog&&RAID.gk==='break'?100:RAID.brk/RB_BRK*100)+'%';$('rbBrk').parentNode.parentNode.classList.toggle('grog',RAID.grog&&RAID.gk==='break');
   $('rbSt').textContent=st;$('rbSt').className=RAID.wt>0?'wt':'';
@@ -3435,6 +3445,7 @@ const RB_LEGEND=`<div class="lg">
   <span class="c" style="--c:#ff4a5e">빨강</span><span>빨간 연기 뒤 일반 공격. 대쉬나 점프로 피한다. <b>기력</b>: 대쉬 50 · 점프 20 · 2단 점프 30 (내 머리 위 초록 막대).</span>
   <span class="c" style="--c:#4fb4ff">파랑</span><span>파란 연기 뒤 <b>칼끝이 파랗게 번쩍</b>인 짧은 순간에 <b>대쉬평</b>(Z → X)으로 때리면 <b>카운터</b> → 짧은 그로기. 그 전에 치면 튕긴다.</span>
   <span class="c" style="--c:#d4d7e3">회색</span><span>몸에서 회색 연기가 나다가 <b>칼끝이 번쩍</b>이면 곧 순간이동 베기. 번쩍임을 보고 대쉬하면 <b>저스트 회피</b> → 시간이 느려지고, 공격 하나를 누르면 보스 곁으로 붙어 끝까지 이어진다. 처음 6타 치명타, 마지막에 밀쳐낸다.</span>
+  <span class="c" style="--c:#c9a7ff">큰 기믹</span><span>체력 60% <b>분신진</b>(그림자 있는 진짜를 3번) · 30% <b>검기 결계</b>(부적 셋을 부수고 V 세 번) · 10% <b>일섬 연격</b>(돌진 5번 + 4번을 색대로 받아내면 그로기, 실패하면 각성).</span>
   <span class="c" style="--c:#ffd36b">노랑</span><span>금빛이 차오르면 뒤로 뛰며 <b>거대한 금색 검기</b>를 날린다. 피할 수 없고, 닿는 순간 <b>V</b>로 막아야 한다. 쏜 뒤엔 무릎 꿇고 긴 <b style="color:#ff9f4a">빈틈</b>.</span></div>`;
 function raidPickHTML(){const ids=Object.keys(SK);
   return `<h2>출전 기술 <small>RAID · 흑월</small></h2><div class="sub">기술을 3개까지 고른다. 레이드 중에는 바꿀 수 없다.</div>
@@ -3460,7 +3471,7 @@ function raidBegin(){$('mRun').classList.remove('on');paused=false;runBan(null);
   Object.assign(p,{x:-320,y:0,vx:0,vy:0,f:1,hp:100,maxHp:100,hurtT:0,invT:0,dead:false,deadT:0,guardT:0,guardCD:0,guardP:0,sta:RB_STA,staT:0,staFl:0});if(p.act)endAct();
   Object.assign(dummy,{x:260,y:0,vx:0,vy:0,air:false,state:'stand',rot:0,rv:0,frozen:false,heldT:0});
   Object.assign(RAID,{hp:RB_HP,max:RB_HP,hpShow:1,brk:RB_BRK,ai:'idle',t:0,f:-1,pat:null,mi:0,cd:1.2,last:null,grog:0,gk:null,gT:0,stag:0,yo:0,wt:0,fall:1,
-    ghost:[],trail:[],shots:[],hair:null,dead:false,deadT:0,time:0,spd:1,lock:true,phase:'intro',wtM:null,wtAct:null,wtHits:0,bind:false,gs:0,push:0,smoke:[],bl:null,want:null,lastPat:null,guide:null,glint:0,crack:null,sx:1,sy:1});
+    ghost:[],trail:[],shots:[],hair:null,dead:false,deadT:0,time:0,spd:1,lock:true,phase:'intro',wtM:null,wtAct:null,wtHits:0,bind:false,gs:0,push:0,smoke:[],bl:null,want:null,lastPat:null,guide:null,glint:0,crack:null,sx:1,sy:1,gim:null,gdone:{},awake:0,awakeAfter:0,fs:null});$('raidGM').classList.remove('on');
   document.body.classList.remove('wt');$('raidWT').classList.remove('on');RBH='';
   runBan('흑월','방랑하는 검귀 · 색을 읽고 대응하라',0,1700);tn({d:.6,type:'sawtooth',f0:110,f1:70,v:.06});
   RAID.introT=1.5;}
@@ -3470,7 +3481,7 @@ function raidOver(win){RAID.phase='over';RAID.lock=true;runBan(null);const t=RAI
     <div class="grade"><div class="g ${win?'':'X'}" style="font-size:62px">${win?'격파':pc+'%'}</div><div class="gs"><b>${mm}</b><span>${win?'남은 체력 '+(p.hp|0)+' · 흑월을 쓰러뜨렸다.':'흑월의 체력이 '+pc+'% 남았다.'}</span></div></div>
     <div class="rown">${RAID.sel.map(id=>`<span class="tagm n">${SK[id].name}</span>`).join('')}</div>
     <div class="row"><span class="rk"><kbd>Space</kbd><kbd>Enter</kbd> 다시 도전</span><button class="btn ghost" data-go="title">시작 화면</button><button class="btn ghost" data-go="pick">기술 다시 고르기</button><button class="btn" data-go="again">다시 도전</button></div>`,raidBegin);}
-function endRaid(){if(!RAID.on)return;RAID.wtM=null;RAID.bind=false;RAID.on=false;RAID.phase='off';RAID.lock=false;RAID.fall=1;RAID.wt=0;RAID.grog=0;RAID.shots.length=0;
+function endRaid(){if(!RAID.on)return;RAID.gim=null;$('raidGM').classList.remove('on');RAID.wtM=null;RAID.bind=false;RAID.on=false;RAID.phase='off';RAID.lock=false;RAID.fall=1;RAID.wt=0;RAID.grog=0;RAID.shots.length=0;
   document.body.classList.remove('raid','wt');$('raidWT').classList.remove('on');$('mRun').classList.remove('on');runBan(null);
   if(RAID.keep){for(let i=0;i<loadout.length;i++)loadout[i]=RAID.keep[i];RAID.keep=null;}paintSlots();
   Object.assign(p,{hurtT:0,invT:0,dead:false,guardT:0,guardP:0});if(RAID.mapKeep&&RAID.mapKeep!==MAP)setMap(RAID.mapKeep);else resetDummy();for(const k in p.cd)p.cd[k]=0;}
@@ -3491,6 +3502,106 @@ function raidKey(e){const b=KM[e.code],ok=!e.repeat&&(e.code==='Enter'||e.code==
   if(e.code==='KeyV'){if(!e.repeat&&RAID.phase==='fight')raidGuard();return true;}
   if(e.code==='Tab')return true;
   return false;}
+
+// ============================================================ RAID big gimmicks (체력 60% 분신진 · 30% 검기 결계 · 10% 일섬 연격)
+// 기믹 중에는 무력화 게이지가 잠기고, 보스는 정해진 방법으로만 반응한다. 시작은 보스가 패턴을 쉬고 있을 때.
+const RB_GIM=[{at:.6,k:'clone',nm:'분신진'},{at:.3,k:'seal',nm:'검기 결계'},{at:.1,k:'flash',nm:'일섬 연격'}];
+const rbG=()=>RAID.gim;
+function rbGimCheck(){if(RAID.gim||RAID.grog||RAID.dead||RAID.wtM||RAID.ai!=='idle'||RAID.phase!=='fight'||p.dead)return;
+  const r=RAID.hp/RAID.max;for(const q of RB_GIM)if(r<=q.at&&!RAID.gdone[q.k]){RAID.gdone[q.k]=1;rbGimStart(q);return;}}
+function rbGimStart(q){const d=dummy;RAID.gim={k:q.k,nm:q.nm,ph:'intro',t:0,pose:'stance'};RAID.pat=null;RAID.want=null;RAID.shots.length=0;RAID.bind=false;RAID.lock=false;
+  if(combo.n>0)endCombo();$('raidGM').classList.add('on');
+  runBan(q.nm,{clone:'진짜를 세 번 베어라 · 진짜만 그림자가 있다',seal:'떠 있는 부적 셋을 부숴라',flash:'모든 일섬을 받아내라'}[q.k],1,1800);
+  for(let i=0;i<22;i++){const a=rnd(0,TAU);RAID.smoke.push({x:d.x+Math.cos(a)*16,y:-80+Math.sin(a)*50,vx:Math.cos(a)*rnd(120,260),vy:Math.sin(a)*rnd(80,180)-40,r:rnd(10,20),life:.8,max:.8,c:'#9a8fb0'});}
+  addTrauma(.4);cam.zk=Math.max(cam.zk,.05);rbThump(.12);tn({d:.9,type:'sawtooth',f0:90,f1:55,v:.07});tn({d:.6,type:'triangle',f0:440,f1:220,v:.04});}
+function rbGimEnd(ok){const G=RAID.gim,k=G&&G.k;RAID.gim=null;$('raidGM').classList.remove('on');RAID.yo=0;RAID.ai='idle';RAID.cd=.8;RAID.bl=null;
+  const d=dummy;Object.assign(d,{state:'stand',air:false,y:0,vy:0,vx:0,rot:0,rv:0});
+  if(k==='flash'){if(ok){RAID.awakeAfter=1.1;rbGrog('break');}else rbAwaken(1.3);}
+  else if(ok)rbGrog('break');
+  else runBan('기믹 실패',null,1,1200);}
+function rbAwaken(spd){RAID.spd=spd;RAID.awake=1;runBan('각성','흑월의 공격이 '+Math.round((spd-1)*100)+'% 빨라진다',1,1800);
+  const d=dummy;for(let i=0;i<20;i++){const a=rnd(0,TAU);RAID.smoke.push({x:d.x+Math.cos(a)*14,y:-80+Math.sin(a)*50,vx:Math.cos(a)*rnd(100,220),vy:Math.sin(a)*rnd(80,160)-40,r:rnd(9,18),life:.9,max:.9,c:'#e8384f'});}
+  addTrauma(.4);rbImpact(d.x,-90);rbThump(.12);tn({d:.8,type:'sawtooth',f0:70,f1:140,v:.07});}
+function rbPuff(x,n,c){for(let i=0;i<(n||8);i++)RAID.smoke.push({x:x+rnd(-20,20),y:-rnd(20,150),vx:rnd(-60,60),vy:-rnd(20,90),r:rnd(8,15),life:.55,max:.55,c:c||'#9a8fb0'});}
+function rbAtkNear(x,y,r){const a=p.act;if(!a)return false;const D=a.def;if(!(D.basic||D.skill||D.name==='DA'||D.name==='SA'))return false;
+  return Math.hypot(p.x+p.f*55-x,p.y-70-y)<r+40;}
+// ---- 분신진
+function rbCloneBlink(){const G=RAID.gim,d=dummy,old=[d.x,...G.cl];const slots=shuf([-310,-150,150,310]).slice(0,3).map(o=>clamp(p.x+o,-ARENA+60,ARENA-60));
+  const ri=Math.random()*3|0,xs=slots;for(const x of old)rbPuff(x,6);
+  rbGhostLine(d.x,xs[ri]);d.x=xs[ri];G.cl=xs.filter((_,i)=>i!==ri);G.bt=1.35;tn({d:.12,type:'sine',f0:300,f1:900,v:.04});}
+// ---- 검기 결계
+function rbSealWave(){const G=RAID.gim,d=dummy;RAID.fs={a:1};addTrauma(.45);rbThump(.1);sfx.swing(.6);
+  const el=$('raidGD');el.classList.remove('on');void el.offsetWidth;el.classList.add('on');
+  if(p.guardT>0)rbWaveGuard(Math.sign(p.x-d.x)||1);else raidHurt(24,Math.sign(p.x-d.x)||1,520,true,'gold',true);}
+// ---- 일섬 연격
+const RB_FL_W=.72;
+function rbFlashNext(){const G=RAID.gim;G.i++;if(G.i>=G.seq.length){if(G.fail){rbGimEnd(false);return;}
+    if(G.round===1){G.ph='down';G.t=0;G.pose='kneel';runBan('한 번 더',null,1,1000);tn({d:.4,type:'sawtooth',f0:120,f1:90,v:.05});return;}
+    rbGimEnd(true);return;}
+  G.st='wind';G.t=0;G.cued=0;G.countered=0;G.pose='stance';}
+function rbFlashCut(){const G=RAID.gim,d=dummy,col=G.seq[G.i],dir=Math.sign(p.x-d.x)||1,x0=d.x,x1=clamp(p.x+dir*260,-ARENA+60,ARENA-60);
+  rbGhostLine(x0,x1);d.x=x1;RAID.f=dir;RAID.bl={x0,x1,a:1};cam.kx+=dir*14;addTrauma(.3);tn({d:.25,type:'sawtooth',f0:1800,f1:300,v:.06});G.pose='cut';
+  const a=p.act,dash=a&&a.def.name==='DASH';let ok=false;
+  if(col==='gray'&&dash&&a.t<.12){ok=true;rbNum('통과',p.x,p.y-160,1);ring(p.x,p.y-70,'#e8ecff',60,.25);}
+  else if(col==='gold'&&p.guardT>0){ok=true;rbWaveGuard(dir);}
+  if(!ok){G.fail=1;raidHurt(16,dir,420,true,col,true);}
+  G.st='gap';G.t=0;}
+function rbGimStep(dt){const G=RAID.gim,d=dummy;G.t+=dt;RAID.f=p.x>=d.x?1:-1;
+  if(G.k==='clone'){
+    if(G.ph==='intro'){if(G.t>=.7){G.ph='hunt';G.t=0;G.left=10;G.hits=0;G.cl=[];rbCloneBlink();}}
+    else if(G.ph==='hunt'){G.left-=dt;G.bt-=dt;if(G.bt<=0)rbCloneBlink();
+      if(G.left<=0){G.ph='punish';G.t=0;G.pose='stance';runBan('늦었다',null,1,900);tn({d:.4,type:'sawtooth',f0:200,f1:500,v:.05});}}
+    else if(G.ph==='punish'){if(G.t>=.55&&!G.cut){G.cut=1;const dir=Math.sign(p.x-d.x)||1;for(const x of G.cl)rbGhostLine(x,p.x);rbGhostLine(d.x,p.x);RAID.bl={x0:Math.min(d.x,...G.cl),x1:Math.max(d.x,...G.cl),a:1};
+        raidHurt(30,dir,700,true,'red',true);G.cl=[];G.pose='cut';addTrauma(.5);}
+      if(G.t>=1.3)rbGimEnd(false);}}
+  else if(G.k==='seal'){
+    if(G.ph==='intro'){G.pose='float';const u=Math.min(1,G.t/1);d.x=lerp(d.x,0,Math.min(1,dt*4));RAID.yo=E.io(u)*210;
+      if(u>=1){G.ph='charge';G.t=0;G.left=9;G.tal=[{x:-280,y:-170},{x:0,y:-150},{x:280,y:-170}].map(q=>Object.assign(q,{alive:1,ph:rnd(0,TAU)}));}}
+    else if(G.ph==='charge'){G.left-=dt;RAID.yo=210+Math.sin(G.t*2)*6;
+      for(const q of G.tal)if(q.alive&&rbAtkNear(q.x,q.y+Math.sin(G.t*2+q.ph)*8,26)){q.alive=0;sparks(q.x,q.y,18,'#ffd36b',null,PI,1.4);ring(q.x,q.y,'#ffd36b',50,.25);hitstop=Math.max(hitstop,.06);tn({d:.18,type:'square',f0:1500,f1:900,v:.05});rbNum('부적 파괴',q.x,q.y-40);}
+      if(G.tal.every(q=>!q.alive)){G.ph='shatter';G.t=0;rbThump(.1);runBan('결계 붕괴','곧 전방위 검기 · 땅에서 V',0,1400);ring(d.x,-RAID.yo-80,'#ffffff',160,.4);}
+      else if(G.left<=0){G.ph='blast';G.t=0;}}
+    else if(G.ph==='shatter'){RAID.yo=210;if(G.t>=2){G.ph='guard';G.t=0;G.gi=0;G.gt=.75;}}
+    else if(G.ph==='guard'){G.gt-=dt;if(G.gt<=0){rbSealWave();G.gi++;G.gt=1.05;if(G.gi>=3){G.ph='fall';G.t=0;}}}
+    else if(G.ph==='blast'){if(G.t>=.6&&!G.cut){G.cut=1;RAID.fs={a:1};addTrauma(.6);rbThump(.12);raidHurt(35,Math.sign(p.x-d.x)||1,700,true,'gold',true);}
+      if(G.t>=.9){G.ph='land';G.t=0;}}
+    else if(G.ph==='fall'||G.ph==='land'){G.pose='fall';RAID.yo=Math.max(0,RAID.yo-dt*900);if(RAID.yo<=0){dust(d.x,0,20);addTrauma(.35);rbGimEnd(G.ph==='fall');}}}
+  else if(G.k==='flash'){
+    if(G.ph==='intro'){const sd=Math.sign(dummy.x-p.x)||1;let edge=p.x+sd*430;if(edge>ARENA-60||edge<-ARENA+60)edge=p.x-sd*430;edge=clamp(edge,-ARENA+60,ARENA-60);if(G.t<.05){G.x0=d.x;G.x1=edge;}const u=Math.min(1,G.t/.6);d.x=lerp(G.x0,G.x1,E.io(u));RAID.yo=Math.sin(PI*u)*120;G.pose='float';
+      if(u>=1){RAID.yo=0;G.ph='dash';G.round=1;G.seq=['gray','gray','gray','gray','gold'];G.i=-1;G.fail=0;rbFlashNext();}}
+    else if(G.ph==='down'){if(G.t>=1.3){G.ph='dash';G.round=2;const pool=['blue','gray','gold'];G.seq=[0,1,2].map(()=>pool[Math.random()*3|0]).concat(['gold']);G.i=-1;rbFlashNext();}}
+    else if(G.ph==='dash'){const col=G.seq[G.i],cue=RB_CUE[col]+(col==='gold'?.08:0);
+      if(G.st==='wind'){if(Math.random()<.6)RAID.smoke.push({x:d.x+rnd(-20,20),y:-rnd(15,150),vx:rnd(-25,25),vy:-rnd(20,70),r:rnd(7,13),life:.6,max:.6,c:RB_COL[col]});
+        if(!G.cued&&G.t>=RB_FL_W-cue){G.cued=1;RAID.cued=1;RAID.glint=1;RAID.gc=RB_COL[col];tn({d:.14,type:'sine',f0:2600,f1:2500,v:.06});}
+        if(G.countered){G.st='gap';G.t=-.25;G.pose='stance';}
+        else if(G.t>=RB_FL_W)rbFlashCut();}
+      else if(G.st==='gap'){if(G.t>=.38){RAID.cued=0;rbFlashNext();}}}}}
+// hits on the boss during a gimmick
+function rbGimHit(h,a){const G=RAID.gim,d=dummy;
+  if(G.k==='clone'&&G.ph==='hunt'){if(a&&a!==G.lastA){G.lastA=a;G.hits++;sparks(d.x,-90,14,'#ffffff',null,PI,1.2);ring(d.x,-90,'#ffffff',60,.25);hitstop=Math.max(hitstop,.08);rbThump(.06);
+      rbNum('간파 '+G.hits+' / 3',d.x,-200,1);if(G.hits>=3){for(const x of G.cl)rbPuff(x,12);G.cl=[];rbGimEnd(true);}else rbCloneBlink();}return false;}
+  if(G.k==='flash'&&G.ph==='dash'&&G.st==='wind'&&G.cued&&G.seq[G.i]==='blue'&&a&&a.def&&a.def.name==='DA'&&!G.countered){G.countered=1;rbNum('카운터!',d.x,-200,1);ring(d.x,-90,'#4fb4ff',90,.3);hitstop=Math.max(hitstop,.12);rbThump(.08);return false;}
+  sparks(d.x,-95,4,'#ffffff',null,PI,.6);return false;}
+function rbGimPose(){const G=RAID.gim;if(!G)return null;
+  if(G.pose==='stance')return samplePose(ACT.S_IAI.keys,.38,{});
+  if(G.pose==='cut')return samplePose(ACT.S_IAI.keys,.6,{});
+  if(G.pose==='kneel')return Object.assign({},RB_POSE.kneel);
+  if(G.pose==='fall')return RB_POSE.air;
+  if(G.pose==='float'){const T=Object.assign({},STAND);T.lean=-6;T.aFU=-30;T.aFL=-20;T.lFU=30;T.lFL=-40;T.lBU=-10;T.lBL=-60;return T;}
+  return null;}
+function rbGimWorld(){const G=RAID.gim;
+  if(RAID.fs){const a=RAID.fs.a;g.save();g.globalCompositeOperation='lighter';g.globalAlpha=Math.max(0,a);g.strokeStyle='#ffd36b';g.lineCap='round';g.lineWidth=26*a;g.beginPath();g.moveTo(-ARENA-200,-70);g.lineTo(ARENA+200,-70);g.stroke();
+    g.strokeStyle='#fff6dd';g.lineWidth=4;g.beginPath();g.moveTo(-ARENA-200,-70);g.lineTo(ARENA+200,-70);g.stroke();g.restore();}
+  if(!G)return;const d=dummy;
+  if(G.k==='seal'&&(G.ph==='charge'||G.ph==='intro')){const by=-RAID.yo-75;g.save();g.strokeStyle='#ffe9b0';g.globalAlpha=.5+.2*Math.sin(rt*6);g.lineWidth=3;g.beginPath();g.arc(d.x,by,105,0,TAU);g.stroke();
+    g.globalAlpha=.12;g.fillStyle='#ffd36b';g.fill();g.restore();}
+  if(G.k==='seal'&&G.tal&&G.ph==='charge'){const u=1-G.left/9;for(const q of G.tal){if(!q.alive)continue;const y=q.y+Math.sin(G.t*2+q.ph)*8;g.save();g.translate(q.x,y);g.rotate(Math.sin(G.t*3+q.ph)*.12);
+      g.fillStyle='#f4ede4';g.fillRect(-11,-20,22,40);g.strokeStyle='#e8384f';g.lineWidth=2;g.beginPath();g.moveTo(0,-14);g.lineTo(0,14);g.moveTo(-6,-6);g.lineTo(6,-6);g.moveTo(-6,4);g.lineTo(6,4);g.stroke();
+      g.rotate(-Math.sin(G.t*3+q.ph)*.12);g.strokeStyle='#ffd36b';g.lineWidth=3;g.beginPath();g.arc(0,0,30,-PI/2,-PI/2+TAU*u);g.stroke();g.globalAlpha=.25;g.beginPath();g.arc(0,0,30,0,TAU);g.stroke();g.restore();}}
+  if(G.k==='seal'&&G.ph==='guard'&&G.gt<.75){const u=1-G.gt/.75;g.save();g.globalCompositeOperation='lighter';const by=-RAID.yo-80,r=30+u*90;g.strokeStyle='#ffd36b';g.globalAlpha=.4+.6*u;g.lineWidth=3+5*u;g.beginPath();g.arc(d.x,by,r,0,TAU);g.stroke();g.restore();
+    rbIcon('gold',d.x,by-120,1+.3*u);}
+  if(G.k==='flash'&&G.ph==='dash'&&G.st==='wind'){const[hx,hy]=rbHeadPos();rbIcon(G.seq[G.i],hx,hy-62,1);
+    g.save();g.font="13px 'Black Han Sans','Noto Sans KR',sans-serif";g.textAlign='center';g.fillStyle='#ffffff';g.fillText((G.round===1?'1차 ':'2차 ')+(G.i+1)+' / '+G.seq.length,hx,hy-92);g.restore();}}
 
 paintSlots();paintKeys();renderGuide();
 
